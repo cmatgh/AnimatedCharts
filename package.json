@@ -1,8 +1,7 @@
 {
-    "name": "running-charts",
+    "name": "animated-charts",
     "version": "0.0.1",
-    "description": "Comparison of Node.js template languages.",
-    "author": "Paul Armstrong <paul@paularmstrongdesigns.com>",
+
     "dependencies": {
         "@types/chart.js": "^2.7.15",
         "@types/jquery": "^3.3.38",
@@ -16,7 +15,7 @@
         "color-convert": "2.0.1",
         "canvas": "^2.6.1"
     },
-    "main": "src/typescript/runningcharts/index.ts",
+    "main": "src/typescript/animatedcharts/index.ts",
     "engines": {
         "node": ">= 0.4.1"
     },
