@@ -1,0 +1,25 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "allowJs": true,
+        "alwaysStrict": true,
+        "module": "commonjs",
+        "lib": [
+            "es6",
+            "dom"
+        ],
+        "moduleResolution": "Classic",
+        "target": "es5",
+        "noImplicitAny": false,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "allowSyntheticDefaultImports": true,
+        "outDir": "out",
+        "sourceMap": true
+    },
+    "include": ["src/**/*"],
+    "exclude": [
+        "node_modules",
+        "out"
+    ]
+}
