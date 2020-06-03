@@ -44,6 +44,10 @@ export class Animation implements Observable{
         this.setColors(this.dataObject);
     }
 
+    setDataObject(dataObject: DataObject) : void {
+        this.dataObject = dataObject;
+    }
+
     get AnimationObjects() : Observer[] {
         return Array.from(this.animationObjects);
     }
