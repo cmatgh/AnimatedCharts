@@ -2,6 +2,8 @@ import { Animation, DataObject } from "../animation/Animation";
 import {AnimationChartUI} from "./AnimationChartUI";
 import {UIElement} from "./UIElement";
 import {Observer} from "../animation/Observer";
+import {UIButton} from "./UIButton";
+import {OpenFileCommand} from "./command/OpenFileCommand";
 
 export class AnimationUI extends UIElement{
 
@@ -12,9 +14,17 @@ export class AnimationUI extends UIElement{
                     <h1 id="title_${this.id}"></h1>
                     <h2 class="display-2" id="property_${this.id}"></h2>
                 </div>
-                <div id="chart-content_${this.id}">
-                
+                <div class="row">
+                    <div class="col-md-2">
+                        <div id="chart-buttons_${this.id}">              
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div id="chart-content_${this.id}">                    
+                        </div>
+                    </div>
                 </div>
+              
             </div>
         `;
     }
@@ -23,9 +33,10 @@ export class AnimationUI extends UIElement{
 
     }
 
-    title : string;
-    animation: Animation;
-    animationObjectUIs: Set<AnimationChartUI>;
+    private title : string;
+    private animation: Animation;
+    private animationObjectUIs: Set<AnimationChartUI>;
+    private openFileButton: UIButton;
 
     constructor(title: string, dataObject: DataObject, shouldStart: boolean) {
         super();
@@ -41,6 +52,9 @@ export class AnimationUI extends UIElement{
         this.addChart("doughnut");
         this.addChart("pie");
         this.addChart("polarArea");
+
+        this.openFileButton = new UIButton("Load Dataset", new OpenFileCommand());
+        this.$element.find(`[id^='chart-buttons_']`).append(this.openFileButton.getJQueryElement());
 
         this.updateUI();
 
