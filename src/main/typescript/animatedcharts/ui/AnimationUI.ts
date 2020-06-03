@@ -53,7 +53,7 @@ export class AnimationUI extends UIElement{
         this.addChart("pie");
         this.addChart("polarArea");
 
-        this.openFileButton = new UIButton("Load Dataset", new OpenFileCommand());
+        this.openFileButton = new UIButton("Load Dataset", new OpenFileCommand(this.animation));
         this.$element.find(`[id^='chart-buttons_']`).append(this.openFileButton.getJQueryElement());
 
         this.updateUI();
