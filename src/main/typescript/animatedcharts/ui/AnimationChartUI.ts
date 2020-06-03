@@ -11,7 +11,7 @@ export class AnimationChartUI extends UIElement{
     protected html() : string {
         return `
             <div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-4 mb-3">
                     <label for="validationCustom04">Sort by</label>
                     <select class="custom-select" id="chart-sort-select_${this.id}" required>
                     <option selected value="value">Value</option>
@@ -19,7 +19,7 @@ export class AnimationChartUI extends UIElement{
                     <option  value="label">Label</option>
                     </select>
                     <div class="form-group row">
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                           <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="chart-sort-check_${this.id}">
                             <label class="form-check-label" for="gridCheck1">
@@ -40,12 +40,17 @@ export class AnimationChartUI extends UIElement{
     protected events() : void {
         this.$element
             .find(`#chart-sort-select_${this.id}`)
-            .on("change", (event: Event) => this.animationObject.setComparator(ComparatorFactory
+            .on("change", (event: Event) => {this.animationObject.setComparator(ComparatorFactory
                 .getInstance()
-                .create($(event.target).val().toString())));
+                .create($(event.target).val().toString()))
+                this.animationObject.update();
+            });
         this.$element
             .find(`#chart-sort-check_${this.id}`)
-            .on("change", (event: Event) => this.animationObject.setComparator(ComparatorUtils.reverse(this.animationObject.getComparator())));
+            .on("change", (event: Event) => {
+                this.animationObject.setComparator(ComparatorUtils.reverse(this.animationObject.getComparator()));
+                this.animationObject.update();
+        });
     }
 
     animationObject: AnimationChart;
