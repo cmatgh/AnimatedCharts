@@ -24,7 +24,7 @@ describe("AnimationUI", () => {
     });
 
     describe("getJQueryElement", () => {
-        it("has loaded the html after initilization", () => {
+        it("has loaded the html after initialization", () => {
             const $element = animationUI.getJQueryElement();
 
             expect($element.find("[id^=chart-content_]").length).to.be.greaterThan(0);

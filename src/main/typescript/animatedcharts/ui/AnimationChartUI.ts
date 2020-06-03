@@ -40,12 +40,12 @@ export class AnimationChartUI extends UIElement{
     protected events() : void {
         this.$element
             .find(`#chart-sort-select_${this.id}`)
-            .on("change", (event: Event) => this.animationObject.setComparator(ComparatorFactory
-                .getInstance()
-                .create($(event.target).val().toString())));
+            .on("change", (event: Event) => this.animationObject
+                .setComparator(ComparatorFactory.getInstance().create($(event.target).val().toString())));
         this.$element
             .find(`#chart-sort-check_${this.id}`)
-            .on("change", (event: Event) => this.animationObject.setComparator(ComparatorUtils.reverse(this.animationObject.getComparator())));
+            .on("change", (event: Event) => this.animationObject
+                .setComparator(ComparatorUtils.reverse(this.animationObject.getComparator())));
     }
 
     animationObject: AnimationChart;

@@ -225,14 +225,16 @@ describe("Animation", () => {
                 expect(animation.incrementFrame).to.have.been.called.exactly(4);
                 expect(animation.notifyAnimationObjects).to.have.been.called.exactly(4);
                 animation.stop();
-            })
+            }).finally(() => {
+                animation.stop()
+            });
 
         }).timeout(2500);
 
     });
 
     describe("pause", () => {
-        //TODO
+
     });
 
     describe("resume", () => {

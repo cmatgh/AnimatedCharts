@@ -23,7 +23,7 @@ describe("AnimationChartUI", () => {
     });
 
     describe("getJQueryElement", () => {
-       it("has loaded the html after initilization", () => {
+       it("has loaded the html after initialization", () => {
            const $element = animationObjectUI.getJQueryElement();
 
            expect($element.find("[id^=chart-sort-select_]").length).to.be.greaterThan(0);
