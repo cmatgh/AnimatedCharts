@@ -10,6 +10,7 @@ var document = new jsdom.JSDOM(`<!DOCTYPE html><html></html>`).window.document;
 var window = document.defaultView;
 
 global.window = window
+global.document = document;
 global.$ = require('jquery');
 
 describe("UIButton", () => {

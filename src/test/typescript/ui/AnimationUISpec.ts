@@ -1,8 +1,6 @@
 import "mocha"
 import { expect } from "chai";
-import {AnimationChartUI} from "../../../main/typescript/animatedcharts/ui/AnimationChartUI";
 import jsdom = require('jsdom');
-import {Animation} from "../../../main/typescript/animatedcharts/animation/Animation";
 import {AnimationUI} from "../../../main/typescript/animatedcharts/ui/AnimationUI";
 var document = new jsdom.JSDOM(`<!DOCTYPE html><html></html>`).window.document;
 var window = document.defaultView;
