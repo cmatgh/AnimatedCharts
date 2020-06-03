@@ -8,6 +8,8 @@
             "es6",
             "dom"
         ],
+        "baseUrl": ".",
+        "paths": { "xlsx": ["./node_modules/xlsx/types/index.d.ts"] },
         "moduleResolution": "Classic",
         "target": "es5",
         "noImplicitAny": false,

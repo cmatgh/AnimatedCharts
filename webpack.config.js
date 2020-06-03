@@ -17,6 +17,7 @@ module.exports = {
     alias: {
       chai: path.resolve(__dirname, "node_modules/chai/chai.js"),
       chart: path.resolve(__dirname, 'node_modules/chart.js/dist/Chart.js'),
+      xlsx: path.resolve(__dirname, 'node_modules/xlsx/xlsx.js')
     }
   },
   entry: './src/main/typescript/animatedcharts/index.ts',
