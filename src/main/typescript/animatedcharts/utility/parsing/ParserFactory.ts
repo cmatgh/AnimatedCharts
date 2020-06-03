@@ -21,7 +21,7 @@ export class ParserFactory {
             return this.parsers.get(type);
         }
 
-        throw new Error("comparator type does not exist: " + type );
+        throw new Error("parser type does not exist: " + type );
     }
 
 }
