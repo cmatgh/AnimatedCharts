@@ -2,6 +2,13 @@ import { Animation, DataObject } from "../animation/Animation";
 import {AnimationChartUI} from "./AnimationChartUI";
 import {UIElement} from "./UIElement";
 import {Observer} from "../animation/Observer";
+import {UIButton} from "./UIButton";
+import {OpenFileDialogCommand} from "./command/OpenFileDialogCommand";
+import {StartAnimatonCommand} from "./command/StartAnimatonCommand";
+import {StopAnimationCommand} from "./command/StopAnimationCommand";
+import {PauseAnimationCommand} from "./command/PauseAnimationCommand";
+import {ResumeAnimationCommand} from "./command/ResumeAnimationCommand";
+import {Command} from "./command/Command";
 
 export class AnimationUI extends UIElement{
 
@@ -12,8 +19,15 @@ export class AnimationUI extends UIElement{
                     <h1 id="title_${this.id}"></h1>
                     <h2 class="display-2" id="property_${this.id}"></h2>
                 </div>
-                <div id="chart-content_${this.id}">
-                
+                <div class="row">
+                    <div class="col-md-2">
+                        <div id="animation-buttons_${this.id}">              
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div id="animation-content_${this.id}">                    
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -23,15 +37,16 @@ export class AnimationUI extends UIElement{
 
     }
 
-    title : string;
-    animation: Animation;
-    animationObjectUIs: Set<AnimationChartUI>;
+    private title : string;
+    private animation: Animation;
+    private animationObjectUIs: Set<AnimationChartUI>;
+    private openFileButton: UIButton;
 
-    constructor(title: string, dataObject: DataObject, shouldStart: boolean) {
+    constructor(title: string) {
         super();
 
         this.title = title;
-        this.animation = new Animation(window, dataObject);
+        this.animation = new Animation(window);
         this.animationObjectUIs = new Set<AnimationChartUI>();
 
         const yearObserver : Observer = this.createPropertyObserver();
@@ -42,12 +57,13 @@ export class AnimationUI extends UIElement{
         this.addChart("pie");
         this.addChart("polarArea");
 
-        this.updateUI();
+        this.createButton("Load Dataset", new OpenFileDialogCommand(this.animation));
+        this.createButton("Start", new StartAnimatonCommand(this.animation));
+        this.createButton("Stop", new StopAnimationCommand(this.animation));
+        this.createButton("Pause", new PauseAnimationCommand(this.animation));
+        this.createButton("Resume", new ResumeAnimationCommand(this.animation));
 
-        if(shouldStart)
-        {
-            this.animation.start();
-        }
+        this.updateUI();
     }
 
     private createPropertyObserver(): Observer {
@@ -73,6 +89,15 @@ export class AnimationUI extends UIElement{
         })(this.animation, this.$element);
     }
 
+    private createButton(label: string, command: Command) {
+        let button = new UIButton(label, command);
+        let $row = $("<div></div>");
+        $row.addClass("row");
+        $row.addClass("m-1");
+        $row.append(button.getJQueryElement());
+        this.$element.find(`#animation-buttons_${this.id}`).append($row);
+    }
+
     updateUI() {
         this.$element.find(`#title_${this.id}`).html(this.title);
     }
@@ -96,7 +121,7 @@ export class AnimationUI extends UIElement{
 
         if(!this.hasRowSpace(this.animationObjectUIs.size)){
             this.$element
-                .find(`#chart-content_${this.id}`)
+                .find(`#animation-content_${this.id}`)
                 .append(this.buildRow(rowId));
         }
 

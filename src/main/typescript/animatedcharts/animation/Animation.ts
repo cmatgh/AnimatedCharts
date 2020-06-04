@@ -30,9 +30,9 @@ export class Animation implements Observable{
     private frame: number;
     private numFrames: number;
 
-    constructor(window: Window, dataObject: DataObject) {
+    constructor(window: Window) {
         this.animationObjects = new Set();
-        this.dataObject = dataObject;
+        this.dataObject = {valuesLength : 0, dataSets : [], columnDefs : []};
         this.animationLoop = new AnimationLoop(window, { updatesPerSecond : 2 });
         this.frame = 0;
         this.numFrames = this.dataObject.valuesLength;
@@ -42,6 +42,13 @@ export class Animation implements Observable{
         })
 
         this.setColors(this.dataObject);
+    }
+
+    setDataObject(dataObject: DataObject) : void {
+        this.dataObject = dataObject;
+        this.frame = 0;
+        this.numFrames = dataObject.valuesLength;
+        this.setColors(dataObject);
     }
 
     get AnimationObjects() : Observer[] {
@@ -95,6 +102,8 @@ export class Animation implements Observable{
 
     stop() : void{
         this.animationLoop.stop();
+        this.frame = 0;
+        this.notifyAnimationObjects();
     }
 
     pause() : void {

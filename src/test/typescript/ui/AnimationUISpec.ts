@@ -1,8 +1,6 @@
 import "mocha"
 import { expect } from "chai";
-import {AnimationChartUI} from "../../../main/typescript/animatedcharts/ui/AnimationChartUI";
 import jsdom = require('jsdom');
-import {Animation} from "../../../main/typescript/animatedcharts/animation/Animation";
 import {AnimationUI} from "../../../main/typescript/animatedcharts/ui/AnimationUI";
 var document = new jsdom.JSDOM(`<!DOCTYPE html><html></html>`).window.document;
 var window = document.defaultView;
@@ -15,19 +13,14 @@ describe("AnimationUI", () => {
     let animationUI : AnimationUI;
 
     beforeEach( () => {
-        const dataObject = {
-            columnDefs : [],
-            dataSets : [],
-            valuesLength: 0,
-        };
-        animationUI = new AnimationUI("some title", {columnDefs: [], dataSets: [], valuesLength: 0}, false);
+        animationUI = new AnimationUI("some title");
     });
 
     describe("getJQueryElement", () => {
-        it("has loaded the html after initilization", () => {
+        it("has loaded the html after initialization", () => {
             const $element = animationUI.getJQueryElement();
 
-            expect($element.find("[id^=chart-content_]").length).to.be.greaterThan(0);
+            expect($element.find("[id^=animation-content_]").length).to.be.greaterThan(0);
             expect($element.find("[id^=title]").length).to.be.greaterThan(0);
         })
     });
