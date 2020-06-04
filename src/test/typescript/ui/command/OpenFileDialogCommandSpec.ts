@@ -11,8 +11,8 @@ describe("OpenFileDialogCommand", () => {
         openFileDialogCommand = new OpenFileDialogCommand(null);
     });
 
-    describe("getJQueryElement", () => {
-        it("has loaded the html after initilization", () => {;
+    describe("execute", () => {
+        it("has loaded the html after initialization", () => {;
 
         })
     });
