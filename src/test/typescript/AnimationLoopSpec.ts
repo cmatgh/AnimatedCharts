@@ -1,5 +1,5 @@
 import "mocha"
-import spies from 'chai-spies';
+import * as spies from 'chai-spies';
 import * as chai from "chai";
 chai.use(spies);
 import { JSDOM } from "jsdom";
