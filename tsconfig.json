@@ -17,7 +17,6 @@
         "moduleResolution": "Classic",
         "target": "es5",
         "noImplicitAny": false,
-        "esModuleInterop": true,
         "removeComments": true,
         "preserveConstEnums": true,
         "allowSyntheticDefaultImports": true,

@@ -1,6 +1,6 @@
 import { expect } from "chai"
 import "mocha"
-import spies from 'chai-spies';
+import * as spies from 'chai-spies';
 import * as chai from "chai";
 chai.use(spies);
 import { AnimationChart } from "../../main/typescript/animatedcharts/animation/AnimationChart";

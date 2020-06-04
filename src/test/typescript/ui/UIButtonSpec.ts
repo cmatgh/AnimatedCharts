@@ -1,6 +1,6 @@
 import "mocha"
 import { expect } from "chai";
-import spies from 'chai-spies';
+import * as spies from 'chai-spies';
 import * as chai from "chai";
 chai.use(spies);
 import jsdom = require('jsdom');
