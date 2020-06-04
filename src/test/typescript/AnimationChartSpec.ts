@@ -1,7 +1,4 @@
 import { expect } from "chai";
-import * as spies from 'chai-spies';
-import * as chai from "chai";
-chai.use(spies);
 import Chart from "chart.js";
 import { AnimationChart } from "../../main/typescript/animatedcharts/animation/AnimationChart";
 import { Animation } from "../../main/typescript/animatedcharts/animation/Animation";
