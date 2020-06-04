@@ -1,9 +1,11 @@
 import {Command} from "./Command";
 import {Animation} from "../../animation/Animation";
 import {ParserFactory} from "../../utility/parsing/ParserFactory";
+import {Logger} from "../../utility/logging/Logger";
 
 export class OpenFileDialogCommand implements Command {
 
+    logger: Logger = Logger.getInstance();
     openFileElement : JQuery;
     animation: Animation;
     parserFactory: ParserFactory;
@@ -27,7 +29,9 @@ export class OpenFileDialogCommand implements Command {
         let fileType = this.getFileType(file.name);
         let parser = this.parserFactory.create(fileType);
         let stringPromise = file.text();
+        this.logger.debug("opening " + file.name + "...");
         stringPromise.then( text => {
+            this.logger.debug("file opened.");
             let data = parser.parse(Buffer.from(text));
             this.animation.setDataObject(data);
             this.animation.notifyAnimationObjects();

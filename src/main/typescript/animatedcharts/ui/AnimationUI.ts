@@ -1,4 +1,4 @@
-import { Animation, DataObject } from "../animation/Animation";
+import { Animation } from "../animation/Animation";
 import {AnimationChartUI} from "./AnimationChartUI";
 import {UIElement} from "./UIElement";
 import {Observer} from "../animation/Observer";
@@ -40,7 +40,6 @@ export class AnimationUI extends UIElement{
     private title : string;
     private animation: Animation;
     private animationObjectUIs: Set<AnimationChartUI>;
-    private openFileButton: UIButton;
 
     constructor(title: string) {
         super();
