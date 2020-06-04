@@ -19,8 +19,8 @@ describe("Animation", () => {
 
     beforeEach( () => {
         dom = new JSDOM(`<!DOCTYPE html><div id='bar'></div>`, { pretendToBeVisual: true }).window
-        animation = new Animation(dom,
-        {
+        animation = new Animation(dom);
+        animation.setDataObject({
             columnDefs: ["labels", "colors", "1960"],
             dataSets: [
                 {
@@ -171,7 +171,8 @@ describe("Animation", () => {
                 valuesLength: 2
             };
 
-            animation = new Animation(dom, dataObj);
+            animation = new Animation(dom);
+            animation.setDataObject(dataObj);
 
             expect(animation.getCurrentFrameData()).to.deep.equal([{
                 label : "Africa",

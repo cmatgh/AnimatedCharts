@@ -14,12 +14,7 @@ describe("AnimationChartUI", () => {
     let animationObjectUI : AnimationChartUI;
 
     beforeEach( () => {
-        const dataObject = {
-            columnDefs : [],
-            dataSets : [],
-            valuesLength: 0,
-        };
-        animationObjectUI = new AnimationChartUI("bar", new Animation(global.window, dataObject));
+        animationObjectUI = new AnimationChartUI("bar", new Animation(global.window));
     });
 
     describe("getJQueryElement", () => {

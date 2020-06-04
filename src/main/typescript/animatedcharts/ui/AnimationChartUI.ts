@@ -12,12 +12,14 @@ export class AnimationChartUI extends UIElement{
         return `
             <div>
                 <div class="col-md-4 mb-3">
-                    <label for="validationCustom04">Sort by</label>
-                    <select class="custom-select" id="chart-sort-select_${this.id}" required>
-                    <option selected value="value">Value</option>
-                    <option  value="color">Color</option>
-                    <option  value="label">Label</option>
-                    </select>
+                    <div class="row" id="chart-buttons_">
+                        <label for="validationCustom04">Sort by</label>
+                        <select class="custom-select" id="chart-sort-select_${this.id}" required>
+                        <option selected value="value">Value</option>
+                        <option  value="color">Color</option>
+                        <option  value="label">Label</option>
+                        </select>
+                    </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
                           <div class="form-check">
@@ -62,6 +64,8 @@ export class AnimationChartUI extends UIElement{
             .getInstance()
             .create(type, <HTMLCanvasElement> this.$element.find(`#chart_${this.id}`).get(0));
         this.animationObject = new AnimationChart(animation, this.chart);
+
+
     }
 
     getAnimationObject() : AnimationChart {

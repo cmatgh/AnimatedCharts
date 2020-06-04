@@ -16,11 +16,11 @@ export class AnimationUI extends UIElement{
                 </div>
                 <div class="row">
                     <div class="col-md-2">
-                        <div id="chart-buttons_${this.id}">              
+                        <div id="animation-buttons_${this.id}">              
                         </div>
                     </div>
                     <div class="col-md-10">
-                        <div id="chart-content_${this.id}">                    
+                        <div id="animation-content_${this.id}">                    
                         </div>
                     </div>
                 </div>
@@ -38,11 +38,11 @@ export class AnimationUI extends UIElement{
     private animationObjectUIs: Set<AnimationChartUI>;
     private openFileButton: UIButton;
 
-    constructor(title: string, dataObject: DataObject, shouldStart: boolean) {
+    constructor(title: string) {
         super();
 
         this.title = title;
-        this.animation = new Animation(window, dataObject);
+        this.animation = new Animation(window);
         this.animationObjectUIs = new Set<AnimationChartUI>();
 
         const yearObserver : Observer = this.createPropertyObserver();
@@ -57,11 +57,6 @@ export class AnimationUI extends UIElement{
         this.$element.find(`[id^='chart-buttons_']`).append(this.openFileButton.getJQueryElement());
 
         this.updateUI();
-
-        if(shouldStart)
-        {
-            this.animation.start();
-        }
     }
 
     private createPropertyObserver(): Observer {
@@ -110,7 +105,7 @@ export class AnimationUI extends UIElement{
 
         if(!this.hasRowSpace(this.animationObjectUIs.size)){
             this.$element
-                .find(`#chart-content_${this.id}`)
+                .find(`#animation-content_${this.id}`)
                 .append(this.buildRow(rowId));
         }
 

@@ -11,8 +11,8 @@ describe("AnimationLoop Object", () => {
     let mockedChart: Chart;
 
     beforeEach( () => {
-        animation = new Animation(null,
-        {
+        animation = new Animation(null);
+        animation.setDataObject({
             columnDefs: ["labels", "colors", "1960"],
             dataSets: [
                 {
