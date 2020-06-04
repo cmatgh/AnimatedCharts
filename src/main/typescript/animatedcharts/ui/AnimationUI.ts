@@ -4,6 +4,11 @@ import {UIElement} from "./UIElement";
 import {Observer} from "../animation/Observer";
 import {UIButton} from "./UIButton";
 import {OpenFileDialogCommand} from "./command/OpenFileDialogCommand";
+import {StartAnimatonCommand} from "./command/StartAnimatonCommand";
+import {StopAnimationCommand} from "./command/StopAnimationCommand";
+import {PauseAnimationCommand} from "./command/PauseAnimationCommand";
+import {ResumeAnimationCommand} from "./command/ResumeAnimationCommand";
+import {Command} from "./command/Command";
 
 export class AnimationUI extends UIElement{
 
@@ -53,8 +58,11 @@ export class AnimationUI extends UIElement{
         this.addChart("pie");
         this.addChart("polarArea");
 
-        this.openFileButton = new UIButton("Load Dataset", new OpenFileDialogCommand(this.animation));
-        this.$element.find(`[id^='chart-buttons_']`).append(this.openFileButton.getJQueryElement());
+        this.createButton("Load Dataset", new OpenFileDialogCommand(this.animation));
+        this.createButton("Start", new StartAnimatonCommand(this.animation));
+        this.createButton("Stop", new StopAnimationCommand(this.animation));
+        this.createButton("Pause", new PauseAnimationCommand(this.animation));
+        this.createButton("Resume", new ResumeAnimationCommand(this.animation));
 
         this.updateUI();
     }
@@ -80,6 +88,15 @@ export class AnimationUI extends UIElement{
             }
 
         })(this.animation, this.$element);
+    }
+
+    private createButton(label: string, command: Command) {
+        let button = new UIButton(label, command);
+        let $row = $("<div></div>");
+        $row.addClass("row");
+        $row.addClass("m-1");
+        $row.append(button.getJQueryElement());
+        this.$element.find(`#animation-buttons_${this.id}`).append($row);
     }
 
     updateUI() {
