@@ -22,22 +22,34 @@ export class Logger {
     }
 
     public setLogLevel(logLevel: LogLevel) : void {
-
+        this.logLevel = logLevel;
     }
 
-    public debug() : void {
-        //TODO
+    public debug(msg: string) : void {
+        this.log(msg, LogLevel.DEBUG);
     }
 
-    public info() : void {
-        //TODO
+    public info(msg: string) : void {
+        this.log(msg, LogLevel.INFO);
     }
 
-    public warn() : void {
-        //TODO
+    public warn(msg: string) : void {
+        this.log(msg, LogLevel.WARN);
     }
 
-    public error() : void {
-        //TODO
+    public error(msg: string) : void {
+        this.log(msg, LogLevel.ERROR);
+    }
+
+    private log(msg: string, logLevel: LogLevel) : void {
+        if(this.logLevel <= logLevel) {
+            let levelName = LogLevel[logLevel];
+            console[levelName.toLowerCase()](`${this.getDate()} [${levelName}] : %s`, msg)
+        }
+    }
+
+    private getDate() : string {
+        let date = new Date();
+        return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}:${date.getMilliseconds()}`;
     }
 }

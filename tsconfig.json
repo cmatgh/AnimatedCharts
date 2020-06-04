@@ -9,10 +9,15 @@
             "dom"
         ],
         "baseUrl": ".",
-        "paths": { "xlsx": ["./node_modules/xlsx/types/index.d.ts"] },
+        "paths": {
+            "xlsx": ["./node_modules/xlsx/types/index.d.ts"],
+            "jest-mock-console": ["./node_modules/jest-mock-console/index.d.ts"]
+
+        },
         "moduleResolution": "Classic",
         "target": "es5",
         "noImplicitAny": false,
+        "esModuleInterop": true,
         "removeComments": true,
         "preserveConstEnums": true,
         "allowSyntheticDefaultImports": true,
