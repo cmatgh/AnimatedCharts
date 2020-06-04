@@ -64,8 +64,6 @@ export class AnimationChartUI extends UIElement{
             .getInstance()
             .create(type, <HTMLCanvasElement> this.$element.find(`#chart_${this.id}`).get(0));
         this.animationObject = new AnimationChart(animation, this.chart);
-
-
     }
 
     getAnimationObject() : AnimationChart {

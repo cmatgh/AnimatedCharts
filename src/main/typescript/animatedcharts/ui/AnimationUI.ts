@@ -29,7 +29,6 @@ export class AnimationUI extends UIElement{
                         </div>
                     </div>
                 </div>
-              
             </div>
         `;
     }
