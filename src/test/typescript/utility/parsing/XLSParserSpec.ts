@@ -38,7 +38,6 @@ describe("XLSParser", () => {
         it("should succeed when required head fields in input", () => {
             const data = createXLSFileBuffer([["label", "color"]]);
             const parsedObj = xlsParser.parse(data);
-            console.log(parsedObj);
 
             expect(parsedObj.columnDefs).to.deep.equal(["label", "color"]);
             expect(parsedObj.dataSets).to.deep.equal([]);
