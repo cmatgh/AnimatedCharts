@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import {ColorComparator} from "../../../../main/typescript/animatedcharts/utility/comparing/ColorComparator";
 import {FrameDataSet} from "../../../../main/typescript/animatedcharts/animation/Animation";
 import {LabelComparator} from "../../../../main/typescript/animatedcharts/utility/comparing/LabelComparator";
 

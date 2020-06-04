@@ -16,7 +16,6 @@
         "canvas": "^2.6.1"
     },
     "main": "src/typescript/animatedcharts/index.ts",
-    "types": "node_modules/xlsx/index.d.ts",
     "engines": {
         "node": ">= 0.4.1"
     },
