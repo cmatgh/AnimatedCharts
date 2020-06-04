@@ -32,15 +32,23 @@ export class AnimationLoop {
         this.frameTickStrategy = frameTickStrategy;
     }
 
+    isRunning() : boolean {
+        return this.started;
+    }
+
+    hasPaused() : boolean {
+        return this.paused;
+    }
+
     start() : void {
-        if(!this.started) {
+        if(!this.isRunning()){
             this.started = true;
-            this.loop();
+            this.animationFrameNumber = this.window.requestAnimationFrame(this.loop.bind(this));
         }
     }
 
     stop() : void {
-        if(this.started){
+        if(this.isRunning()){
             this.window.cancelAnimationFrame(this.animationFrameNumber);
             this.started = false;
         }
@@ -51,11 +59,13 @@ export class AnimationLoop {
     }
 
     resume() : void {
+        //reset the timestamp of last update when resuming, so that tick doesn't get triggered instantly
+        this.lastTimestamp = Date.now();
         this.paused = false;
     }
 
     private loop() : void {
-        if(this.started && !this.paused){
+        if(this.isRunning() && !this.hasPaused()){
             if(Date.now() - this.lastTimestamp > this.updateThreshold){
                 if(this.frameTickStrategy != null) {
                     this.frameTickStrategy();
