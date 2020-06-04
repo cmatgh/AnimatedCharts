@@ -16,7 +16,7 @@ export class ParserFactory {
         return Array.from(this.parsers.keys());
     }
 
-    create(type: string) : Parser{
+    create(type: string) : Parser {
         if(this.parsers.has(type)){
             return this.parsers.get(type);
         }
