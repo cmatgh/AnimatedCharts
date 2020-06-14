@@ -10,14 +10,14 @@ export class AnimationChartUI extends UIElement{
 
     protected html() : string {
         return `
-            <div>
-                <div class="col-md-4 mb-3">
+            <div class="mb-3">
+                <div class="col-md-4 mb-1">
                     <div class="row" id="chart-buttons_">
                         <label for="validationCustom04">Sort by</label>
-                        <select class="custom-select" id="chart-sort-select_${this.id}" required>
-                        <option selected value="value">Value</option>
-                        <option  value="color">Color</option>
-                        <option  value="label">Label</option>
+                        <select class="form-control form-control-sm" id="chart-sort-select_${this.id}" required>
+                            <option selected value="value">Value</option>
+                            <option value="color">Color</option>
+                            <option value="label">Label</option>
                         </select>
                     </div>
                     <div class="form-group row">
@@ -29,12 +29,9 @@ export class AnimationChartUI extends UIElement{
                             </label>
                           </div>
                         </div>
-                      </div>
-                    <div class="invalid-feedback">
-                    
                     </div>
+                    <canvas id="chart_${this.id}" width="350" height="350"></canvas>
                 </div>
-                <canvas class="float-left" id="chart_${this.id}" width="400" height="400"></canvas>
             </div>
         `;
     }
@@ -58,8 +55,8 @@ export class AnimationChartUI extends UIElement{
     animationObject: AnimationChart;
     chart: Chart;
 
-    constructor(type: string, animation: Animation) {
-        super();
+    constructor(elementId: string, type: string, animation: Animation) {
+        super(elementId);
         this.chart = ChartFactory
             .getInstance()
             .create(type, <HTMLCanvasElement> this.$element.find(`#chart_${this.id}`).get(0));
