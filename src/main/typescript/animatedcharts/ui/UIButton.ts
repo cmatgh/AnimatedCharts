@@ -17,8 +17,8 @@ export class UIButton extends UIElement {
     protected id: number;
     private command: Command;
 
-    constructor(label: string, command: Command) {
-        super();
+    constructor(elementId: string, label: string, command: Command) {
+        super(elementId);
         this.$element.html(label);
         this.command = command;
     }

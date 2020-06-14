@@ -13,7 +13,7 @@ describe("AnimationUI", () => {
     let animationUI : AnimationUI;
 
     beforeEach( () => {
-        animationUI = new AnimationUI("some title");
+        animationUI = new AnimationUI("", "some title");
     });
 
     describe("getJQueryElement", () => {

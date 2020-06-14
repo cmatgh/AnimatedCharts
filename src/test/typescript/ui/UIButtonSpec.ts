@@ -18,7 +18,7 @@ describe("UIButton", () => {
     let uiButton : UIButton;
 
     beforeEach( () => {
-        uiButton = new UIButton("title", null);
+        uiButton = new UIButton("", "title", null);
     });
 
     describe("getJQueryElement", () => {

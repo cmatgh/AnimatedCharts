@@ -14,7 +14,7 @@ describe("AnimationChartUI", () => {
     let animationObjectUI : AnimationChartUI;
 
     beforeEach( () => {
-        animationObjectUI = new AnimationChartUI("bar", new Animation(global.window));
+        animationObjectUI = new AnimationChartUI("", "bar", new Animation(global.window));
     });
 
     describe("getJQueryElement", () => {
