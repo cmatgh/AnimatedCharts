@@ -1,5 +1,6 @@
 import {UIElement} from "./UIElement";
 import {Command} from "./command/Command";
+import { Visitor } from "./visitor/Visitor";
 
 export class UIButton extends UIElement {
 
@@ -29,6 +30,10 @@ export class UIButton extends UIElement {
 
     setCommand(command: Command) : void {
         this.command = command;
+    }
+
+    accept(visitor: Visitor): void {
+        visitor.visitButton(this);
     }
 
 }
