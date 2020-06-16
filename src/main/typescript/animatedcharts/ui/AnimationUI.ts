@@ -8,6 +8,7 @@ import {StartAnimatonCommand} from "./command/StartAnimatonCommand";
 import {StopAnimationCommand} from "./command/StopAnimationCommand";
 import {PauseAnimationCommand} from "./command/PauseAnimationCommand";
 import {ResumeAnimationCommand} from "./command/ResumeAnimationCommand";
+import {Visitor} from "./visitor/Visitor";
 
 export class AnimationUI extends UIElement{
 
@@ -84,10 +85,6 @@ export class AnimationUI extends UIElement{
             .map(child => <AnimationChartUI> child)
             .forEach(child => this.animation.register(child.getAnimationObject()));
 
-        this.updateUI();
-    }
-
-    updateUI() {
         this.$element.find(`#title_${this.id}`).html(this.title);
     }
 
@@ -95,33 +92,40 @@ export class AnimationUI extends UIElement{
         return this.$element;
     }
 
-    private findNextCol(size : number) : JQuery {
-        const rowId = Math.floor(size / 2);
+    //TODO
+    // extract to own class
+    //
+    // private findNextCol(size : number) : JQuery {
+    //     const rowId = Math.floor(size / 2);
+    //
+    //     if(!this.hasRowSpace(size)){
+    //         this.$element
+    //             .find(`#animation-content_${this.id}`)
+    //             .append(this.buildRow(rowId));
+    //     }
+    //
+    //     const $row = this.getRow(rowId)
+    //     const $col = $(`<div class="col"></div>`);
+    //     $row.append($col);
+    //
+    //     return $col;
+    // }
+    //
+    // private hasRowSpace(chartCount: number) : boolean {
+    //     // if even it means that the chart is on a new row, so there is no available space
+    //     return chartCount % 2 != 0;
+    // }
+    //
+    // private buildRow(rowId: number) : JQuery {
+    //     return $(`<div class="row" id="chart_${this.id}-row_${rowId}"></div>`);
+    // }
+    //
+    // private getRow(rowId: number) : JQuery {
+    //     return this.$element.find(`#chart_${this.id}-row_${rowId}`);
+    // }
 
-        if(!this.hasRowSpace(size)){
-            this.$element
-                .find(`#animation-content_${this.id}`)
-                .append(this.buildRow(rowId));
-        }
-
-        const $row = this.getRow(rowId)
-        const $col = $(`<div class="col"></div>`);
-        $row.append($col);
-
-        return $col;
-    }
-
-    private hasRowSpace(chartCount: number) : boolean {
-        // if even it means that the chart is on a new row, so there is no available space
-        return chartCount % 2 != 0;
-    }
-
-    private buildRow(rowId: number) : JQuery {
-        return $(`<div class="row" id="chart_${this.id}-row_${rowId}"></div>`);
-    }
-
-    private getRow(rowId: number) : JQuery {
-        return this.$element.find(`#chart_${this.id}-row_${rowId}`);
+    accept(visitor: Visitor): void {
+        visitor.visitAnimationUI(this);
     }
 
     private static YearObserver = class implements Observer {

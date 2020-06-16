@@ -5,6 +5,7 @@ import {Animation} from "../animation/Animation";
 import {UIElement} from "./UIElement";
 import {ComparatorFactory} from "../utility/comparing/ComparatorFactory";
 import {ComparatorUtils} from "../utility/comparing/ComparatorUtils";
+import {Visitor} from "./visitor/Visitor";
 
 export class AnimationChartUI extends UIElement{
 
@@ -24,7 +25,7 @@ export class AnimationChartUI extends UIElement{
                         <div class="col-sm-12">
                           <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="chart-sort-check_${this.id}">
-                            <label class="form-check-label" for="gridCheck1">
+                            <label class="form-check-label" for="chart-sort-check_${this.id}" id="chart-sort-check-label_${this.id}">
                               reverse
                             </label>
                           </div>
@@ -69,5 +70,9 @@ export class AnimationChartUI extends UIElement{
 
     getJQueryElement() : JQuery {
         return this.$element;
+    }
+
+    accept(visitor: Visitor): void {
+        visitor.visitAnimationCharUI(this);
     }
 }
