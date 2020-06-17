@@ -3,12 +3,12 @@ import "mocha"
 import * as spies from 'chai-spies';
 import * as chai from "chai";
 chai.use(spies);
-import { AnimationChart } from "../../main/typescript/animatedcharts/animation/AnimationChart";
+import { AnimationChart } from "../../../main/typescript/animatedcharts/animation/AnimationChart";
 import { JSDOM, DOMWindow } from "jsdom";
-import { Animation } from "../../main/typescript/animatedcharts/animation/Animation";
-import * as mockito from "../../../node_modules/ts-mockito/lib/ts-mockito";
+import { Animation } from "../../../main/typescript/animatedcharts/animation/Animation";
+import * as mockito from "../../../../node_modules/ts-mockito/lib/ts-mockito";
 import Chart from "chart.js";
-import {Observer} from "../../main/typescript/animatedcharts/animation/Observer";
+import {Observer} from "../../../main/typescript/animatedcharts/animation/Observer";
 
 describe("Animation", () => {
 
@@ -235,7 +235,7 @@ describe("Animation", () => {
     });
 
     describe("pause", () => {
-
+         //TODO
     });
 
     describe("resume", () => {

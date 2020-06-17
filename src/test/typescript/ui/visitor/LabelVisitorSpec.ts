@@ -3,6 +3,7 @@ import { expect } from "chai";
 import jsdom = require('jsdom');
 import {LabelVisitor} from "../../../../main/typescript/animatedcharts/ui/visitor/LabelVisitor";
 import {UIButton} from "../../../../main/typescript/animatedcharts/ui/UIButton";
+import {NodeLabelStylingDecorator} from "../../../../main/typescript/animatedcharts/ui/decorator/NodeLabelStylingDecorator";
 import {AnimationUI} from "../../../../main/typescript/animatedcharts/ui/AnimationUI";
 import {AnimationChartUI} from "../../../../main/typescript/animatedcharts/ui/AnimationChartUI";
 import {Animation} from "../../../../main/typescript/animatedcharts/animation/Animation";
@@ -13,178 +14,275 @@ global.window = window
 global.$ = require('jquery');
 global.documet = document;
 
-describe("FontDecoratorVisitor", () => {
+describe("LabelVisitor", () => {
 
-    let fontDecoratorVisitor : LabelVisitor;
+    let labelVisitor : LabelVisitor;
 
     beforeEach( () => {
-        fontDecoratorVisitor = new LabelVisitor(new Set<string>());
+        labelVisitor = new LabelVisitor();
     });
 
-    describe("constructor", () => {
-        it("adds all classes", () => {
-            // when
-            fontDecoratorVisitor = new LabelVisitor(new Set<string>(["class1", "class2", "class3"]));
-
-            // then
-            expect(fontDecoratorVisitor.getClasses().length).to.be.eq(3);
-            expect(fontDecoratorVisitor.getClasses()).contains("class1");
-            expect(fontDecoratorVisitor.getClasses()).contains("class2");
-            expect(fontDecoratorVisitor.getClasses()).contains("class3");
-        });
-
-        it("should not add a the same class twice", () => {
+    describe("addDecorator", () => {
+        it("should add a the decorator", () => {
             // given
-            fontDecoratorVisitor.addClass("class");
+            let labelVisitor = new LabelVisitor();
+            let decorator = new NodeLabelStylingDecorator("a")
 
             // when
-            fontDecoratorVisitor.addClass("class");
+            labelVisitor.addDecorator(decorator);
 
             // then
-            expect(fontDecoratorVisitor.getClasses().length).to.be.eq(1);
-            expect(fontDecoratorVisitor.getClasses()[0]).to.be.eq("class");
-        });
-    });
-
-    describe("addClass", () => {
-        it("should add a class", () => {
-            // when
-            fontDecoratorVisitor.addClass("class");
-
-            // then
-            expect(fontDecoratorVisitor.getClasses().length).to.be.eq(1);
-            expect(fontDecoratorVisitor.getClasses()[0]).to.be.eq("class");
+            expect(labelVisitor.getLabelStyling()).to.be.eq(decorator);
+            let expectedDecoratorA = (<NodeLabelStylingDecorator>labelVisitor.getLabelStyling());
+            expect(expectedDecoratorA.getLabelStyling()).to.be.null;
         });
 
-        it("should not add a the same class twice", () => {
+        it("should throw error when decorator already exists", () => {
             // given
-            fontDecoratorVisitor.addClass("class");
-
-            // when
-            fontDecoratorVisitor.addClass("class");
+            let labelVisitor = new LabelVisitor();
+            let decoratorA = new NodeLabelStylingDecorator("a");
+            let decoratorB = new NodeLabelStylingDecorator("b");
+            labelVisitor.addDecorator(decoratorA);
+            labelVisitor.addDecorator(decoratorB);
 
             // then
-            expect(fontDecoratorVisitor.getClasses().length).to.be.eq(1);
-            expect(fontDecoratorVisitor.getClasses()[0]).to.be.eq("class");
+            expect(() => labelVisitor.addDecorator(decoratorA)).to.throw("Decorator already exists");
+        });
+
+        it("should add a the decorator on top of other decorators", () => {
+            // given
+            let labelVisitor = new LabelVisitor();
+            let decoratorA = new NodeLabelStylingDecorator("a")
+            let decoratorB = new NodeLabelStylingDecorator("b")
+
+            // when
+            labelVisitor.addDecorator(decoratorA);
+            labelVisitor.addDecorator(decoratorB);
+
+            // then
+            expect(labelVisitor.getLabelStyling()).to.be.eq(decoratorB);
+            let expectedDecoratorB = <NodeLabelStylingDecorator>labelVisitor.getLabelStyling();
+            expect(expectedDecoratorB.getLabelStyling()).to.be.eq(decoratorA);
+            let expectedDecoratorA =<NodeLabelStylingDecorator> (<NodeLabelStylingDecorator>labelVisitor.getLabelStyling()).getLabelStyling();
+            expect(expectedDecoratorA.getLabelStyling()).to.be.null;
         });
     });
 
-    describe("removeClass", () => {
-        it("should remove class", () => {
-            fontDecoratorVisitor = new LabelVisitor(new Set<string>(["class"]));
+    describe("removeDecorator", () => {
+        it("should remove decorator", () => {
+            // given
+            let labelVisitor = new LabelVisitor();
+            let decorator = new NodeLabelStylingDecorator("a")
+            labelVisitor.addDecorator(decorator);
 
             // when
-            fontDecoratorVisitor.removeClass("class");
+            labelVisitor.removeDecorator(decorator);
 
             // then
-            expect(fontDecoratorVisitor.getClasses().length).to.be.eq(0);
+            expect(labelVisitor.getLabelStyling()).to.be.null;
+            expect(decorator.getLabelStyling()).to.be.null;
         });
 
-        it("should do nothing when not existing", () => {
+        it("should do nothing when decorator not existing", () => {
+            // given
+            let labelVisitor = new LabelVisitor();
+            let decorator = new NodeLabelStylingDecorator("a")
+            labelVisitor.addDecorator(decorator);
+
             // when
-            fontDecoratorVisitor.removeClass("class");
+            labelVisitor.removeDecorator(new NodeLabelStylingDecorator("b"));
 
             // then
-            expect(fontDecoratorVisitor.getClasses().length).to.be.eq(0);
+            expect(labelVisitor.getLabelStyling()).to.be.eq(decorator);
+            expect((<NodeLabelStylingDecorator>labelVisitor.getLabelStyling()).getLabelStyling()).to.be.null;
         });
-    });
 
-
-    describe("clearClasses", () => {
-        it("should remove all classes", () => {
-            fontDecoratorVisitor = new LabelVisitor(new Set<string>(["class1", "class2", "class3"]));
+        it("should have correct structure when removing decorator in between two decorators", () => {
+            // given
+            let labelVisitor = new LabelVisitor();
+            let decoratorA = new NodeLabelStylingDecorator("a");
+            let decoratorB = new NodeLabelStylingDecorator("b");
+            let decoratorC = new NodeLabelStylingDecorator("c");
+            labelVisitor.addDecorator(decoratorA);
+            labelVisitor.addDecorator(decoratorB);
+            labelVisitor.addDecorator(decoratorC);
 
             // when
-            fontDecoratorVisitor.clearClasses();
+            labelVisitor.removeDecorator(decoratorB);
 
             // then
-            expect(fontDecoratorVisitor.getClasses().length).to.be.eq(0);
+            expect(labelVisitor.getLabelStyling()).to.be.eq(decoratorC);
+            let expectedDecoratorC = <NodeLabelStylingDecorator> labelVisitor.getLabelStyling();
+            expect(expectedDecoratorC.getLabelStyling()).to.be.eq(decoratorA);
+            let expectedDecoratorA = <NodeLabelStylingDecorator> expectedDecoratorC.getLabelStyling();
+            expect(expectedDecoratorA.getLabelStyling()).to.be.null;
+        });
+
+        it("should have correct structure when removing first decorator", () => {
+            // given
+            let labelVisitor = new LabelVisitor();
+            let decoratorA = new NodeLabelStylingDecorator("a");
+            let decoratorB = new NodeLabelStylingDecorator("b");
+            let decoratorC = new NodeLabelStylingDecorator("c");
+            labelVisitor.addDecorator(decoratorA);
+            labelVisitor.addDecorator(decoratorB);
+            labelVisitor.addDecorator(decoratorC);
+
+            // when
+            labelVisitor.removeDecorator(decoratorC);
+
+            // then
+            expect(labelVisitor.getLabelStyling()).to.be.eq(decoratorB);
+            let expectedDecoratorB = <NodeLabelStylingDecorator> labelVisitor.getLabelStyling();
+            expect(expectedDecoratorB.getLabelStyling()).to.be.eq(decoratorA);
+            let expectedDecoratorA = <NodeLabelStylingDecorator> expectedDecoratorB.getLabelStyling();
+            expect(expectedDecoratorA.getLabelStyling()).to.be.null;
+        });
+
+        it("should have correct structure when removing last decorator", () => {
+            // given
+            let labelVisitor = new LabelVisitor();
+            let decoratorA = new NodeLabelStylingDecorator("a");
+            let decoratorB = new NodeLabelStylingDecorator("b");
+            let decoratorC = new NodeLabelStylingDecorator("c");
+            labelVisitor.addDecorator(decoratorA);
+            labelVisitor.addDecorator(decoratorB);
+            labelVisitor.addDecorator(decoratorC);
+
+            // when
+            labelVisitor.removeDecorator(decoratorA);
+
+            // then
+            expect(labelVisitor.getLabelStyling()).to.be.eq(decoratorC);
+            let expectedDecoratorC = <NodeLabelStylingDecorator> labelVisitor.getLabelStyling();
+            expect(expectedDecoratorC.getLabelStyling()).to.be.eq(decoratorB);
+            let expectedDecoratorB = <NodeLabelStylingDecorator> expectedDecoratorC.getLabelStyling();
+            expect(expectedDecoratorB.getLabelStyling()).to.be.null;
+        });
+    }); describe("hasDecorator", () => {
+        it("should have decorator when added", () => {
+            // given
+            let labelVisitor = new LabelVisitor();
+            let decorator = new NodeLabelStylingDecorator("a")
+            labelVisitor.addDecorator(decorator);
+
+            // when
+            let has = labelVisitor.hasDecorator(decorator);
+
+            // then
+            expect(has).to.be.true;
+        });
+
+        it("should not have decorator when not added", () => {
+            // given
+            let labelVisitor = new LabelVisitor();
+            let decorator = new NodeLabelStylingDecorator("a")
+
+            // when
+            let has = labelVisitor.hasDecorator(decorator);
+
+            // then
+            expect(has).to.be.false;
         });
     });
 
     describe("visitButton", () => {
-        it("should not apply any classes when no classes specified", () => {
+
+        it("should not decorator when decorator is null", () => {
             // given
             const button = new UIButton("", "Label", null);
-            button.getJQueryElement().addClass("testClass")
-            const classesBefore = button.getJQueryElement().attr("class");
+            labelVisitor = new LabelVisitor();
 
             // when
-            fontDecoratorVisitor.visitButton(button);
+            labelVisitor.visitButton(button);
 
             //then
-            expect(button.getJQueryElement().attr("class")).to.be.eq(classesBefore);
-        });
-
-        it("should apply decoratorClasses attribute to button element when no classes specified", () => {
-            // given
-            const button = new UIButton("", "Label", null);
-
-            // when
-            fontDecoratorVisitor.visitButton(button);
-
-            //then
-            expect(button.getJQueryElement().attr("decoratorClasses")).to.be.eq("");
+            expect(button.getJQueryElement().text()).to.be.eq("Label");
         })
 
-        it("should apply all classes", () => {
+        it("should apply decorator", () => {
             // given
             const button = new UIButton("", "Label", null);
-            fontDecoratorVisitor = new LabelVisitor(new Set<string>(["class1", "class2"]));
+            labelVisitor = new LabelVisitor();
+            labelVisitor.addDecorator(new NodeLabelStylingDecorator("a"));
 
             // when
-            fontDecoratorVisitor.visitButton(button);
+            labelVisitor.visitButton(button);
 
             //then
-            expect(button.getJQueryElement().attr("decoratorClasses")).to.be.eq("class1 class2");
-            expect(button.getJQueryElement().attr("class")).to.contain("class1");
-            expect(button.getJQueryElement().attr("class")).to.contain("class2");
+            expect(button.getJQueryElement().html()).to.be.eq("<a>Label</a>")
         })
 
-        it("should remove all classes that are no longer specified without removing classes that the visitor has not set", () => {
+        it("should apply multiple decorators", () => {
             // given
             const button = new UIButton("", "Label", null);
-            const classesBefore = button.getJQueryElement().attr("class");
-            fontDecoratorVisitor = new LabelVisitor(new Set<string>(["class1", "class2"]));
-            fontDecoratorVisitor.clearClasses();
+            labelVisitor = new LabelVisitor();
+            labelVisitor.addDecorator(new NodeLabelStylingDecorator("a"));
+            labelVisitor.addDecorator(new NodeLabelStylingDecorator("b"));
 
             // when
-            fontDecoratorVisitor.visitButton(button);
+            labelVisitor.visitButton(button);
 
             //then
-            expect(button.getJQueryElement().attr("class")).to.not.contain("class1");
-            expect(button.getJQueryElement().attr("class")).to.not.contain("class2");
-            expect(button.getJQueryElement().attr("class")).to.contain(classesBefore);
+            expect(button.getJQueryElement().html()).to.be.eq("<a><b>Label</b></a>")
+        })
+
+        it("should remove decorator from label when decorator was applied before", () => {
+            // given
+            const button = new UIButton("", "Label", null);
+            const labelVisitor = new LabelVisitor();
+            const decorator = new NodeLabelStylingDecorator("a");
+            labelVisitor.addDecorator(decorator);
+            labelVisitor.visitButton(button);
+            labelVisitor.removeDecorator(decorator);
+
+            // when
+            labelVisitor.visitButton(button);
+
+            //then
+            expect(button.getJQueryElement().html()).to.be.eq("Label")
+        })
+
+        it("should throw an error if there are multiple leaf nodes", () => {
+            //TODO
         })
     });
 
     describe("visitAnimationUI", () => {
-        it("sets classes to the correct fields", () => {
+        it("should apply decorators", () => {
             // given
-            const animationUI = new AnimationUI("", "title");
-            fontDecoratorVisitor.addClass("decoratorClass");
+            const animationUI = new AnimationUI("animationUI", "title");
+            labelVisitor = new LabelVisitor();
+            labelVisitor.addDecorator(new NodeLabelStylingDecorator("a"));
+            labelVisitor.addDecorator(new NodeLabelStylingDecorator("b"));
+            const title = animationUI.getTitleElement().html();
+            const checkLabel = animationUI.getPropertyElement().html();
 
             // when
-            fontDecoratorVisitor.visitAnimationUI(animationUI);
+            labelVisitor.visitAnimationUI(animationUI);
 
-            //then
-            expect(animationUI.getJQueryElement().find(`#property_${animationUI.getId()}`).attr("class")).to.contain("decoratorClass");
-            expect(animationUI.getJQueryElement().find(`#title_${animationUI.getId()}`).attr("class")).to.contain("decoratorClass");
+            // then
+            expect(animationUI.getTitleElement().html()).to.be.eq(`<a><b>${title}</b></a>`);
+            expect(animationUI.getPropertyElement().html()).to.be.eq(`<a><b>${checkLabel}</b></a>`);
         });
     });
 
     describe("visitAnimationChartUI", () => {
-        it("sets classes to the correct fields", () => {
+        it("should apply decorators", () => {
             // given
-            const animationChartUI = new AnimationChartUI("", "bar", new Animation(global.window));
-            fontDecoratorVisitor.addClass("decoratorClass");
+            const animationChartUI = new AnimationChartUI("animationChartUI", "bar", new Animation(null));
+            labelVisitor = new LabelVisitor();
+            labelVisitor.addDecorator(new NodeLabelStylingDecorator("a"));
+            labelVisitor.addDecorator(new NodeLabelStylingDecorator("b"));
+            const selectLabel = animationChartUI.getSelectLabelElement().html();
+            const checkLabel = animationChartUI.getCheckLabelElement().html();
 
             // when
-            fontDecoratorVisitor.visitAnimationCharUI(animationChartUI);
+            labelVisitor.visitAnimationCharUI(animationChartUI);
 
-            //then
-            expect(animationChartUI.getJQueryElement().find(`#chart-sort-check-label_${animationChartUI.getId()}`).attr("class")).to.contain("decoratorClass");
-            expect(animationChartUI.getJQueryElement().find(`#chart-sort-select_${animationChartUI.getId()}`).attr("class")).to.contain("decoratorClass");
+            // then
+            expect(animationChartUI.getSelectLabelElement().html()).to.be.eq(`<a><b>${selectLabel}</b></a>`);
+            expect(animationChartUI.getCheckLabelElement().html()).to.be.eq(`<a><b>${checkLabel}</b></a>`);
         });
     });
 });

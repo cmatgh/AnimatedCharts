@@ -9,6 +9,8 @@ import {StopAnimationCommand} from "./command/StopAnimationCommand";
 import {PauseAnimationCommand} from "./command/PauseAnimationCommand";
 import {ResumeAnimationCommand} from "./command/ResumeAnimationCommand";
 import {Visitor} from "./visitor/Visitor";
+import {ApplyDecoratorCommand} from "./command/ApplyDecoratorCommand";
+import {LabelVisitor} from "./visitor/LabelVisitor";
 
 export class AnimationUI extends UIElement{
 
@@ -21,13 +23,36 @@ export class AnimationUI extends UIElement{
                 </div>
                 <div class="row">
                     <div class="col-md-2 border-right">
-                        <div id="animation-buttons_${this.id}">     
-                            <div id="load-dataset-button_${this.id}"></div>         
-                            <div id="start-button_${this.id}"></div>         
-                            <div id="stop-button_${this.id}"></div>         
-                            <div id="resume-button_${this.id}"></div>         
-                            <div id="pause-button_${this.id}"></div>         
+                        <div class="row">
+                            <div class="col-md-12">
+                                 <div id="animation-buttons_${this.id}"  class="d-flex flex-column">    
+                                    <h3 class="border-bottom pb-2" id="data-label_${this.id}">Data:</h3> 
+                                    <div id="load-dataset-button_${this.id}"></div>               
+                                </div>
+                            </div> 
                         </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <div id="animation-buttons_${this.id}"  class="d-flex flex-column">    
+                                    <h3 class="border-bottom pb-2" id="control-label_${this.id}">Control:</h3> 
+                                    <div id="load-dataset-button_${this.id}"></div>         
+                                    <div id="start-button_${this.id}"></div>         
+                                    <div id="stop-button_${this.id}"></div>         
+                                    <div id="resume-button_${this.id}"></div>         
+                                    <div id="pause-button_${this.id}"></div>         
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <div id="decorator-buttons_${this.id}" class="d-flex flex-column">     
+                                    <h3 class="border-bottom pb-2" id="decorators-label_${this.id}">Decorators:</h3>
+                                    <div id="bold-decorator-button_${this.id}"></div>         
+                                    <div id="underline-decorator-button_${this.id}"></div>         
+                                    <div id="small-decorator-button_${this.id}"></div>             
+                                </div>
+                            </div>
+                        </div>  
                     </div>
                     <div class="col-md-10">
                         <div id="animation-content_${this.id}">    
@@ -61,6 +86,26 @@ export class AnimationUI extends UIElement{
     private title : string;
     private animation: Animation;
 
+    getTitleElement() : JQuery {
+        return this.$element.find(`#title_${this.id}`);
+    }
+
+    getPropertyElement() : JQuery {
+        return this.$element.find(`#property_${this.id}`);
+    }
+
+    getDecoratorsLabelElement() : JQuery {
+        return this.$element.find(`#decorators-label_${this.id}`);
+    }
+
+    getControlLabelElement() : JQuery {
+        return this.$element.find(`#control-label_${this.id}`);
+    }
+
+    getDataLabelElement() : JQuery {
+        return this.$element.find(`#data-label_${this.id}`);
+    }
+
     constructor(elementId : string, title: string) {
         super(elementId);
 
@@ -79,6 +124,11 @@ export class AnimationUI extends UIElement{
         this.addElement(new UIButton(`stop-button_${this.id}`, "Stop", new StopAnimationCommand(this.animation)));
         this.addElement(new UIButton(`pause-button_${this.id}`, "Pause", new PauseAnimationCommand(this.animation)));
         this.addElement(new UIButton(`resume-button_${this.id}`, "Resume", new ResumeAnimationCommand(this.animation)));
+
+        const labelVisitor = new LabelVisitor();
+        this.addElement(new UIButton(`bold-decorator-button_${this.id}`, "Bold", new ApplyDecoratorCommand("b", labelVisitor, this)));
+        this.addElement(new UIButton(`underline-decorator-button_${this.id}`, "Underline", new ApplyDecoratorCommand("u", labelVisitor, this)));
+        this.addElement(new UIButton(`small-decorator-button_${this.id}`, "Small", new ApplyDecoratorCommand("small", labelVisitor, this)));
 
         Array.from(this.childUIElements)
             .filter(child => child instanceof AnimationChartUI)

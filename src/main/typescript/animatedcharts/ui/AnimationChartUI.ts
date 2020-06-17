@@ -14,7 +14,7 @@ export class AnimationChartUI extends UIElement{
             <div class="mb-3">
                 <div class="col-md-4 mb-1">
                     <div class="row" id="chart-buttons_">
-                        <label for="validationCustom04">Sort by</label>
+                        <label for="validationCustom04" id="chart-sort-select-label_${this.id}">Sort by</label>
                         <select class="form-control form-control-sm" id="chart-sort-select_${this.id}" required>
                             <option selected value="value">Value</option>
                             <option value="color">Color</option>
@@ -35,6 +35,14 @@ export class AnimationChartUI extends UIElement{
                 </div>
             </div>
         `;
+    }
+
+    getSelectLabelElement() : JQuery {
+        return this.$element.find(`#chart-sort-select-label_${this.id}`);
+    }
+
+    getCheckLabelElement() : JQuery {
+        return this.$element.find(`#chart-sort-check-label_${this.id}`);
     }
 
     protected events() : void {

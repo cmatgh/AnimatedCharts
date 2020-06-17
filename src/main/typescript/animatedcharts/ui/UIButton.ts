@@ -6,7 +6,7 @@ export class UIButton extends UIElement {
 
     protected html(): string {
         return `
-            <button type="button" class="btn btn-primary"></button>     
+            <button type="button" class="btn btn-sm btn-primary btn-block mt-1 mb-1"></button>     
         `;
     }
 
