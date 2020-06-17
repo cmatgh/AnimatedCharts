@@ -50,6 +50,7 @@ export class AnimationUI extends UIElement{
                                     <div id="bold-decorator-button_${this.id}"></div>         
                                     <div id="underline-decorator-button_${this.id}"></div>         
                                     <div id="small-decorator-button_${this.id}"></div>             
+                                    <div id="italicized-decorator-button_${this.id}"></div>             
                                 </div>
                             </div>
                         </div>  
@@ -83,8 +84,8 @@ export class AnimationUI extends UIElement{
 
     }
 
-    private title : string;
-    private animation: Animation;
+    private readonly title : string;
+    private readonly animation: Animation;
 
     getTitleElement() : JQuery {
         return this.$element.find(`#title_${this.id}`);
@@ -129,8 +130,9 @@ export class AnimationUI extends UIElement{
         this.addElement(new UIButton(`bold-decorator-button_${this.id}`, "Bold", new ApplyDecoratorCommand("b", labelVisitor, this)));
         this.addElement(new UIButton(`underline-decorator-button_${this.id}`, "Underline", new ApplyDecoratorCommand("u", labelVisitor, this)));
         this.addElement(new UIButton(`small-decorator-button_${this.id}`, "Small", new ApplyDecoratorCommand("small", labelVisitor, this)));
+        this.addElement(new UIButton(`italicized-decorator-button_${this.id}`, "Italic", new ApplyDecoratorCommand("em", labelVisitor, this)));
 
-        Array.from(this.childUIElements)
+        Array.from(this.childElements)
             .filter(child => child instanceof AnimationChartUI)
             .map(child => <AnimationChartUI> child)
             .forEach(child => this.animation.register(child.getAnimationObject()));

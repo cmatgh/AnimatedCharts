@@ -13,25 +13,25 @@ export class AnimationChartUI extends UIElement{
         return `
             <div class="mb-3">
                 <div class="col-md-4 mb-1">
-                    <div class="row" id="chart-buttons_">
-                        <label for="validationCustom04" id="chart-sort-select-label_${this.id}">Sort by</label>
-                        <select class="form-control form-control-sm" id="chart-sort-select_${this.id}" required>
-                            <option selected value="value">Value</option>
-                            <option value="color">Color</option>
-                            <option value="label">Label</option>
-                        </select>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="chart-sort-check_${this.id}">
-                            <label class="form-check-label" for="chart-sort-check_${this.id}" id="chart-sort-check-label_${this.id}">
-                              reverse
-                            </label>
-                          </div>
+                    <form>
+                        <div class="form-group" id="chart-buttons_">
+                            <label for="chart-sort-select_${this.id}" id="chart-sort-select-label_${this.id}">Sort by</label>
+                            <select class="form-control form-control-sm" id="chart-sort-select_${this.id}" required>
+                                <option selected value="value">Value</option>
+                                <option value="color">Color</option>
+                                <option value="label">Label</option>
+                            </select>
                         </div>
-                    </div>
-                    <canvas id="chart_${this.id}" width="350" height="350"></canvas>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="chart-sort-check_${this.id}">
+                                <label class="form-check-label" for="chart-sort-check_${this.id}" id="chart-sort-check-label_${this.id}">
+                                  reverse
+                                </label>
+                            </div>
+                        </div>
+                        <canvas id="chart_${this.id}" width="350" height="350"></canvas>
+                    </form>
                 </div>
             </div>
         `;
@@ -53,6 +53,7 @@ export class AnimationChartUI extends UIElement{
                 .create($(event.target).val().toString()))
                 this.animationObject.update();
             });
+
         this.$element
             .find(`#chart-sort-check_${this.id}`)
             .on("change", (event: Event) => {
