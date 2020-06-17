@@ -16,7 +16,7 @@ export class AnimationUI extends UIElement{
 
     protected html(): string {
         return `
-            <div class="container">
+            <div class="container mb-5">
                 <div class="row justify-content-center border-bottom mb-3" >  
                     <h1 id="title_${this.id}"></h1>
                     <h2 class="display-2" id="property_${this.id}"></h2>

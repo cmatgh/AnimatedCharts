@@ -1,5 +1,5 @@
-import { ChartAnimationApp } from "./ChartAnimationApp"
+import { AppUI } from "./ui/AppUI"
 
-( (window) => {
-    new ChartAnimationApp(window);
-})(window)
+(() => {
+    new AppUI("animation-chart");
+})()

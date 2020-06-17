@@ -11,7 +11,7 @@ export class AnimationChartUI extends UIElement{
 
     protected html() : string {
         return `
-            <div class="mb-3">
+            <div class="mb-3 pb-2 border-bottom">
                 <div class="col-md-4 mb-1">
                     <form>
                         <div class="form-group" id="chart-buttons_">
