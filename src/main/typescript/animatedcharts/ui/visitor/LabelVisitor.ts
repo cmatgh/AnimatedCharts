@@ -68,6 +68,9 @@ export class LabelVisitor implements Visitor{
     visitAnimationUI(animationUI: AnimationUI): void {
         this.applyStyling(animationUI.getTitleElement());
         this.applyStyling(animationUI.getPropertyElement());
+        this.applyStyling(animationUI.getControlLabelElement());
+        this.applyStyling(animationUI.getDecoratorsLabelElement());
+        this.applyStyling(animationUI.getDataLabelElement());
 
         this.visitChildren(animationUI);
     }
