@@ -10,4 +10,6 @@ Design Patterns used:
 -Singleton
 -Strategy
 -Composite
+-Decorator
+-Visitor
 ```
