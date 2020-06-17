@@ -35,5 +35,4 @@ export class UIButton extends UIElement {
     accept(visitor: Visitor): void {
         visitor.visitButton(this);
     }
-
 }

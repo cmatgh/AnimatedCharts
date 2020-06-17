@@ -26,22 +26,23 @@ export class LabelVisitor implements Visitor{
     }
 
     removeDecorator(stylingDecorator : LabelStylingDecorator) : void {
-        let curLabelStyling = this.labelStyling;
-        let lastLabelStyling = null;
+        let curDecorator = this.labelStyling;
+        let prevDecorator = null;
 
-        while(curLabelStyling instanceof LabelStylingDecorator) {
-            if(curLabelStyling === stylingDecorator) {
+        while(curDecorator instanceof LabelStylingDecorator) {
+            let nextDecorator = <LabelStylingDecorator> curDecorator.getLabelStyling();
 
-                if(lastLabelStyling != null) {
-                    (<LabelStylingDecorator>lastLabelStyling).setLabelStyling(curLabelStyling.getLabelStyling());
+            if(curDecorator === stylingDecorator) {
+                if(prevDecorator != null) {
+                    prevDecorator.setLabelStyling(nextDecorator);
                 }else {
-                    this.labelStyling = curLabelStyling.getLabelStyling();
+                    this.labelStyling = nextDecorator;
                 }
-                curLabelStyling = curLabelStyling.getLabelStyling();
+                curDecorator = nextDecorator;
                 stylingDecorator.setLabelStyling(null);
             } else {
-                lastLabelStyling = curLabelStyling;
-                curLabelStyling = curLabelStyling.getLabelStyling();
+                prevDecorator = curDecorator;
+                curDecorator = nextDecorator;
             }
 
         }
