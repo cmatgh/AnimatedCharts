@@ -13,7 +13,7 @@ export class OpenFileDialogCommand implements Command {
     constructor(animation: Animation) {
         this.animation = animation;
         this.parserFactory = new ParserFactory();
-        this.openFileElement = $("input");
+        this.openFileElement = $("<input>");
         this.openFileElement.attr("type", "file");
         this.openFileElement.attr("accept", this.parserFactory.getTypes().map( type => "." +type).join(","));
         this.openFileElement.on("change", (event: Event) => this.loadContent(event) );
