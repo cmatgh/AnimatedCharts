@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import Chart from "chart.js";
-import { AnimationChart } from "../../main/typescript/animatedcharts/animation/AnimationChart";
-import { Animation } from "../../main/typescript/animatedcharts/animation/Animation";
-import * as mockito from "../../../node_modules/ts-mockito/lib/ts-mockito";
-import {ValueComparator} from "../../main/typescript/animatedcharts/utility/comparing/ValueComparator";
-import {ComparatorFactory} from "../../main/typescript/animatedcharts/utility/comparing/ComparatorFactory";
-import {ColorComparator} from "../../main/typescript/animatedcharts/utility/comparing/ColorComparator";
+import { AnimationChart } from "../../../main/typescript/animatedcharts/animation/AnimationChart";
+import { Animation } from "../../../main/typescript/animatedcharts/animation/Animation";
+import * as mockito from "../../../../node_modules/ts-mockito/lib/ts-mockito";
+import {ValueComparator} from "../../../main/typescript/animatedcharts/utility/comparing/ValueComparator";
+import {ComparatorFactory} from "../../../main/typescript/animatedcharts/utility/comparing/ComparatorFactory";
+import {ColorComparator} from "../../../main/typescript/animatedcharts/utility/comparing/ColorComparator";
 
 describe("AnimationChart", () => {
 
