@@ -51,11 +51,14 @@ export class AnimationLoop {
         if(this.isRunning()){
             this.window.cancelAnimationFrame(this.animationFrameNumber);
             this.started = false;
+            this.paused = false;
         }
     }
 
     pause() : void {
-        this.paused = true;
+        if(this.isRunning()) {
+            this.paused = true;
+        }
     }
 
     resume() : void {

@@ -235,7 +235,7 @@ describe("Animation", () => {
     });
 
     describe("pause", () => {
-
+         //TODO
     });
 
     describe("resume", () => {

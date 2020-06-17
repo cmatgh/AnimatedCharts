@@ -32,16 +32,14 @@ export class Animation implements Observable{
 
     constructor(window: Window) {
         this.animationObjects = new Set();
-        this.dataObject = {valuesLength : 0, dataSets : [], columnDefs : []};
+        this.dataObject = null;
         this.animationLoop = new AnimationLoop(window, { updatesPerSecond : 2 });
         this.frame = 0;
-        this.numFrames = this.dataObject.valuesLength;
+        this.numFrames = 0;
         this.animationLoop.setFrameTickStrategy(() => {
             this.incrementFrame();
             this.notifyAnimationObjects();
         })
-
-        this.setColors(this.dataObject);
     }
 
     setDataObject(dataObject: DataObject) : void {
@@ -78,17 +76,23 @@ export class Animation implements Observable{
     }
 
     getCurrentFrameData() : FrameDataSet[] {
-        return this.dataObject.dataSets.map( set => {
-            return {
-                label: set.label.slice(),
-                color : [...set.color],
-                value: set.values[this.frame]
-            }
-        });
+        if(this.dataObject != null) {
+            return this.dataObject.dataSets.map( set => {
+                return {
+                    label: set.label.slice(),
+                    color : [...set.color],
+                    value: set.values[this.frame]
+                }
+            });
+        }
+        return [];
     }
 
     getCurrentColumnProperty() : string {
-        return this.dataObject.columnDefs[2 + this.frame];
+        if(this.dataObject != null) {
+            return this.dataObject.columnDefs[2 + this.frame];
+        }
+        return "";
     }
 
     incrementFrame() : void{
@@ -97,7 +101,9 @@ export class Animation implements Observable{
     }
 
     start() : void{
-        this.animationLoop.start();
+        if(this.dataObject != null) {
+            this.animationLoop.start();
+        }
     }
 
     stop() : void{

@@ -76,6 +76,15 @@ describe("AnimationLoop", () => {
             expect(animationLoop.isRunning()).to.be.false;
             animationLoop.stop();
         });
+
+        it("should stop running and unpause when paused", () => {
+            animationLoop.start();
+
+            animationLoop.stop();
+
+            expect(animationLoop.isRunning()).to.be.false;
+            expect(animationLoop.hasPaused()).to.be.false;
+        });
     });
 
     describe("pause", () => {
@@ -108,6 +117,13 @@ describe("AnimationLoop", () => {
 
 
         }).timeout(2000);
+
+        it("should not pause when not running", () => {
+            expect(animationLoop.isRunning()).to.be.false;
+            animationLoop.pause();
+
+            expect(animationLoop.hasPaused()).to.be.false;
+        });
     });
 
     describe("resume", () => {
@@ -149,7 +165,9 @@ describe("AnimationLoop", () => {
     });
 
     describe("setUpdatesPerSecond", () => {
-        //TODO
+        it("", () => {
+            //TODO
+        });
     });
 
     describe("setFrameTickStrategy", () => {
