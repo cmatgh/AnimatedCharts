@@ -1,5 +1,7 @@
-import { AppUI } from "./ui/AppUI"
+import { AppComponent } from "./ui/app/AppComponent"
 
 (() => {
-    new AppUI("animation-chart");
+    const component = new AppComponent("animation-chart");
+    component.buildJQueryStructure()
+    $(`#animation-chart`).append(component.getJQueryElement());
 })()

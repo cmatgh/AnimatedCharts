@@ -1,7 +1,7 @@
 import {Command} from "./Command";
-import {Animation} from "../../animation/Animation";
+import {Animation} from "../animation/Animation";
 
-export class ResumeAnimationCommand implements Command {
+export class StopAnimationCommand implements Command {
 
     private animation : Animation;
 
@@ -10,6 +10,7 @@ export class ResumeAnimationCommand implements Command {
     }
 
     execute(event: Event): void {
-        this.animation.resume();
+        this.animation.stop();
     }
+
 }

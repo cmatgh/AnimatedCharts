@@ -1,10 +1,10 @@
 import {Visitor} from "./Visitor";
-import {AnimationChartUI} from "../AnimationChartUI";
-import {AnimationUI} from "../AnimationUI";
-import {UIButton} from "../UIButton";
-import {UIElement} from "../UIElement";
 import {LabelStyling} from "../decorator/LabelStyling";
 import {LabelStylingDecorator} from "../decorator/LabelStylingDecorator";
+import {ChartComponent} from "../ui/chart/ChartComponent";
+import {AnimationComponent} from "../ui/animation/AnimationComponent";
+import {ButtonComponent} from "../ui/button/ButtonComponent";
+import {Component} from "../ui/Component";
 
 export class LabelVisitor implements Visitor{
 
@@ -59,14 +59,14 @@ export class LabelVisitor implements Visitor{
         return false;
     }
 
-    visitAnimationCharUI(animationChartUI: AnimationChartUI): void {
+    visitAnimationCharUI(animationChartUI: ChartComponent): void {
         this.applyStyling(animationChartUI.getCheckLabelElement());
         this.applyStyling(animationChartUI.getSelectLabelElement());
 
         this.visitChildren(animationChartUI);
     }
 
-    visitAnimationUI(animationUI: AnimationUI): void {
+    visitAnimationUI(animationUI: AnimationComponent): void {
         this.applyStyling(animationUI.getTitleElement());
         this.applyStyling(animationUI.getPropertyElement());
         this.applyStyling(animationUI.getControlLabelElement());
@@ -76,14 +76,14 @@ export class LabelVisitor implements Visitor{
         this.visitChildren(animationUI);
     }
 
-    visitButton(button: UIButton): void {
+    visitButton(button: ButtonComponent): void {
         this.applyStyling(button.getJQueryElement());
 
         this.visitChildren(button);
     }
 
-    private visitChildren(uiElement : UIElement) : void {
-        uiElement.getElements().forEach( element => element.accept(this));
+    private visitChildren(uiElement : Component) : void {
+      //  uiElement.g().forEach( element => element.accept(this));
     }
 
     private applyStyling(element : JQuery) : void {

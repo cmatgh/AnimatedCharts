@@ -1,7 +1,7 @@
 import "mocha"
 import { expect } from "chai";
 import jsdom = require('jsdom');
-import {AnimationUI} from "../../../main/typescript/animatedcharts/ui/AnimationUI";
+import {AnimationComponent} from "../../../main/typescript/animatedcharts/ui/animation/AnimationComponent";
 var document = new jsdom.JSDOM(`<!DOCTYPE html><html></html>`).window.document;
 var window = document.defaultView;
 
@@ -10,10 +10,10 @@ global.$ = require('jquery');
 
 describe("AnimationUI", () => {
 
-    let animationUI : AnimationUI;
+    let animationUI : AnimationComponent;
 
     beforeEach( () => {
-        animationUI = new AnimationUI("", "some title");
+        animationUI = new AnimationComponent("", "some title");
     });
 
     describe("getJQueryElement", () => {

@@ -129,7 +129,7 @@ describe("Animation", () => {
             chai.spy.on(animationObject, "update");
 
             animation.register(animationObject);
-            animation.notifyAnimationObjects();
+            animation.notifyObservers();
 
             expect(animationObject.update).to.have.been.called();
         });
@@ -224,7 +224,7 @@ describe("Animation", () => {
             await new Promise(resolve => setTimeout(() => { resolve() }, 2100))
             .then( () => {
                 expect(animation.incrementFrame).to.have.been.called.exactly(4);
-                expect(animation.notifyAnimationObjects).to.have.been.called.exactly(4);
+                expect(animation.notifyObservers).to.have.been.called.exactly(4);
                 animation.stop();
             }).finally(() => {
                 animation.stop()

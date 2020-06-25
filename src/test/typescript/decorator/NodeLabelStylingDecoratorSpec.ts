@@ -1,9 +1,9 @@
 import "mocha"
 import jsdom = require('jsdom');
-import {NodeLabelStylingDecorator} from "../../../../main/typescript/animatedcharts/ui/decorator/NodeLabelStylingDecorator";
 import { expect } from "chai"
 import * as spies from 'chai-spies';
 import * as chai from "chai";
+import {NodeLabelStylingDecorator} from "../../../main/typescript/animatedcharts/decorator/NodeLabelStylingDecorator";
 chai.use(spies);
 var document = new jsdom.JSDOM(`<!DOCTYPE html><html></html>`).window.document;
 var window = document.defaultView;

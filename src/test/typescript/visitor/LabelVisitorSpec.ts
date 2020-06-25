@@ -1,12 +1,12 @@
 import "mocha"
 import { expect } from "chai";
 import jsdom = require('jsdom');
-import {LabelVisitor} from "../../../../main/typescript/animatedcharts/ui/visitor/LabelVisitor";
-import {UIButton} from "../../../../main/typescript/animatedcharts/ui/UIButton";
-import {NodeLabelStylingDecorator} from "../../../../main/typescript/animatedcharts/ui/decorator/NodeLabelStylingDecorator";
-import {AnimationUI} from "../../../../main/typescript/animatedcharts/ui/AnimationUI";
-import {AnimationChartUI} from "../../../../main/typescript/animatedcharts/ui/AnimationChartUI";
-import {Animation} from "../../../../main/typescript/animatedcharts/animation/Animation";
+import {LabelVisitor} from "../../../main/typescript/animatedcharts/visitor/LabelVisitor";
+import {NodeLabelStylingDecorator} from "../../../main/typescript/animatedcharts/decorator/NodeLabelStylingDecorator";
+import {ButtonComponent} from "../../../main/typescript/animatedcharts/ui/button/ButtonComponent";
+import {AnimationComponent} from "../../../main/typescript/animatedcharts/ui/animation/AnimationComponent";
+import {ChartComponent} from "../../../main/typescript/animatedcharts/ui/chart/ChartComponent";
+import {Animation} from "../../../main/typescript/animatedcharts/animation/Animation";
 var document = new jsdom.JSDOM(`<!DOCTYPE html><html></html>`).window.document;
 var window = document.defaultView;
 
@@ -190,7 +190,7 @@ describe("LabelVisitor", () => {
 
         it("should not decorator when decorator is null", () => {
             // given
-            const button = new UIButton("", "Label", null);
+            const button = new ButtonComponent("", "Label", null);
             labelVisitor = new LabelVisitor();
 
             // when
@@ -202,7 +202,7 @@ describe("LabelVisitor", () => {
 
         it("should apply decorator", () => {
             // given
-            const button = new UIButton("", "Label", null);
+            const button = new ButtonComponent("", "Label", null);
             labelVisitor = new LabelVisitor();
             labelVisitor.addDecorator(new NodeLabelStylingDecorator("a"));
 
@@ -215,7 +215,7 @@ describe("LabelVisitor", () => {
 
         it("should apply multiple decorators", () => {
             // given
-            const button = new UIButton("", "Label", null);
+            const button = new ButtonComponent("", "Label", null);
             labelVisitor = new LabelVisitor();
             labelVisitor.addDecorator(new NodeLabelStylingDecorator("a"));
             labelVisitor.addDecorator(new NodeLabelStylingDecorator("b"));
@@ -229,7 +229,7 @@ describe("LabelVisitor", () => {
 
         it("should remove decorator from label when decorator was applied before", () => {
             // given
-            const button = new UIButton("", "Label", null);
+            const button = new ButtonComponent("", "Label", null);
             const labelVisitor = new LabelVisitor();
             const decorator = new NodeLabelStylingDecorator("a");
             labelVisitor.addDecorator(decorator);
@@ -251,7 +251,7 @@ describe("LabelVisitor", () => {
     describe("visitAnimationUI", () => {
         it("should apply decorators", () => {
             // given
-            const animationUI = new AnimationUI("animationUI", "title");
+            const animationUI = new AnimationComponent("animationUI", "title");
             labelVisitor = new LabelVisitor();
             labelVisitor.addDecorator(new NodeLabelStylingDecorator("a"));
             labelVisitor.addDecorator(new NodeLabelStylingDecorator("b"));
@@ -270,7 +270,7 @@ describe("LabelVisitor", () => {
     describe("visitAnimationChartUI", () => {
         it("should apply decorators", () => {
             // given
-            const animationChartUI = new AnimationChartUI("animationChartUI", "bar", new Animation(null));
+            const animationChartUI = new ChartComponent("animationChartUI", "bar", new Animation(null));
             labelVisitor = new LabelVisitor();
             labelVisitor.addDecorator(new NodeLabelStylingDecorator("a"));
             labelVisitor.addDecorator(new NodeLabelStylingDecorator("b"));

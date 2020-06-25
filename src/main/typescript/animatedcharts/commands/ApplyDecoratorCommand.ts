@@ -1,15 +1,15 @@
 import {Command} from "./Command";
 import {LabelVisitor} from "../visitor/LabelVisitor";
-import {UIElement} from "../UIElement";
+import {Component} from "../ui/Component";
 import {NodeLabelStylingDecorator} from "../decorator/NodeLabelStylingDecorator";
 
 export class ApplyDecoratorCommand implements Command {
 
     private labelVisitor : LabelVisitor;
-    private element : UIElement;
+    private element : Component;
     private decorator : NodeLabelStylingDecorator;
 
-    constructor(nodeType: string, labelVisitor : LabelVisitor, element : UIElement) {
+    constructor(nodeType: string, labelVisitor : LabelVisitor, element : Component) {
         this.labelVisitor = labelVisitor;
         this.decorator = new NodeLabelStylingDecorator(nodeType);
         this.element = element;

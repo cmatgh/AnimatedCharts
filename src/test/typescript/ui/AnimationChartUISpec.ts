@@ -1,6 +1,6 @@
 import "mocha"
 import { expect } from "chai";
-import {AnimationChartUI} from "../../../main/typescript/animatedcharts/ui/AnimationChartUI";
+import {ChartComponent} from "../../../main/typescript/animatedcharts/ui/chart/ChartComponent";
 import jsdom = require('jsdom');
 import {Animation} from "../../../main/typescript/animatedcharts/animation/Animation";
 var document = new jsdom.JSDOM(`<!DOCTYPE html><html></html>`).window.document;
@@ -11,10 +11,10 @@ global.$ = require('jquery');
 
 describe("AnimationChartUI", () => {
 
-    let animationObjectUI : AnimationChartUI;
+    let animationObjectUI : ChartComponent;
 
     beforeEach( () => {
-        animationObjectUI = new AnimationChartUI("", "bar", new Animation(global.window));
+        animationObjectUI = new ChartComponent("", "bar", new Animation(global.window));
     });
 
     describe("getJQueryElement", () => {

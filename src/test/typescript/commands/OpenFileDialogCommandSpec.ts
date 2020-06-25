@@ -1,6 +1,6 @@
 import "mocha"
 import { expect } from "chai";
-import {OpenFileDialogCommand} from "../../../../main/typescript/animatedcharts/ui/command/OpenFileDialogCommand";
+import {OpenFileDialogCommand} from "../../../main/typescript/animatedcharts/commands/OpenFileDialogCommand";
 
 
 describe("OpenFileDialogCommand", () => {

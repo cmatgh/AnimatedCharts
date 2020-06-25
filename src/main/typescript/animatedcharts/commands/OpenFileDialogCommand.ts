@@ -1,7 +1,7 @@
 import {Command} from "./Command";
-import {Animation} from "../../animation/Animation";
-import {ParserFactory} from "../../utility/parsing/ParserFactory";
-import {Logger} from "../../utility/logging/Logger";
+import {Animation} from "../animation/Animation";
+import {ParserFactory} from "../utility/parsing/ParserFactory";
+import {Logger} from "../utility/logging/Logger";
 
 export class OpenFileDialogCommand implements Command {
 
@@ -13,10 +13,14 @@ export class OpenFileDialogCommand implements Command {
     constructor(animation: Animation) {
         this.animation = animation;
         this.parserFactory = new ParserFactory();
+        this.createFileDialogElement();
+    }
+
+    private createFileDialogElement() {
         this.openFileElement = $("<input>");
         this.openFileElement.attr("type", "file");
-        this.openFileElement.attr("accept", this.parserFactory.getTypes().map( type => "." +type).join(","));
-        this.openFileElement.on("change", (event: Event) => this.loadContent(event) );
+        this.openFileElement.attr("accept", this.parserFactory.getTypes().map(type => "." + type).join(","));
+        this.openFileElement.on("change", (event: Event) => this.loadContent(event));
     }
 
     execute(event: Event): void {
@@ -34,7 +38,7 @@ export class OpenFileDialogCommand implements Command {
             this.logger.debug("file opened.");
             let data = parser.parse(Buffer.from(text));
             this.animation.setDataObject(data);
-            this.animation.notifyAnimationObjects();
+            this.animation.notifyObservers();
         });
     }
 

@@ -1,5 +1,5 @@
 import {Command} from "./Command";
-import {Animation} from "../../animation/Animation";
+import {Animation} from "../animation/Animation";
 
 export class StartAnimatonCommand implements Command {
 

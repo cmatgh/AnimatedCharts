@@ -38,7 +38,7 @@ export class Animation implements Observable{
         this.numFrames = 0;
         this.animationLoop.setFrameTickStrategy(() => {
             this.incrementFrame();
-            this.notifyAnimationObjects();
+            this.notifyObservers();
         })
     }
 
@@ -71,7 +71,7 @@ export class Animation implements Observable{
         this.animationObjects.delete(object);
     }
 
-    notifyAnimationObjects() : void {
+    notifyObservers() : void {
         this.animationObjects.forEach( obj => obj.update());
     }
 
@@ -109,7 +109,7 @@ export class Animation implements Observable{
     stop() : void{
         this.animationLoop.stop();
         this.frame = 0;
-        this.notifyAnimationObjects();
+        this.notifyObservers();
     }
 
     pause() : void {

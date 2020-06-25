@@ -1,11 +1,11 @@
-import { AnimationChart } from "./AnimationChart";
+import {Observer} from "./Observer";
 
 export interface Observable {
 
-    register(object: AnimationChart) : void;
+    register(object: Observer) : void;
 
-    unregister(object: AnimationChart) : void;
+    unregister(object: Observer) : void;
 
-    notifyAnimationObjects() : void;
+    notifyObservers() : void;
 
 }

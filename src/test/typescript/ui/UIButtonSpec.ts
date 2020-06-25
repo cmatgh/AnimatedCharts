@@ -4,8 +4,8 @@ import * as spies from 'chai-spies';
 import * as chai from "chai";
 chai.use(spies);
 import jsdom = require('jsdom');
-import {UIButton} from "../../../main/typescript/animatedcharts/ui/UIButton";
-import {Command} from "../../../main/typescript/animatedcharts/ui/command/Command";
+import {ButtonComponent} from "../../../main/typescript/animatedcharts/ui/button/ButtonComponent";
+import {Command} from "../../../main/typescript/animatedcharts/commands/Command";
 var document = new jsdom.JSDOM(`<!DOCTYPE html><html></html>`).window.document;
 var window = document.defaultView;
 
@@ -15,10 +15,10 @@ global.$ = require('jquery');
 
 describe("UIButton", () => {
 
-    let uiButton : UIButton;
+    let uiButton : ButtonComponent;
 
     beforeEach( () => {
-        uiButton = new UIButton("", "title", null);
+        uiButton = new ButtonComponent("", "title", null);
     });
 
     describe("getJQueryElement", () => {
