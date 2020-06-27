@@ -1,5 +1,5 @@
 import {LabelStylingDecorator} from "./LabelStylingDecorator";
-import {Preconditions} from "../../utility/Preconditions";
+import {Preconditions} from "../utility/Preconditions";
 
 export class NodeLabelStylingDecorator extends LabelStylingDecorator{
 

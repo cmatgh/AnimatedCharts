@@ -129,7 +129,7 @@ describe("Animation", () => {
             chai.spy.on(animationObject, "update");
 
             animation.register(animationObject);
-            animation.notifyAnimationObjects();
+            animation.notifyObservers();
 
             expect(animationObject.update).to.have.been.called();
         });
@@ -217,14 +217,14 @@ describe("Animation", () => {
 
             //inrementFrame and notifyAnimationObjects get called in tickStrategy, which gets called in an animationLoop tick
             chai.spy.on(animation, "incrementFrame");
-            chai.spy.on(animation, "notifyAnimationObjects");
+            chai.spy.on(animation, "notifyObservers");
 
             animation.start();
 
             await new Promise(resolve => setTimeout(() => { resolve() }, 2100))
             .then( () => {
                 expect(animation.incrementFrame).to.have.been.called.exactly(4);
-                expect(animation.notifyAnimationObjects).to.have.been.called.exactly(4);
+                expect(animation.notifyObservers).to.have.been.called.exactly(4);
                 animation.stop();
             }).finally(() => {
                 animation.stop()
