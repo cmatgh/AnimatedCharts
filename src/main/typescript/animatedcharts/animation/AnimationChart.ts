@@ -1,13 +1,18 @@
 import { Animation, FrameDataSet } from "./Animation";
-import { Observer } from "./Observer";
 import { Comparator } from "../utility/comparing/Comparator";
 import {ComparatorFactory} from "../utility/comparing/ComparatorFactory";
+import Chart from "chart.js";
+import {AnimationObserver} from "./AnimationObserver";
 
-export class AnimationChart implements Observer{
+export class AnimationChart implements AnimationObserver {
 
     chart: Chart;
     animation: Animation;
     comparator: Comparator<FrameDataSet>;
+
+    setAnimation(animation : Animation) : void {
+        this.animation = animation;
+    }
 
     constructor(animation: Animation, chart: Chart){
         this.animation = animation;

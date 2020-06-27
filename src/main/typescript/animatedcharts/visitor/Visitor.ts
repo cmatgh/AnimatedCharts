@@ -1,13 +1,10 @@
-import {ButtonComponent} from "../button/ButtonComponent";
-import {AnimationComponent} from "../animation/AnimationComponent";
-import {ChartComponent} from "../chart/ChartComponent";
+import {InputPresenter} from "../ui/input/InputPresenter";
+import {AnimationPresenterImpl} from "../ui/animation/impl/AnimationPresenterImpl";
 
 export interface Visitor {
 
-    visitButton(button : ButtonComponent) : void;
+    visitButton(button : InputPresenter) : void;
 
-    visitAnimationUI(animationUI : AnimationComponent) : void;
-
-    visitAnimationCharUI(animationChartUI : ChartComponent) : void;
+    visitAnimationUI(animationUI : AnimationPresenterImpl) : void;
 
 }

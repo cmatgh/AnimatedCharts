@@ -1,12 +1,8 @@
-import {HtmlTemplate} from "../HtmlTemplate";
+import {Template} from "../../Template";
 
-export class AnimationTemplate extends HtmlTemplate {
+export class AnimationTemplate implements Template{
 
-    constructor() {
-        super();
-    }
-
-    getTemplate(): string {
+    html(): string {
         return `
             <div class="container mb-5">
                 <div class="row justify-content-center border-bottom mb-3" >  
@@ -14,7 +10,7 @@ export class AnimationTemplate extends HtmlTemplate {
                     <h2 class="display-2" id="property"></h2>
                 </div>
                 <div class="row">
-                    <div class="col-md-2 border-right">
+                    <div class="col-md-4 border-right">
                         <div class="row">
                             <div class="col-md-12">
                                  <div id="animation-buttons"  class="d-flex flex-column">    
@@ -33,26 +29,24 @@ export class AnimationTemplate extends HtmlTemplate {
                                     <div id="resume-button"></div>         
                                 </div>
                             </div>
-                        </div>
+                        </div>        
                         <div class="row mt-3">
-                            <div class="col-md-12">
-                                <div id="decorator-buttons" class="d-flex flex-column">     
-                                    <div id="bold-decorator-button"></div>          
-                                    <div id="underline-decorator-button"></div>          
-                                    <div id="small-decorator-button"></div>          
-                                    <div id="italicized-decorator-button"></div>          
-                                </div>
+                            <div class="col-md-12 mb-3">
+                                <div id="select-sort"></div>
+                                 <div class="custom-control custom-checkbox mb-3 mt-3">
+                                    <input type="checkbox" class="custom-control-input" id="chart-sort-check" required>
+                                    <label class="custom-control-label" for="chart-sort-check-label">reversed</label>
+                                  </div>
+                                  <div id="select-chart"></div>
+                              </div>
                             </div>
-                        </div>  
                     </div>
-                    <div class="col-md-10">
-                        <div id="pie-chart"></div>          
-                        <div id="bar-chart"></div>          
-                        <div id="doughnut-chart"></div>          
-                        <div id="polarArea-chart"></div>     
+                    <div class="col-md-8">
+                        <canvas id="chart" width="800" height="600"></canvas>
                     </div>
                 </div>
             </div>
         `;
     }
+
 }

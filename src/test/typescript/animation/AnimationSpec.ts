@@ -217,7 +217,7 @@ describe("Animation", () => {
 
             //inrementFrame and notifyAnimationObjects get called in tickStrategy, which gets called in an animationLoop tick
             chai.spy.on(animation, "incrementFrame");
-            chai.spy.on(animation, "notifyAnimationObjects");
+            chai.spy.on(animation, "notifyObservers");
 
             animation.start();
 
