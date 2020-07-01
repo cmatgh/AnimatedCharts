@@ -1,13 +1,13 @@
 import {Command} from "./Command";
-import {ParserFactory} from "../utility/parsing/ParserFactory";
+import {ParserFactory} from "../utility/creation/ParserFactory";
 import {Logger} from "../utility/logging/Logger";
 import {AnimationPresenter} from "../ui/animation/AnimationPresenter";
 
 export class ParseFileCommand implements Command {
 
-    animationPresenter: AnimationPresenter;
+    animationPresenter: AnimationPresenter<any>;
 
-    constructor(animationPresenter: AnimationPresenter) {
+    constructor(animationPresenter: AnimationPresenter<any>) {
         this.animationPresenter = animationPresenter;
     }
 

@@ -1,7 +1,8 @@
 import {Presenter} from "../Presenter";
 import {Animation, DataObject} from "../../animation/Animation";
+import {AnimationView} from "./AnimationView";
 
-export interface AnimationPresenter extends Presenter{
+export interface AnimationPresenter<V extends AnimationView> extends Presenter<V>{
 
     getAnimation() : Animation
     setTitle(title: string);
@@ -10,6 +11,8 @@ export interface AnimationPresenter extends Presenter{
     stop() : void;
     pause() : void;
     resume() : void;
+    isRunning(): boolean;
+    hasPaused(): boolean;
     reverse() : void;
     sortBy(type : string);
 

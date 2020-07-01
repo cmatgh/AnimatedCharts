@@ -5,17 +5,18 @@ import {ResumeButtonTemplate} from "../ui/input/button/templates/ResumeButtonTem
 import {PauseButtonTemplate} from "../ui/input/button/templates/PauseButtonTemplate";
 import {Logger} from "../utility/logging/Logger";
 import {Template} from "../ui/Template";
+import {AnimationPresenter} from "../ui/animation/AnimationPresenter";
 
 export class ResumePauseCommand implements Command {
 
-    animation: Animation;
+    animationPresenter: AnimationPresenter<any>;
     buttonView: ButtonView;
     startTemplate : Template
     resumeTemplate : Template;
     pauseTemplate : Template;
 
-    constructor(animation : Animation, buttonView : ButtonView) {
-        this.animation = animation;
+    constructor(animationPresenter : AnimationPresenter<any>, buttonView : ButtonView) {
+        this.animationPresenter = animationPresenter;
         this.buttonView = buttonView;
         this.resumeTemplate = new ResumeButtonTemplate();
         this.pauseTemplate = new PauseButtonTemplate();
@@ -23,17 +24,17 @@ export class ResumePauseCommand implements Command {
     }
 
     execute(map: Map<string, any>): void {
-        if(!this.animation.isRunning()) {
+        if(!this.animationPresenter.isRunning()) {
             Logger.getInstance().info("Starting the animation.")
-            this.animation.start();
+            this.animationPresenter.start();
             this.buttonView.setTemplate(this.pauseTemplate)
-        } else if(this.animation.hasPaused()) {
+        } else if(this.animationPresenter.hasPaused()) {
             Logger.getInstance().info("Resuming the animation.")
-            this.animation.resume();
+            this.animationPresenter.resume();
             this.buttonView.setTemplate(this.pauseTemplate)
         } else {
             Logger.getInstance().info("Pausing the animation.")
-            this.animation.pause();
+            this.animationPresenter.pause();
             this.buttonView.setTemplate(this.resumeTemplate)
         }
     }

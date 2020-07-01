@@ -1,18 +1,13 @@
 import {InputView} from "../InputView";
-import {Template} from "../../Template";
 
 export class SelectView extends InputView{
-
-    constructor(template : Template) {
-        super(template);
-    }
 
     protected doInitialize(): void {
         this.getElement().find("#select-input").on("change", (event) => {
             let selectedValue = $(event.target).children("option:selected").val();
-            this.component
+            this.presenter
                 .onSelect
-                .bind(this.component)(selectedValue);
+                .bind(this.presenter)(selectedValue);
         });
     }
 
@@ -20,7 +15,12 @@ export class SelectView extends InputView{
         this.getElement().find("label").html(label);
     }
 
-    addOption(label : string, value : string) {
+    printOptions(map : Map<string, string>) {
+        this.getElement().find("#select-input").html("");
+        map.forEach((label, value) => this.drawOption(value, label));
+    }
+
+    private drawOption(label : string, value : string) {
         let option = $("<option>");
         option.val(value);
         option.html(label);

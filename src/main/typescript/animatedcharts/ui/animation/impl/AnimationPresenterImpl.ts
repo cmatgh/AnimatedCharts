@@ -6,13 +6,13 @@ import {Comparator} from "../../../utility/comparing/Comparator";
 import {ComparatorFactory} from "../../../utility/comparing/ComparatorFactory";
 import {ComparatorUtils} from "../../../utility/comparing/ComparatorUtils";
 
-export class AnimationPresenterImpl implements AnimationPresenter, Observer{
+export class AnimationPresenterImpl<V extends AnimationView> implements AnimationPresenter<V>, Observer{
 
     private readonly animation: Animation;
-    private view : AnimationView;
+    private view : V;
     private comparator : Comparator<FrameDataSet>;
 
-    constructor(elementId : string, view : AnimationView) {
+    constructor(elementId : string, view : V) {
         this.view = view;
         this.view.setComponent(this);
         this.animation = new Animation(window);
@@ -32,8 +32,12 @@ export class AnimationPresenterImpl implements AnimationPresenter, Observer{
         return this.view.getElement();
     }
 
-    setView(view: AnimationView) {
+    setView(view: V) {
         this.view = view;
+    }
+
+    getView(): V {
+        return this.view;
     }
 
     pause(): void {
@@ -50,6 +54,14 @@ export class AnimationPresenterImpl implements AnimationPresenter, Observer{
 
     stop(): void {
         this.animation.stop();
+    }
+
+    isRunning(): boolean {
+        return this.animation.isRunning();
+    }
+
+    hasPaused(): boolean {
+        return this.animation.hasPaused();
     }
 
     reverse(): void {

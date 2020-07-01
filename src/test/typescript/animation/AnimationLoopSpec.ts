@@ -22,8 +22,8 @@ describe("AnimationLoop", () => {
 
     describe("start", () => {
         it("should start the loop", async () => {
-            const spy = chai.spy(spyFunc);
-            animationLoop.setFrameTickStrategy(spy);
+            const spy = chai.spy();
+            animationLoop.setOnTickCommand(spy);
 
             animationLoop.start();
 
@@ -39,7 +39,7 @@ describe("AnimationLoop", () => {
 
         it("should not start a new loop when already started", async() => {
             const spy = chai.spy(spyFunc);
-            animationLoop.setFrameTickStrategy(spy);
+            animationLoop.setOnTickCommand(spy);
 
             animationLoop.start();
             animationLoop.start();
@@ -58,7 +58,7 @@ describe("AnimationLoop", () => {
     describe("stop", () => {
         it("should cancel the loop", async() => {
             const spy = chai.spy(spyFunc);
-            animationLoop.setFrameTickStrategy(spy);
+            animationLoop.setOnTickCommand(spy);
 
             animationLoop.start();
             expect(animationLoop.isRunning()).to.be.true;
@@ -90,7 +90,7 @@ describe("AnimationLoop", () => {
     describe("pause", () => {
         it("should pause the loop", async() => {
             const spy = chai.spy(spyFunc);
-            animationLoop.setFrameTickStrategy(spy);
+            animationLoop.setOnTickCommand(spy);
 
             animationLoop.start();
 
@@ -129,7 +129,7 @@ describe("AnimationLoop", () => {
     describe("resume", () => {
         it("should resume the loop when paused", async() => {
             const spy = chai.spy(spyFunc);
-            animationLoop.setFrameTickStrategy(spy);
+            animationLoop.setOnTickCommand(spy);
 
             animationLoop.start();
 

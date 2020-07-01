@@ -1,3 +1,5 @@
+import {Command} from "../commands/Command";
+
 export interface AnimationLoopOptions {
      updatesPerSecond? : number,
 }
@@ -9,7 +11,7 @@ export class AnimationLoop {
     private lastTimestamp: number;
     private updateThreshold: number;
     private animationFrameNumber: number;
-    private frameTickStrategy: Function;
+    private onTickCommand: Command;
     private paused: boolean;
     private started: boolean;
 
@@ -18,7 +20,7 @@ export class AnimationLoop {
         this.updatesPerSecond = typeof options === "undefined" || options === null ? 1 : options.updatesPerSecond || 1;
         this.lastTimestamp = Date.now();
         this.updateThreshold = 1000 / this.updatesPerSecond;
-        this.frameTickStrategy = null;
+        this.onTickCommand = null;
         this.paused = false;
         this.started = false;
     }
@@ -28,8 +30,8 @@ export class AnimationLoop {
         this.updateThreshold = 1000 / value;
     }
 
-    setFrameTickStrategy(frameTickStrategy : Function) {
-        this.frameTickStrategy = frameTickStrategy;
+    setOnTickCommand(onTickCommand : Command) {
+        this.onTickCommand = onTickCommand;
     }
 
     isRunning() : boolean {
@@ -70,8 +72,8 @@ export class AnimationLoop {
     private loop() : void {
         if(this.isRunning() && !this.hasPaused()){
             if(Date.now() - this.lastTimestamp > this.updateThreshold){
-                if(this.frameTickStrategy != null) {
-                    this.frameTickStrategy();
+                if(this.onTickCommand != null) {
+                    this.onTickCommand.execute(null);
                 }
 
                 this.lastTimestamp = Date.now();

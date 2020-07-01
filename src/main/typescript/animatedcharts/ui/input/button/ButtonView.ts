@@ -3,12 +3,8 @@ import {Template} from "../../Template";
 
 export class ButtonView extends InputView {
 
-    constructor(template : Template) {
-        super(template);
-    }
-
-    doInitialize(): void {
-        this.getElement().on("click", this.component.onClick.bind(this.component));
+    protected doInitialize(): void {
+        this.getElement().on("click", this.presenter.onClick.bind(this.presenter));
     }
 
     setLabel(label: string): void {

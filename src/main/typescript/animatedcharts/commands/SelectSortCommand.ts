@@ -3,9 +3,9 @@ import {AnimationPresenter} from "../ui/animation/AnimationPresenter";
 
 export class SelectSortCommand implements Command {
 
-    animationPresenter : AnimationPresenter
+    animationPresenter : AnimationPresenter<any>
 
-    constructor(animationPresenter : AnimationPresenter) {
+    constructor(animationPresenter : AnimationPresenter<any>) {
         this.animationPresenter = animationPresenter;
     }
 

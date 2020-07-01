@@ -3,8 +3,8 @@ import {AnimationPresenterImpl} from "../ui/animation/impl/AnimationPresenterImp
 
 export interface Visitor {
 
-    visitButton(button : InputPresenter) : void;
+    visitButton(button : InputPresenter<any>) : void;
 
-    visitAnimationUI(animationUI : AnimationPresenterImpl) : void;
+    visitAnimationUI(animationUI : AnimationPresenterImpl<any>) : void;
 
 }

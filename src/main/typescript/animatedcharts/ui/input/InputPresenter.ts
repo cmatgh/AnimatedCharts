@@ -2,18 +2,13 @@ import {Presenter} from "../Presenter";
 import {Command} from "../../commands/Command";
 import {InputView} from "./InputView";
 
-export abstract class InputPresenter implements Presenter {
+export abstract class InputPresenter<V extends InputView> implements Presenter<V> {
 
-    protected view : InputView;
+    protected view : V;
     protected onClickCommand : Command;
     protected onSubmitCommand : Command;
     protected onSelectCommand : Command;
     protected onChangeCommand : Command;
-
-    protected constructor(view : InputView) {
-        this.setView(view);
-        view.setComponent(this);
-    }
 
     initialize(): void {
         this.view.initialize();
@@ -22,9 +17,17 @@ export abstract class InputPresenter implements Presenter {
 
     protected abstract doInitialize();
 
-    setView(view: InputView) {
+    setView(view: V) {
         this.view = view;
         this.view.setComponent(this);
+    }
+
+    getView(): V {
+        return this.view;
+    }
+
+    setLabel(label : string) {
+        this.view.setLabel(label);
     }
 
     onClick(event: Event): void {
