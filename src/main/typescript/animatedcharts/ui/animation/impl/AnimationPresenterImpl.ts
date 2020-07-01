@@ -1,11 +1,10 @@
-import {Animation, FrameDataSet} from "../../../animation/Animation";
+import {Animation, DataObject, DataSet, FrameDataSet} from "../../../animation/Animation";
 import {AnimationPresenter} from "../AnimationPresenter";
 import {AnimationView} from "../AnimationView";
 import {Observer} from "../../../animation/Observer";
 import {Comparator} from "../../../utility/comparing/Comparator";
 import {ComparatorFactory} from "../../../utility/comparing/ComparatorFactory";
 import {ComparatorUtils} from "../../../utility/comparing/ComparatorUtils";
-import {ParserFactory} from "../../../utility/parsing/ParserFactory";
 
 export class AnimationPresenterImpl implements AnimationPresenter, Observer{
 
@@ -70,25 +69,13 @@ export class AnimationPresenterImpl implements AnimationPresenter, Observer{
         this.view.setProperty(this.animation.getCurrentColumnProperty());
     }
 
-    loadDataset(event: Event): void {
-        // @ts-ignore
-        let file : File = event.target.files[0];
-        let fileType = this.getFileType(file.name);
-        let parser = ParserFactory.getInstance().create(fileType);
-        file.text().then( text => {
-            let data = parser.parse(Buffer.from(text));
-            this.animation.setDataObject(data);
-            this.animation.notifyObservers();
-        });
+    loadDataset(data: DataObject): void {
+        this.animation.setDataObject(data);
+        this.animation.notifyObservers();
     }
 
-    private getFileType(filename : string) : string {
-        const extensionStart = filename.lastIndexOf(".");
-        if(extensionStart >= 0) {
-            return filename.substring(extensionStart + 1, filename.length);
-        }
-
-        return "";
+    getAnimation(): Animation {
+        return this.animation;
     }
 
 }

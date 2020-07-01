@@ -1,7 +1,7 @@
 import {InputView} from "../InputView";
 import {Template} from "../../Template";
 
-export class ButtonViewImpl extends InputView {
+export class ButtonView extends InputView {
 
     constructor(template : Template) {
         super(template);

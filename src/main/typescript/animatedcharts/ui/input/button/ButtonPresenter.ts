@@ -2,7 +2,7 @@ import {InputPresenter} from "../InputPresenter";
 import {Command} from "../../../commands/Command";
 import {InputView} from "../InputView";
 
-export class ButtonPresenterImpl extends InputPresenter {
+export class ButtonPresenter extends InputPresenter {
 
     constructor(view : InputView ) {
         super(view);

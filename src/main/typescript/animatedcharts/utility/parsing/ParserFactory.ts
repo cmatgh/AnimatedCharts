@@ -10,8 +10,9 @@ export class ParserFactory {
 
     private constructor() {
         this.parsers = new Map<string, Parser>([
-            ["csv", new CSVParser()],
-            ["xls", new XLSParser()],
+            ["text/csv", new CSVParser()],
+            ["application/xls", new XLSParser()],
+            ["application/xlsx", new XLSParser()],
         ]);
     }
 

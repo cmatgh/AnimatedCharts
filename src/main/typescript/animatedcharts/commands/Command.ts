@@ -1,5 +1,5 @@
 export interface Command {
 
-    (event: Event) : void;
+    execute(map: Map<string, any>) : void;
 
 }

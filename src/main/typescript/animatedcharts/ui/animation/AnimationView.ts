@@ -5,7 +5,7 @@ export interface AnimationView extends View{
 
     setProperty(property: string)
 
-    setChart(chart : Chart) : void
+    setChart(type : string) : void
 
     setTitle(title : string) : void
 
