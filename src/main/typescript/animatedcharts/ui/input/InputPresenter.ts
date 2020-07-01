@@ -28,19 +28,35 @@ export abstract class InputPresenter implements Presenter {
     }
 
     onClick(event: Event): void {
-        this.onClickCommand(event);
+        if(this.onClickCommand == null) {
+            return;
+        }
+
+        this.onClickCommand.execute(new Map<string, any>([["event", event]]));
     }
 
     onChange(event: Event): void {
-        this.onChangeCommand(event);
+        if(this.onChangeCommand == null) {
+            return;
+        }
+
+        this.onChangeCommand.execute(new Map<string, any>([["event", event]]));
     }
 
     onSelect(event: Event): void {
-        this.onSelectCommand(event);
+        if(this.onSelectCommand == null) {
+            return;
+        }
+
+        this.onSelectCommand.execute(new Map<string, any>([["event", event]]));
     }
 
     onSubmit(event: Event): void {
-        this.onSubmitCommand(event);
+        if(this.onSubmitCommand == null) {
+            return;
+        }
+
+        this.onSubmitCommand.execute(new Map<string, any>([["event", event]]));
     }
 
     getElement(): JQuery {

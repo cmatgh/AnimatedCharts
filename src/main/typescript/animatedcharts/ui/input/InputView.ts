@@ -13,7 +13,14 @@ export abstract class InputView implements View {
     }
 
     initialize(): void {
-        this.$element = $(this.template.html());
+        if(this.$element != null) {
+            const $newElement = $(this.template.html());
+            this.$element.replaceWith($newElement);
+            this.$element = $newElement;
+        } else {
+            this.$element = $(this.template.html());
+        }
+
         this.doInitialize();
     }
 
@@ -27,7 +34,7 @@ export abstract class InputView implements View {
 
     setTemplate(template: Template): void {
         if(this.getElement() != null) {
-            this.getElement().off("click");
+            this.getElement().off();
         }
 
         this.template = template;

@@ -120,6 +120,14 @@ export class Animation implements Observable{
         this.animationLoop.resume();
     }
 
+    hasPaused() : boolean {
+        return this.animationLoop.hasPaused();
+    }
+
+    isRunning() : boolean {
+        return this.animationLoop.isRunning();
+    }
+
     private setColors(dataObj: DataObject) : void {
         let hue = 0;
         let stepLength = Math.floor(360 / this.dataObject.dataSets.length);
