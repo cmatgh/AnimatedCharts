@@ -4,13 +4,9 @@ import {Template} from "../Template";
 
 export abstract class InputView implements View {
 
-    protected component: InputPresenter;
+    protected presenter: InputPresenter;
     protected template: Template;
     protected $element: JQuery;
-
-    protected constructor(template: Template) {
-        this.template = template;
-    }
 
     initialize(): void {
         if(this.$element != null) {
@@ -28,8 +24,8 @@ export abstract class InputView implements View {
         return this.$element;
     }
 
-    setComponent(component: InputPresenter): void {
-        this.component = component;
+    setPresenter(presenter: InputPresenter): void {
+        this.presenter = presenter;
     }
 
     setTemplate(template: Template): void {
@@ -39,6 +35,10 @@ export abstract class InputView implements View {
 
         this.template = template;
         this.initialize();
+    }
+
+    getTemplate(): Template {
+        return this.template;
     }
 
     protected abstract doInitialize() : void;

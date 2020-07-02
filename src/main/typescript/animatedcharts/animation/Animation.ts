@@ -3,6 +3,7 @@ import { Preconditions } from "../utility/Preconditions";
 import { AnimationLoop } from "./AnimationLoop";
 import * as convert from "color-convert";
 import {Observer} from "./Observer";
+import {Command} from "../commands/Command";
 
 export interface DataSet {
     label : string,
@@ -36,10 +37,19 @@ export class Animation implements Observable{
         this.animationLoop = new AnimationLoop(window, { updatesPerSecond : 2 });
         this.frame = 0;
         this.numFrames = 0;
-        this.animationLoop.setFrameTickStrategy(() => {
-            this.incrementFrame();
-            this.notifyObservers();
-        })
+        this.animationLoop.setOnTickCommand( new class implements Command {
+
+            private animation : Animation;
+
+            constructor(animation : Animation) {
+                this.animation = animation;
+            }
+
+            execute(map: Map<string, any>): void {
+                this.animation.incrementFrame();
+                this.animation.notifyObservers();
+            }
+        }(this))
     }
 
     setDataObject(dataObject: DataObject) : void {

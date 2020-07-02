@@ -3,12 +3,8 @@ import {Template} from "../../Template";
 
 export class FileDialogView extends InputView{
 
-    constructor(template : Template) {
-        super(template);
-    }
-
     protected doInitialize(): void {
-        this.getElement().on("change", this.component.onChange.bind(this.component));
+        this.getElement().on("change", this.presenter.onChange.bind(this.presenter));
     }
 
     setLabel(label: String): void {

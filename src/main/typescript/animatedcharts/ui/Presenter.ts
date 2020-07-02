@@ -6,6 +6,8 @@ export interface Presenter {
 
     setView(view : View)
 
+    getView() : View;
+
     getElement() : JQuery
 
 }

@@ -1,6 +1,6 @@
-import {CSVParser} from "./CSVParser";
-import {Parser} from "./Parser";
-import {XLSParser} from "./XLSParser";
+import {CSVParser} from "../parsing/CSVParser";
+import {Parser} from "../parsing/Parser";
+import {XLSParser} from "../parsing/XLSParser";
 
 export class ParserFactory {
 

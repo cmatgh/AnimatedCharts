@@ -1,10 +1,10 @@
-import {Animation, DataObject, DataSet, FrameDataSet} from "../../../animation/Animation";
+import {Animation, DataObject, FrameDataSet} from "../../../animation/Animation";
 import {AnimationPresenter} from "../AnimationPresenter";
-import {AnimationView} from "../AnimationView";
 import {Observer} from "../../../animation/Observer";
 import {Comparator} from "../../../utility/comparing/Comparator";
 import {ComparatorFactory} from "../../../utility/comparing/ComparatorFactory";
 import {ComparatorUtils} from "../../../utility/comparing/ComparatorUtils";
+import {AnimationView} from "../AnimationView";
 
 export class AnimationPresenterImpl implements AnimationPresenter, Observer{
 
@@ -12,9 +12,7 @@ export class AnimationPresenterImpl implements AnimationPresenter, Observer{
     private view : AnimationView;
     private comparator : Comparator<FrameDataSet>;
 
-    constructor(elementId : string, view : AnimationView) {
-        this.view = view;
-        this.view.setComponent(this);
+    constructor() {
         this.animation = new Animation(window);
         this.animation.register(this);
         this.comparator = ComparatorFactory.getInstance().create("label");
@@ -36,6 +34,10 @@ export class AnimationPresenterImpl implements AnimationPresenter, Observer{
         this.view = view;
     }
 
+    getView(): AnimationView {
+        return this.view;
+    }
+
     pause(): void {
         this.animation.pause();
     }
@@ -50,6 +52,14 @@ export class AnimationPresenterImpl implements AnimationPresenter, Observer{
 
     stop(): void {
         this.animation.stop();
+    }
+
+    isRunning(): boolean {
+        return this.animation.isRunning();
+    }
+
+    hasPaused(): boolean {
+        return this.animation.hasPaused();
     }
 
     reverse(): void {
@@ -76,6 +86,10 @@ export class AnimationPresenterImpl implements AnimationPresenter, Observer{
 
     getAnimation(): Animation {
         return this.animation;
+    }
+
+    setChart(type: string) {
+        this.view.setChart(type);
     }
 
 }

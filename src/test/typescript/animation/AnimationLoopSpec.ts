@@ -5,11 +5,13 @@ chai.use(spies);
 import { JSDOM } from "jsdom";
 import { AnimationLoop } from "../../../main/typescript/animatedcharts/animation/AnimationLoop";
 import { expect } from "chai";
+import {Command} from "../../../main/typescript/animatedcharts/commands/Command";
 
 describe("AnimationLoop", () => {
 
     let animationLoop: AnimationLoop;
     const spyFunc = () => {};
+    let spyCommand : Command = null;
 
     beforeEach( () => {
         animationLoop = new AnimationLoop(
@@ -18,12 +20,18 @@ describe("AnimationLoop", () => {
 
         //set 4 times per second to increase test speed
         animationLoop.setUpdatesPerSecond(4);
+        spyCommand = new class implements Command {
+
+            execute(map: Map<string, any>): void {
+            }
+
+        }();
     });
 
     describe("start", () => {
         it("should start the loop", async () => {
-            const spy = chai.spy(spyFunc);
-            animationLoop.setFrameTickStrategy(spy);
+            chai.spy.on(spyCommand, "execute");
+            animationLoop.setOnTickCommand(spyCommand);
 
             animationLoop.start();
 
@@ -31,15 +39,15 @@ describe("AnimationLoop", () => {
 
             await new Promise(resolve => setTimeout(() => { resolve() }, 600))
                 .then( () => {
-                    expect(spy).to.have.been.called.exactly(2);
+                    expect(spyCommand.execute).to.have.been.called.exactly(2);
                 }).finally(() => {
                     animationLoop.stop()
                 });
         }).timeout(1000);
 
         it("should not start a new loop when already started", async() => {
-            const spy = chai.spy(spyFunc);
-            animationLoop.setFrameTickStrategy(spy);
+            chai.spy.on(spyCommand, "execute");
+            animationLoop.setOnTickCommand(spyCommand);
 
             animationLoop.start();
             animationLoop.start();
@@ -48,7 +56,7 @@ describe("AnimationLoop", () => {
 
             await new Promise(resolve => setTimeout(() => { resolve() }, 600))
                 .then( () => {
-                    expect(spy).to.have.been.called.exactly(2);
+                    expect(spyCommand.execute).to.have.been.called.exactly(2);
                 }).finally(() => {
                     animationLoop.stop()
                 });
@@ -57,8 +65,8 @@ describe("AnimationLoop", () => {
 
     describe("stop", () => {
         it("should cancel the loop", async() => {
-            const spy = chai.spy(spyFunc);
-            animationLoop.setFrameTickStrategy(spy);
+            chai.spy.on(spyCommand, "execute");
+            animationLoop.setOnTickCommand(spyCommand);
 
             animationLoop.start();
             expect(animationLoop.isRunning()).to.be.true;
@@ -67,7 +75,7 @@ describe("AnimationLoop", () => {
 
             await new Promise(resolve => setTimeout(() => { resolve() }, 600))
                 .then( () => {
-                    expect(spy).to.have.been.called.exactly(0);
+                    expect(spyCommand.execute).to.have.been.called.exactly(0);
                 });
         }).timeout(1000);
 
@@ -89,8 +97,8 @@ describe("AnimationLoop", () => {
 
     describe("pause", () => {
         it("should pause the loop", async() => {
-            const spy = chai.spy(spyFunc);
-            animationLoop.setFrameTickStrategy(spy);
+            chai.spy.on(spyCommand, "execute");
+            animationLoop.setOnTickCommand(spyCommand);
 
             animationLoop.start();
 
@@ -100,7 +108,7 @@ describe("AnimationLoop", () => {
             // run for approx. 2 seconds
             await new Promise(resolve => setTimeout(() => { resolve() }, 600))
                 .then( () => {
-                    expect(spy).to.have.been.called.exactly(2);
+                    expect(spyCommand.execute).to.have.been.called.exactly(2);
 
                     animationLoop.pause();
                     expect(animationLoop.hasPaused()).to.be.true;
@@ -109,7 +117,7 @@ describe("AnimationLoop", () => {
                 .then( () => new Promise(resolve => setTimeout(() => { resolve() }, 600)) )
                 // then check result
                 .then( () => {
-                    expect(spy).to.have.been.called.exactly(2);
+                    expect(spyCommand.execute).to.have.been.called.exactly(2);
                 })
                 .finally(() => {
                     animationLoop.stop()
@@ -128,8 +136,8 @@ describe("AnimationLoop", () => {
 
     describe("resume", () => {
         it("should resume the loop when paused", async() => {
-            const spy = chai.spy(spyFunc);
-            animationLoop.setFrameTickStrategy(spy);
+            chai.spy.on(spyCommand, "execute");
+            animationLoop.setOnTickCommand(spyCommand);
 
             animationLoop.start();
 
@@ -139,7 +147,7 @@ describe("AnimationLoop", () => {
             // run for approx. 2 seconds
             await new Promise(resolve => setTimeout(() => { resolve() }, 550))
                 .then( () => {
-                    expect(spy).to.have.been.called.exactly(2);
+                    expect(spyCommand.execute).to.have.been.called.exactly(2);
 
                     animationLoop.pause();
                     expect(animationLoop.hasPaused()).to.be.true;
@@ -148,13 +156,13 @@ describe("AnimationLoop", () => {
                 .then( () => new Promise(resolve => setTimeout(() => { resolve() }, 550)) )
                 // then resume again
                 .then( () => {
-                    expect(spy).to.have.been.called.exactly(2);
+                    expect(spyCommand.execute).to.have.been.called.exactly(2);
                     animationLoop.resume();
                 })
                 //and check results
                 .then( () => new Promise(resolve => setTimeout(() => { resolve() }, 550)) )
                 .then( () => {
-                    expect(spy).to.have.been.called.exactly(4);
+                    expect(spyCommand.execute).to.have.been.called.exactly(4);
                 })
                 .finally(() => {
                     animationLoop.stop()

@@ -10,11 +10,6 @@ export abstract class InputPresenter implements Presenter {
     protected onSelectCommand : Command;
     protected onChangeCommand : Command;
 
-    protected constructor(view : InputView) {
-        this.setView(view);
-        view.setComponent(this);
-    }
-
     initialize(): void {
         this.view.initialize();
         this.doInitialize();
@@ -24,7 +19,15 @@ export abstract class InputPresenter implements Presenter {
 
     setView(view: InputView) {
         this.view = view;
-        this.view.setComponent(this);
+        this.view.setPresenter(this);
+    }
+
+    getView(): InputView {
+        return this.view;
+    }
+
+    setLabel(label : string) {
+        this.view.setLabel(label);
     }
 
     onClick(event: Event): void {

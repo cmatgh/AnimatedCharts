@@ -1,12 +1,6 @@
 import {InputPresenter} from "../InputPresenter";
-import {Command} from "../../../commands/Command";
-import {InputView} from "../InputView";
 
 export class ButtonPresenter extends InputPresenter {
-
-    constructor(view : InputView ) {
-        super(view);
-    }
 
     protected doInitialize() {
     }
