@@ -1,12 +1,12 @@
 import {View} from "./View";
 
-export interface Presenter<V extends View> {
+export interface Presenter {
 
     initialize() : void;
 
-    setView(view : V)
+    setView(view : View)
 
-    getView() : V;
+    getView() : View;
 
     getElement() : JQuery
 

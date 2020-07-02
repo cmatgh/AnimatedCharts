@@ -11,8 +11,8 @@
         "baseUrl": ".",
         "paths": {
             "xlsx": ["./node_modules/xlsx/types/index.d.ts"],
-            "jest-mock-console": ["./node_modules/jest-mock-console/index.d.ts"]
-
+            "jest-mock-console": ["./node_modules/jest-mock-console/index.d.ts"],
+            "ts-mockito": ["./node_modules/ts-mockito/lib/ts-mockito.d.ts"]
         },
         "moduleResolution": "Classic",
         "target": "es5",

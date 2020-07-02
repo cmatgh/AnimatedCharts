@@ -3,7 +3,7 @@ import {AnimationPresenter} from "../AnimationPresenter";
 import {Template} from "../../Template";
 import {ButtonPresenter} from "../../input/button/ButtonPresenter";
 import {ButtonView} from "../../input/button/ButtonView";
-import {ChartFactory} from "../../../utility/creation/ui/ChartFactory";
+import {ChartFactory} from "../../../utility/creating/ui/ChartFactory";
 import {FrameDataSet} from "../../../animation/Animation";
 import Chart from "chart.js";
 import {FileDialogView} from "../../input/filedialog/FileDialogView";
@@ -19,20 +19,16 @@ import {CheckboxTemplate} from "../../input/checkbox/CheckboxTemplate";
 import {CheckboxCommand} from "../../../commands/CheckboxCommand";
 import {ReverseSortCommand} from "../../../commands/ReverseSortCommand";
 import {CheckboxView} from "../../input/checkbox/CheckboxView";
-import {PresenterCreator} from "../../../utility/creation/ui/PresenterCreator";
-import {UIElementFactory} from "../../../utility/creation/ui/UIElementFactory";
+import {PresenterCreator} from "../../../utility/creating/ui/PresenterCreator";
+import {UIElementFactory} from "../../../utility/creating/ui/UIElementFactory";
 import {SelectPresenter} from "../../input/select/SelectPresenter";
 
 export class AnimationViewImpl implements AnimationView {
 
-    presenter: AnimationPresenter<AnimationView>;
+    presenter: AnimationPresenter;
     template : Template;
     $element : JQuery;
     chart: Chart;
-
-    constructor(template : Template) {
-        this.setTemplate(template);
-    }
 
     initialize() {
         this.chart = this.chart = ChartFactory.getInstance()
@@ -42,20 +38,20 @@ export class AnimationViewImpl implements AnimationView {
         const presenterCreator = new PresenterCreator();
 
         // File Dialog
-        const fileDialogButtonPresenter = presenterCreator.create<ButtonPresenter<FileDialogView>, FileDialogView>(new ButtonPresenter<FileDialogView>(), new FileDialogView(), new FileDialogTemplate());
+        const fileDialogButtonPresenter = <ButtonPresenter> presenterCreator.create(new ButtonPresenter(), new FileDialogView(), new FileDialogTemplate());
         const fileDialogCommand = new ParseFileCommand(this.presenter);
         fileDialogButtonPresenter.setOnChange(fileDialogCommand);
         fileDialogButtonPresenter.setLabel("Choose File...");
         this.$element.find(`#load-dataset-button`).append(fileDialogButtonPresenter.getElement());
 
         // Resume Pause Control
-        const resumePauseButtonPresenter = presenterCreator.create<ButtonPresenter<ButtonView>, ButtonView>(new ButtonPresenter(), new ButtonView(), new ResumeButtonTemplate());
+        const resumePauseButtonPresenter = <ButtonPresenter> presenterCreator.create(new ButtonPresenter(), new ButtonView(), new ResumeButtonTemplate());
         const resumePauseCommand = new ResumePauseCommand(this.presenter, <ButtonView> resumePauseButtonPresenter.getView());
         resumePauseButtonPresenter.setOnClick(resumePauseCommand);
         this.$element.find(`#start-pause-button`).append(resumePauseButtonPresenter.getElement());
 
         // Sort Selection
-        const sortSelectionPresenter = <SelectPresenter<SelectView>> elementFactory.createElement("select")
+        const sortSelectionPresenter =  elementFactory.createElement<SelectPresenter>("select")
         sortSelectionPresenter.setOnSelect(new SelectSortCommand(this.presenter));
         sortSelectionPresenter.setLabel("Sort by");
         sortSelectionPresenter.addOption("Value", "value");
@@ -64,7 +60,7 @@ export class AnimationViewImpl implements AnimationView {
         this.$element.find(`#select-sort`).append(sortSelectionPresenter.getElement());
 
         // Reverse Checkbox
-        const checkboxPresenter = presenterCreator.create<ButtonPresenter<CheckboxView>, CheckboxView>(new ButtonPresenter<CheckboxView>(), new CheckboxView(), new CheckboxTemplate());
+        const checkboxPresenter = <ButtonPresenter> presenterCreator.create(new ButtonPresenter(), new CheckboxView(), new CheckboxTemplate());
         const reverseSortCommand = new ReverseSortCommand(this.presenter);
         const checkboxCommand = new CheckboxCommand(reverseSortCommand, reverseSortCommand);
         checkboxPresenter.setOnClick(checkboxCommand);
@@ -72,8 +68,8 @@ export class AnimationViewImpl implements AnimationView {
         this.$element.find(`#checkbox-reverse`).append(checkboxPresenter.getElement());
 
         // Chart Selection
-        const charSelectionPresenter = <SelectPresenter<SelectView>> elementFactory.createElement("select");
-        charSelectionPresenter.setOnSelect(new SelectChartCommand(this));
+        const charSelectionPresenter = elementFactory.createElement<SelectPresenter>("select");
+        charSelectionPresenter.setOnSelect(new SelectChartCommand(this.presenter));
         charSelectionPresenter.setLabel("Chart type");
         charSelectionPresenter.addOption("Bar", "bar");
         charSelectionPresenter.addOption("Pie", "pie");
@@ -96,7 +92,7 @@ export class AnimationViewImpl implements AnimationView {
         return this.$element;
     }
 
-    setComponent(presenter: AnimationPresenter<AnimationView>): void {
+    setPresenter(presenter: AnimationPresenter): void {
         this.presenter = presenter;
     }
 
@@ -107,6 +103,10 @@ export class AnimationViewImpl implements AnimationView {
 
         this.template = template;
         this.$element = $(template.html());
+    }
+
+    getTemplate(): Template {
+        return this.template;
     }
 
     setChart(type: string): void {

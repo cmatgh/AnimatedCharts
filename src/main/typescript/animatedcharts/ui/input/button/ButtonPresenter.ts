@@ -1,7 +1,6 @@
 import {InputPresenter} from "../InputPresenter";
-import {InputView} from "../InputView";
 
-export class ButtonPresenter<V extends InputView> extends InputPresenter<V> {
+export class ButtonPresenter extends InputPresenter {
 
     protected doInitialize() {
     }

@@ -4,12 +4,12 @@ import {Template} from "../../../ui/Template";
 
 export class PresenterCreator {
 
-    public create<P extends Presenter<V>, V extends View>(presenter : P, view : V, template : Template): P {
+    public create<P extends Presenter>(presenter : Presenter, view : View, template : Template): P {
         presenter.setView(view)
         view.setTemplate(template);
         presenter.initialize();
 
-        return presenter;
+        return <P> presenter;
     }
 
 }

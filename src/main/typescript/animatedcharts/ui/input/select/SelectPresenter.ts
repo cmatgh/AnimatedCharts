@@ -1,7 +1,9 @@
 import {InputPresenter} from "../InputPresenter";
 import {SelectView} from "./SelectView";
 
-export class SelectPresenter<V extends SelectView> extends InputPresenter<V>{
+export class SelectPresenter extends InputPresenter{
+
+    protected view : SelectView;
 
     options : Map<string, string>;
 

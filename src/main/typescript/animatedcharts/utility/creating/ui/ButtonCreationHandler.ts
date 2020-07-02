@@ -4,19 +4,22 @@ import {PresenterCreator} from "./PresenterCreator";
 import {ButtonPresenter} from "../../../ui/input/button/ButtonPresenter";
 import {ButtonView} from "../../../ui/input/button/ButtonView";
 import {DefaultButtonTemplate} from "../../../ui/input/button/templates/DefaultButtonTemplate";
-import {SelectView} from "../../../ui/input/select/SelectView";
-import {SelectTemplate} from "../../../ui/input/select/SelectTemplate";
-import {SelectPresenter} from "../../../ui/input/select/SelectPresenter";
+import jsdom = require('jsdom');
+var document = new jsdom.JSDOM(`<!DOCTYPE html><html></html>`).window.document;
+var window = document.defaultView;
 
-export class SelectCreationHandler extends CreationHandler{
+global.window = window
+global.$ = require('jquery');
+
+export class ButtonCreationHandler extends CreationHandler{
 
     constructor(type : string) {
         super(type);
     }
 
-    protected doCreate(): Presenter<any> {
+    protected doCreate(): Presenter {
         const presenterCreator = new PresenterCreator();
-        return presenterCreator.create<SelectPresenter<SelectView>, SelectView>(new SelectPresenter<SelectView>(), new SelectView(), new SelectTemplate());
+        return presenterCreator.create(new ButtonPresenter(), new ButtonView(), new DefaultButtonTemplate());
     }
 
 }

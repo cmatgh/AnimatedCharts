@@ -6,6 +6,7 @@ export interface View {
     initialize() : void;
     getElement() : any
     setTemplate(template : Template) : void
-    setComponent(component : Presenter<any>) : void;
+    getTemplate() : Template;
+    setPresenter(presenter : Presenter) : void;
 
 }

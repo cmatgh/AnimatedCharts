@@ -3,7 +3,7 @@ import {Presenter} from "../../../ui/Presenter";
 export abstract class CreationHandler {
 
     protected nextHandler : CreationHandler
-    private type : string;
+    private readonly type : string;
 
     protected constructor(type : string) {
         this.type = type;
@@ -13,7 +13,11 @@ export abstract class CreationHandler {
         this.nextHandler = handler;
     }
 
-    public handle(type : string) : Presenter<any> {
+    getNext() : CreationHandler {
+        return this.nextHandler;
+    }
+
+    public handle(type : string) : Presenter {
         if(type == this.type) {
             return this.doCreate();
         } else if(this.nextHandler != null) {
@@ -23,6 +27,6 @@ export abstract class CreationHandler {
         return null;
     }
 
-    protected abstract doCreate() : Presenter<any>;
+    protected abstract doCreate() : Presenter;
 
 }

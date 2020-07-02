@@ -9,13 +9,13 @@ import {AnimationPresenter} from "../ui/animation/AnimationPresenter";
 
 export class ResumePauseCommand implements Command {
 
-    animationPresenter: AnimationPresenter<any>;
+    animationPresenter: AnimationPresenter;
     buttonView: ButtonView;
     startTemplate : Template
     resumeTemplate : Template;
     pauseTemplate : Template;
 
-    constructor(animationPresenter : AnimationPresenter<any>, buttonView : ButtonView) {
+    constructor(animationPresenter : AnimationPresenter, buttonView : ButtonView) {
         this.animationPresenter = animationPresenter;
         this.buttonView = buttonView;
         this.resumeTemplate = new ResumeButtonTemplate();

@@ -58,18 +58,18 @@ export class LabelVisitor implements Visitor{
         return false;
     }
 
-    visitAnimationUI(animationUI: AnimationPresenterImpl<any>): void {
+    visitAnimationUI(animationUI: AnimationPresenterImpl): void {
 
         this.visitChildren(animationUI);
     }
 
-    visitButton(button: InputPresenter<any>): void {
+    visitButton(button: InputPresenter): void {
         this.applyStyling(button.getElement());
 
         this.visitChildren(button);
     }
 
-    private visitChildren(uiElement : Presenter<any>) : void {
+    private visitChildren(uiElement : Presenter) : void {
       //  uiElement.g().forEach( element => element.accept(this));
     }
 

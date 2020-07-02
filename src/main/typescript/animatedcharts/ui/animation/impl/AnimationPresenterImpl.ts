@@ -1,20 +1,18 @@
-import {Animation, DataObject, DataSet, FrameDataSet} from "../../../animation/Animation";
+import {Animation, DataObject, FrameDataSet} from "../../../animation/Animation";
 import {AnimationPresenter} from "../AnimationPresenter";
-import {AnimationView} from "../AnimationView";
 import {Observer} from "../../../animation/Observer";
 import {Comparator} from "../../../utility/comparing/Comparator";
 import {ComparatorFactory} from "../../../utility/comparing/ComparatorFactory";
 import {ComparatorUtils} from "../../../utility/comparing/ComparatorUtils";
+import {AnimationView} from "../AnimationView";
 
-export class AnimationPresenterImpl<V extends AnimationView> implements AnimationPresenter<V>, Observer{
+export class AnimationPresenterImpl implements AnimationPresenter, Observer{
 
     private readonly animation: Animation;
-    private view : V;
+    private view : AnimationView;
     private comparator : Comparator<FrameDataSet>;
 
-    constructor(elementId : string, view : V) {
-        this.view = view;
-        this.view.setComponent(this);
+    constructor() {
         this.animation = new Animation(window);
         this.animation.register(this);
         this.comparator = ComparatorFactory.getInstance().create("label");
@@ -32,11 +30,11 @@ export class AnimationPresenterImpl<V extends AnimationView> implements Animatio
         return this.view.getElement();
     }
 
-    setView(view: V) {
+    setView(view: AnimationView) {
         this.view = view;
     }
 
-    getView(): V {
+    getView(): AnimationView {
         return this.view;
     }
 
@@ -88,6 +86,10 @@ export class AnimationPresenterImpl<V extends AnimationView> implements Animatio
 
     getAnimation(): Animation {
         return this.animation;
+    }
+
+    setChart(type: string) {
+        this.view.setChart(type);
     }
 
 }

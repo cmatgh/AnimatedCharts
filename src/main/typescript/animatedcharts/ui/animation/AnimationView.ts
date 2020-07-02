@@ -1,5 +1,5 @@
 import {View} from "../View";
-import {DataSet, FrameDataSet} from "../../animation/Animation";
+import {FrameDataSet} from "../../animation/Animation";
 
 export interface AnimationView extends View{
 
