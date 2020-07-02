@@ -4,12 +4,6 @@ import {PresenterCreator} from "./PresenterCreator";
 import {ButtonPresenter} from "../../../ui/input/button/ButtonPresenter";
 import {ButtonView} from "../../../ui/input/button/ButtonView";
 import {DefaultButtonTemplate} from "../../../ui/input/button/templates/DefaultButtonTemplate";
-import jsdom = require('jsdom');
-var document = new jsdom.JSDOM(`<!DOCTYPE html><html></html>`).window.document;
-var window = document.defaultView;
-
-global.window = window
-global.$ = require('jquery');
 
 export class ButtonCreationHandler extends CreationHandler{
 
