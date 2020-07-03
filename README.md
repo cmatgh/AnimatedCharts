@@ -9,7 +9,7 @@ Design Patterns used:
 -Command
 -Singleton
 -Strategy
--Composite
 -Decorator
--Visitor
+-Chain of Responsibility
+-Template
 ```
