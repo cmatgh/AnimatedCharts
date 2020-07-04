@@ -1,4 +1,4 @@
-import {CreationHandler} from "./CreationHandler";
+import {CreationHandler} from "./handler/CreationHandler";
 import {Presenter} from "../../../ui/Presenter";
 
 export class UIElementFactory {

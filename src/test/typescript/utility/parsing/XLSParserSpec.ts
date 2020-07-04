@@ -1,14 +1,14 @@
 import { expect } from "chai";
-import {XLSParser} from "../../../../main/typescript/animatedcharts/utility/parsing/XLSParser";
+import {XLSParsingStrategy} from "../../../../main/typescript/animatedcharts/utility/parsing/XLSParsingStrategy";
 import * as XLSX from "xlsx";
 import {WorkBook, WorkSheet} from "xlsx";
 
 describe("XLSParser", () => {
 
-    let xlsParser: XLSParser;
+    let xlsParser: XLSParsingStrategy;
 
     beforeEach( () => {
-        xlsParser = new XLSParser();
+        xlsParser = new XLSParsingStrategy();
 
     });
 

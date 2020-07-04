@@ -4,7 +4,7 @@ import {Template} from "./Template";
 export interface View {
 
     initialize() : void;
-    getElement() : any
+    getElement() : JQuery
     setTemplate(template : Template) : void
     getTemplate() : Template;
     setPresenter(presenter : Presenter) : void;

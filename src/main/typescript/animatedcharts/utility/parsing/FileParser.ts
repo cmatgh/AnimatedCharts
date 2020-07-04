@@ -1,16 +1,26 @@
 import {Parser} from "./Parser";
 import {DataObject} from "../../animation/Animation";
+import {ParsingStrategy} from "./ParsingStrategy";
 
-export abstract class AbstractParser implements Parser{
+export class FileParser implements Parser{
+
+    private static parsingStrategies : Map<string, ParsingStrategy> = new Map<string, ParsingStrategy>();
 
     private REQUIRED_COLUMNS : String[] = ["label", "color"]
 
-    parse(buffer: Buffer): DataObject {
-        let parsedData = this.parseRows(buffer);
+    public static add(type : string, parsingStrategy : ParsingStrategy) {
+        this.parsingStrategies.set(type, parsingStrategy);
+    }
+
+    parse(buffer: Buffer, type : string): DataObject {
+        if(!FileParser.parsingStrategies.has(type)) {
+            throw Error("No parsing strategy for this type found.");
+        }
+
+        let parsedData = FileParser.parsingStrategies.get(type).parseRows(buffer);
         this.validate(parsedData);
         return this.transform(parsedData);
     }
-    protected abstract parseRows(buffer: Buffer) : object[][];
 
     public validate(data: object[][]) : void {
         this.checkHasHeadLine(data);

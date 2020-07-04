@@ -4,6 +4,7 @@ import { AnimationLoop } from "./AnimationLoop";
 import * as convert from "color-convert";
 import {Observer} from "./Observer";
 import {Command} from "../commands/Command";
+import {FrameDataImpl} from "./data/FrameDataImpl";
 
 export interface DataSet {
     label : string,
@@ -85,24 +86,22 @@ export class Animation implements Observable{
         this.animationObjects.forEach( obj => obj.update());
     }
 
-    getCurrentFrameData() : FrameDataSet[] {
+    getCurrentFrameData() : FrameDataImpl {
+        const frameData = new FrameDataImpl();
+        frameData.setProperty("");
+        frameData.setFrameDataSet([]);
         if(this.dataObject != null) {
-            return this.dataObject.dataSets.map( set => {
+            frameData.setProperty( this.dataObject.columnDefs[2 + this.frame]);
+            frameData.setFrameDataSet(this.dataObject.dataSets.map( set => {
                 return {
                     label: set.label.slice(),
                     color : [...set.color],
                     value: set.values[this.frame]
                 }
-            });
+            }));
         }
-        return [];
-    }
 
-    getCurrentColumnProperty() : string {
-        if(this.dataObject != null) {
-            return this.dataObject.columnDefs[2 + this.frame];
-        }
-        return "";
+        return frameData;
     }
 
     incrementFrame() : void{

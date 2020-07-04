@@ -30,12 +30,12 @@ export class AnimationChart implements AnimationObserver {
     }
 
     update() : void {
-        const dataSets = this.animation.getCurrentFrameData();
-        dataSets.sort(this.comparator.compare);
+        const frameData = this.animation.getCurrentFrameData();
+        frameData.getFrameDataSet().sort(this.comparator.compare);
 
-        this.chart.data.labels = dataSets.map( set => set.label);
-        this.chart.data.datasets[0].backgroundColor = dataSets.map( set => `rgba(${set.color[0]},${set.color[1]},${set.color[2]})`);
-        this.chart.data.datasets[0].data = dataSets.map( set => set.value);
+        this.chart.data.labels = frameData.getFrameDataSet().map( set => set.label);
+        this.chart.data.datasets[0].backgroundColor = frameData.getFrameDataSet().map( set => `rgba(${set.color[0]},${set.color[1]},${set.color[2]})`);
+        this.chart.data.datasets[0].data = frameData.getFrameDataSet().map( set => set.value);
         this.chart.update(2500);
     }
 

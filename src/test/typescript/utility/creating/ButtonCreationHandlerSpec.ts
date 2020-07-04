@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {ButtonCreationHandler} from "../../../../main/typescript/animatedcharts/utility/creating/ui/ButtonCreationHandler";
+import {ButtonCreationHandler} from "../../../../main/typescript/animatedcharts/utility/creating/ui/handler/ButtonCreationHandler";
 import {ButtonPresenter} from "../../../../main/typescript/animatedcharts/ui/input/button/ButtonPresenter";
 import {ButtonView} from "../../../../main/typescript/animatedcharts/ui/input/button/ButtonView";
 import {DefaultButtonTemplate} from "../../../../main/typescript/animatedcharts/ui/input/button/templates/DefaultButtonTemplate";

@@ -1,30 +1,14 @@
-import {Presenter} from "../Presenter";
 import {Command} from "../../commands/Command";
 import {InputView} from "./InputView";
+import {AbstractPresenter} from "../AbstractPresenter";
 
-export abstract class InputPresenter implements Presenter {
+export abstract class InputPresenter extends AbstractPresenter {
 
     protected view : InputView;
     protected onClickCommand : Command;
     protected onSubmitCommand : Command;
     protected onSelectCommand : Command;
     protected onChangeCommand : Command;
-
-    initialize(): void {
-        this.view.initialize();
-        this.doInitialize();
-    }
-
-    protected abstract doInitialize();
-
-    setView(view: InputView) {
-        this.view = view;
-        this.view.setPresenter(this);
-    }
-
-    getView(): InputView {
-        return this.view;
-    }
 
     setLabel(label : string) {
         this.view.setLabel(label);
@@ -55,15 +39,12 @@ export abstract class InputPresenter implements Presenter {
     }
 
     onSubmit(event: Event): void {
+        console.log(this)
         if(this.onSubmitCommand == null) {
             return;
         }
-
+        console.log("hiwere")
         this.onSubmitCommand.execute(new Map<string, any>([["event", event]]));
-    }
-
-    getElement(): JQuery {
-        return this.view.getElement();
     }
 
     setOnClick(command: Command): void {
@@ -79,6 +60,7 @@ export abstract class InputPresenter implements Presenter {
     }
 
     setOnSubmit(command: Command): void {
+        console.log(command);
         this.onSubmitCommand = command;
     }
 

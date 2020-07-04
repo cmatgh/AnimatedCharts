@@ -1,4 +1,4 @@
-import {Presenter} from "../../../ui/Presenter";
+import {Presenter} from "../../../../ui/Presenter";
 
 export abstract class CreationHandler {
 

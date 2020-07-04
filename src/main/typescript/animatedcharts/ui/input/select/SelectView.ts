@@ -3,21 +3,23 @@ import {InputView} from "../InputView";
 export class SelectView extends InputView{
 
     protected doInitialize(): void {
-        this.getElement().find("#select-input").on("change", (event) => {
+        this.bind("change",
+            (event) => {
             let selectedValue = $(event.target).children("option:selected").val();
             this.presenter
                 .onSelect
                 .bind(this.presenter)(selectedValue);
-        });
+        },
+            "#select-input"  )
     }
 
-    setLabel(label: String): void {
+    setLabel(label: string): void {
         this.getElement().find("label").html(label);
     }
 
     printOptions(map : Map<string, string>) {
         this.getElement().find("#select-input").html("");
-        map.forEach((label, value) => this.drawOption(value, label));
+        map.forEach((label, value) => this.drawOption(label, value));
     }
 
     private drawOption(label : string, value : string) {

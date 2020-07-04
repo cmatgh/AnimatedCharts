@@ -8,29 +8,37 @@ import {FrameDataSet} from "../../../animation/Animation";
 import Chart from "chart.js";
 import {FileDialogView} from "../../input/filedialog/FileDialogView";
 import {FileDialogTemplate} from "../../input/filedialog/FileDialogTemplate";
-import {SelectView} from "../../input/select/SelectView";
-import {SelectTemplate} from "../../input/select/SelectTemplate";
 import {ParseFileCommand} from "../../../commands/ParseFileCommand";
 import {ResumePauseCommand} from "../../../commands/ResumePauseCommand";
 import {ResumeButtonTemplate} from "../../input/button/templates/ResumeButtonTemplate";
 import {SelectSortCommand} from "../../../commands/SelectSortCommand";
 import {SelectChartCommand} from "../../../commands/SelectChartCommand";
 import {CheckboxTemplate} from "../../input/checkbox/CheckboxTemplate";
-import {CheckboxCommand} from "../../../commands/CheckboxCommand";
 import {ReverseSortCommand} from "../../../commands/ReverseSortCommand";
 import {CheckboxView} from "../../input/checkbox/CheckboxView";
 import {PresenterCreator} from "../../../utility/creating/ui/PresenterCreator";
 import {UIElementFactory} from "../../../utility/creating/ui/UIElementFactory";
 import {SelectPresenter} from "../../input/select/SelectPresenter";
+import {NumberFormatter} from "../../../utility/formatting/NumberFormatter";
+import {IntegerNumberFormat} from "../../../utility/formatting/IntegerNumberFormat";
+import {NumberFormatDecoratorCommand} from "../../../commands/NumberFormatDecoratorCommand";
+import {IntegerMillePointFormat} from "../../../utility/formatting/IntegerMillePointFormat";
+import {IntegerMilleSpaceFormat} from "../../../utility/formatting/IntegerMilleSpaceFormat";
+import {UnitDecoratorCommand} from "../../../commands/UnitDecoratorCommand";
+import {PropertyNumberFormatDecorator} from "../../../utility/decorating/PropertyNumberFormatDecorator";
+import {AppendPropertyDecorator} from "../../../utility/decorating/AppendPropertyDecorator";
+import {TagWrapperPropertyFrameDataDecorator} from "../../../utility/decorating/TagWrapperPropertyFrameDataDecorator";
+import {TagWrapperCommand} from "../../../commands/TagWrapperCommand";
+import {CheckboxInlineTemplate} from "../../input/checkbox/CheckboxInlineTemplate";
 
-export class AnimationViewImpl implements AnimationView {
+export class AnimationViewImpl extends AnimationView {
 
     presenter: AnimationPresenter;
     template : Template;
     $element : JQuery;
     chart: Chart;
 
-    initialize() {
+    doInitialize() {
         this.chart = this.chart = ChartFactory.getInstance()
              .create("bar", <HTMLCanvasElement> this.$element.find(`#chart`).get(0));
 
@@ -38,44 +46,97 @@ export class AnimationViewImpl implements AnimationView {
         const presenterCreator = new PresenterCreator();
 
         // File Dialog
-        const fileDialogButtonPresenter = <ButtonPresenter> presenterCreator.create(new ButtonPresenter(), new FileDialogView(), new FileDialogTemplate());
+        const fileDialogButtonPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new FileDialogView(), new FileDialogTemplate());
         const fileDialogCommand = new ParseFileCommand(this.presenter);
         fileDialogButtonPresenter.setOnChange(fileDialogCommand);
         fileDialogButtonPresenter.setLabel("Choose File...");
-        this.$element.find(`#load-dataset-button`).append(fileDialogButtonPresenter.getElement());
+        this.add(`#load-dataset-button`, fileDialogButtonPresenter);
 
         // Resume Pause Control
-        const resumePauseButtonPresenter = <ButtonPresenter> presenterCreator.create(new ButtonPresenter(), new ButtonView(), new ResumeButtonTemplate());
+        const resumePauseButtonPresenter = elementFactory.createElement<ButtonPresenter>("button");
+        resumePauseButtonPresenter.getView().setTemplate(new ResumeButtonTemplate());
+        resumePauseButtonPresenter.initialize();
         const resumePauseCommand = new ResumePauseCommand(this.presenter, <ButtonView> resumePauseButtonPresenter.getView());
         resumePauseButtonPresenter.setOnClick(resumePauseCommand);
-        this.$element.find(`#start-pause-button`).append(resumePauseButtonPresenter.getElement());
+        this.add(`#start-pause-button`, resumePauseButtonPresenter);
 
         // Sort Selection
         const sortSelectionPresenter =  elementFactory.createElement<SelectPresenter>("select")
         sortSelectionPresenter.setOnSelect(new SelectSortCommand(this.presenter));
         sortSelectionPresenter.setLabel("Sort by");
-        sortSelectionPresenter.addOption("Value", "value");
-        sortSelectionPresenter.addOption("Color", "color");
-        sortSelectionPresenter.addOption("Label", "label");
-        this.$element.find(`#select-sort`).append(sortSelectionPresenter.getElement());
+        sortSelectionPresenter.addOption("value", "Value");
+        sortSelectionPresenter.addOption("color", "Color");
+        sortSelectionPresenter.addOption("label", "Label");
+        this.add(`#select-sort`, sortSelectionPresenter);
 
         // Reverse Checkbox
-        const checkboxPresenter = <ButtonPresenter> presenterCreator.create(new ButtonPresenter(), new CheckboxView(), new CheckboxTemplate());
+        const checkboxPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxTemplate());
         const reverseSortCommand = new ReverseSortCommand(this.presenter);
-        const checkboxCommand = new CheckboxCommand(reverseSortCommand, reverseSortCommand);
-        checkboxPresenter.setOnClick(checkboxCommand);
+        checkboxPresenter.setOnClick(reverseSortCommand);
         checkboxPresenter.setLabel("reverse");
-        this.$element.find(`#checkbox-reverse`).append(checkboxPresenter.getElement());
+        this.add(`#checkbox-reverse`, checkboxPresenter);
 
         // Chart Selection
         const charSelectionPresenter = elementFactory.createElement<SelectPresenter>("select");
         charSelectionPresenter.setOnSelect(new SelectChartCommand(this.presenter));
         charSelectionPresenter.setLabel("Chart type");
-        charSelectionPresenter.addOption("Bar", "bar");
-        charSelectionPresenter.addOption("Pie", "pie");
-        charSelectionPresenter.addOption("Polar Area", "polarArea");
-        charSelectionPresenter.addOption("Doughnut", "doughnut");
-        this.$element.find(`#select-chart`).append(charSelectionPresenter.getElement());
+        charSelectionPresenter.addOption("bar", "Bar" );
+        charSelectionPresenter.addOption("pie", "Pie");
+        charSelectionPresenter.addOption("polarArea", "Polar Area");
+        charSelectionPresenter.addOption("doughnut", "Doughnut");
+        this.add(`#select-chart`, charSelectionPresenter);
+
+        // Property Number Decorator
+        const propertyNumberFormatDecorator = new PropertyNumberFormatDecorator(IntegerNumberFormat.IDENTIFIER);
+        const numberPropertyPresenter = elementFactory.createElement<SelectPresenter>("select");
+        numberPropertyPresenter.setOnSelect(new NumberFormatDecoratorCommand(this.presenter, propertyNumberFormatDecorator));
+        numberPropertyPresenter.setLabel("Number format");
+        numberPropertyPresenter.addOption(IntegerNumberFormat.IDENTIFIER, NumberFormatter.format("1611,32", IntegerNumberFormat.IDENTIFIER));
+        numberPropertyPresenter.addOption(IntegerMillePointFormat.IDENTIFIER, NumberFormatter.format("1611,32", IntegerMillePointFormat.IDENTIFIER));
+        numberPropertyPresenter.addOption(IntegerMilleSpaceFormat.IDENTIFIER, NumberFormatter.format("1611,32", IntegerMilleSpaceFormat.IDENTIFIER));
+        this.add(`#select-property-number-format`, numberPropertyPresenter);
+
+        // Property Unit Decorator
+        const appendPropertyDecorator = new AppendPropertyDecorator("");
+        const unitPropertyPresenter = elementFactory.createElement<SelectPresenter>("select");
+        unitPropertyPresenter.setOnSelect(new UnitDecoratorCommand(this.presenter, appendPropertyDecorator));
+        unitPropertyPresenter.setLabel("Unit");
+        unitPropertyPresenter.addOption("", "None");
+        unitPropertyPresenter.addOption("€", "Euro");
+        unitPropertyPresenter.addOption("$", "Dollar");
+        unitPropertyPresenter.addOption("m", "Meters");
+        unitPropertyPresenter.addOption("s", "Seconds");
+        this.add(`#select-property-unit-format`, unitPropertyPresenter);
+
+        // Italic Checkbox
+        const italicCheckboxPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
+        const italicDecorator = new TagWrapperPropertyFrameDataDecorator();
+        italicDecorator.setValue("i");
+        const italicCommand = new TagWrapperCommand(this.presenter, italicDecorator);
+        italicCheckboxPresenter.setOnClick(italicCommand);
+        italicCheckboxPresenter.setLabel("italic");
+        this.add(`#checkbox-italic`, italicCheckboxPresenter);
+
+        // Bold Checkbox
+        const boldCheckboxPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
+        const boldDecorator = new TagWrapperPropertyFrameDataDecorator();
+        boldDecorator.setValue("strong");
+        const boldCommand = new TagWrapperCommand(this.presenter, boldDecorator);
+        boldCheckboxPresenter.setOnClick(boldCommand);
+        boldCheckboxPresenter.setLabel("bold");
+        this.add(`#checkbox-bold`, boldCheckboxPresenter);
+
+        // Italic Checkbox
+        const smallCheckboxPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
+        const smallDecorator = new TagWrapperPropertyFrameDataDecorator();
+        smallDecorator.setValue("small");
+        const smallCommand = new TagWrapperCommand(this.presenter, smallDecorator);
+        smallCheckboxPresenter.setOnClick(smallCommand);
+        smallCheckboxPresenter.setLabel("small");
+        this.add(`#checkbox-small`, smallCheckboxPresenter);
+
+        this.presenter.addFrameDataDecorator(propertyNumberFormatDecorator);
+        this.presenter.addFrameDataDecorator(appendPropertyDecorator);
     }
 
     setProperty(property : string) : void {
@@ -88,25 +149,8 @@ export class AnimationViewImpl implements AnimationView {
         this.$element.find(`#title`).html(title);
     }
 
-    getElement(): any {
-        return this.$element;
-    }
-
     setPresenter(presenter: AnimationPresenter): void {
         this.presenter = presenter;
-    }
-
-    setTemplate(template: Template): void {
-        if(this.getElement() != null) {
-            this.getElement().off("click");
-        }
-
-        this.template = template;
-        this.$element = $(template.html());
-    }
-
-    getTemplate(): Template {
-        return this.template;
     }
 
     setChart(type: string): void {
@@ -133,4 +177,5 @@ export class AnimationViewImpl implements AnimationView {
         this.chart.data.datasets[0].data = dataSets;
         this.chart.update(duration);
     }
+
 }

@@ -9,6 +9,7 @@ import * as mockito from "../../../../node_modules/ts-mockito/lib/ts-mockito";
 import Chart from "chart.js";
 import {Observer} from "../../../main/typescript/animatedcharts/animation/Observer";
 import {AnimationChart} from "../../../main/typescript/animatedcharts/animation/AnimationChart";
+import {FrameDataImpl} from "../../../main/typescript/animatedcharts/animation/data/FrameDataImpl";
 
 describe("Animation", () => {
 
@@ -138,7 +139,9 @@ describe("Animation", () => {
     describe("getData", () => {
 
         it("should return first dataset after initializing animation instance", () => {
-            expect(animation.getCurrentFrameData()).to.deep.equal( [
+            const expectedFrameData = new FrameDataImpl();
+            expectedFrameData.setProperty("1960");
+            expectedFrameData.setFrameDataSet([
                 {
                     label: "Africa",
                     color: [255,255,255],
@@ -150,6 +153,7 @@ describe("Animation", () => {
                     value: 49444
                 }
             ]);
+            expect(animation.getCurrentFrameData()).to.deep.equal(expectedFrameData);
         });
 
         it("should return correct dataSet after each frame", () => {
@@ -174,7 +178,9 @@ describe("Animation", () => {
             animation = new Animation(dom);
             animation.setDataObject(dataObj);
 
-            expect(animation.getCurrentFrameData()).to.deep.equal([{
+            const expectedFrameData = new FrameDataImpl();
+            expectedFrameData.setProperty("key1");
+            expectedFrameData.setFrameDataSet([{
                 label : "Africa",
                 color : [255,255,255],
                 value: 13
@@ -183,10 +189,12 @@ describe("Animation", () => {
                 color : [155,155,155],
                 value: 12
             }]);
+            expect(animation.getCurrentFrameData()).to.deep.equal(expectedFrameData);
 
             animation.incrementFrame();
 
-            expect(animation.getCurrentFrameData()).to.deep.equal([{
+            expectedFrameData.setProperty("key2");
+            expectedFrameData.setFrameDataSet([{
                 label : "Africa",
                 color : [255,255,255],
                 value: 14
@@ -195,10 +203,12 @@ describe("Animation", () => {
                 color : [155,155,155],
                 value: 13
             }]);
+            expect(animation.getCurrentFrameData()).to.deep.equal(expectedFrameData);
 
             animation.incrementFrame();
 
-            expect(animation.getCurrentFrameData()).to.deep.equal([{
+            expectedFrameData.setProperty("key1");
+            expectedFrameData.setFrameDataSet([{
                 label : "Africa",
                 color : [255,255,255],
                 value: 13
@@ -207,6 +217,7 @@ describe("Animation", () => {
                 color : [155,155,155],
                 value: 12
             }]);
+            expect(animation.getCurrentFrameData()).to.deep.equal(expectedFrameData);
         });
 
     });
