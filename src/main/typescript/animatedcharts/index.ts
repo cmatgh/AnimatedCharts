@@ -21,6 +21,8 @@ import {XLSParsingStrategy} from "./utility/parsing/XLSParsingStrategy";
     FileParser.add("text/csv", new CSVParsingStrategy());
     FileParser.add("application/xls", new XLSParsingStrategy());
     FileParser.add("application/xlsx", new XLSParsingStrategy());
+    FileParser.add("application/vnd.ms-excel", new XLSParsingStrategy());
+    FileParser.add("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", new XLSParsingStrategy());
 
     NumberFormatter.add(new IntegerNumberFormat());
     NumberFormatter.add(new IntegerMilleSpaceFormat());
