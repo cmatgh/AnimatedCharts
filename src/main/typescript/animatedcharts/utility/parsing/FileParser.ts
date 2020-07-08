@@ -63,9 +63,8 @@ export class FileParser implements Parser{
         const datasets = valueRows.map( row => {
             return {
                 label: row[0].toString(),
-                color: row[1] as number[],
-                values: row.filter((row, index) => index > 1)
-                    .map(value => parseInt(value.toString()))
+                color: this.rgbTripletToArray(row[1].toString()),
+                values: row.slice(2).map(value => parseInt(value.toString()))
             }
         } )
         return {
@@ -74,4 +73,30 @@ export class FileParser implements Parser{
             valuesLength: data[0].length - 2,
         }
     }
+
+    private rgbTripletToArray(color : string) : number[] {
+        if(color == "") {
+            return [];
+        }
+        this.isValidColor(color.toString());
+
+        const colorTripletString = color
+            .toString()
+            .substring(4, color.toString().length - 1)
+            .split(",");
+        return [
+            parseInt(colorTripletString[0]),
+            parseInt(colorTripletString[1]),
+            parseInt(colorTripletString[2])
+        ];
+    }
+
+    private isValidColor(color : string) : void {
+        //regex for 'rgb(xxx,xxx,xxx)' where xxx can be between 0 and 255
+        const regexTemplate = /rgb\(([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5]),([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5]),([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\)/g;
+        if(color.match(regexTemplate) == null) {
+            throw new Error("Invalid color field. Valid format: rgb(xx,xxx,x).");
+        }
+    }
+
 }
