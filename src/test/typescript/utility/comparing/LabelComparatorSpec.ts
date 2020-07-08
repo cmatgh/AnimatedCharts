@@ -1,12 +1,12 @@
 import { expect } from "chai";
-import {FrameDataSet} from "../../../../main/typescript/animatedcharts/animation/Animation";
 import {LabelComparator} from "../../../../main/typescript/animatedcharts/utility/comparing/LabelComparator";
+import {ChartData} from "../../../../main/typescript/animatedcharts/animation/data/FrameData";
 
 describe("Label Comparator", () => {
 
     let labelComparator: LabelComparator;
-    let o1: FrameDataSet;
-    let o2: FrameDataSet;
+    let o1: ChartData;
+    let o2: ChartData;
 
     beforeEach( () => {
         labelComparator = new LabelComparator();

@@ -17,6 +17,7 @@ export abstract class AnimationPresenter extends AbstractPresenter{
     abstract hasPaused(): boolean;
     abstract reverse() : void;
     abstract sortBy(type : string) : void;
+    abstract setFrame(frame: number) : void;
     abstract addFrameDataDecorator(propertyDecorator: FrameDataDecorator) : void;
     abstract removeFrameDataDecorator(propertyDecorator: FrameDataDecorator) : void;
     abstract setChart(type : string) : void;

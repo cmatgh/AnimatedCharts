@@ -1,16 +1,16 @@
-import {Animation, DataObject, FrameDataSet} from "../../../animation/Animation";
+import {Animation, DataObject} from "../../../animation/Animation";
 import {AnimationPresenter} from "../AnimationPresenter";
 import {Observer} from "../../../animation/Observer";
 import {Comparator} from "../../../utility/comparing/Comparator";
 import {ComparatorFactory} from "../../../utility/comparing/ComparatorFactory";
 import {ComparatorUtils} from "../../../utility/comparing/ComparatorUtils";
 import {FrameDataDecorator} from "../../../utility/decorating/FrameDataDecorator";
-import {FrameData} from "../../../animation/data/FrameData";
+import {FrameData, ChartData} from "../../../animation/data/FrameData";
 
 export class AnimationPresenterImpl extends AnimationPresenter implements Observer {
 
     private animation: Animation;
-    private comparator: Comparator<FrameDataSet>;
+    private comparator: Comparator<ChartData>;
     private frameDataDecorators : Array<FrameDataDecorator>;
 
     protected doInitialize() : void{
@@ -58,11 +58,15 @@ export class AnimationPresenterImpl extends AnimationPresenter implements Observ
         this.update();
     }
 
+    setFrame(frame: number) {
+        this.animation.setFrame(frame);
+        this.update();
+    }
+
     update(): void {
         const currentFrameData = this.animation.getCurrentFrameData();
         currentFrameData.getFrameDataSet().sort(this.comparator.compare);
-        this.view.updateChart(currentFrameData.getFrameDataSet());
-        console.log(this.frameDataDecorators);
+        this.view.update(currentFrameData);
         this.view.setProperty(this.applyDecorators(currentFrameData).getProperty());
     }
 

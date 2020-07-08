@@ -4,7 +4,6 @@ import {Template} from "../../Template";
 import {ButtonPresenter} from "../../input/button/ButtonPresenter";
 import {ButtonView} from "../../input/button/ButtonView";
 import {ChartFactory} from "../../../utility/creating/ui/ChartFactory";
-import {FrameDataSet} from "../../../animation/Animation";
 import Chart from "chart.js";
 import {FileDialogView} from "../../input/filedialog/FileDialogView";
 import {FileDialogTemplate} from "../../input/filedialog/FileDialogTemplate";
@@ -30,6 +29,11 @@ import {AppendPropertyDecorator} from "../../../utility/decorating/AppendPropert
 import {TagWrapperPropertyFrameDataDecorator} from "../../../utility/decorating/TagWrapperPropertyFrameDataDecorator";
 import {TagWrapperCommand} from "../../../commands/TagWrapperCommand";
 import {CheckboxInlineTemplate} from "../../input/checkbox/CheckboxInlineTemplate";
+import {FrameData} from "../../../animation/data/FrameData";
+import {RangeCommand} from "../../../commands/RangeCommand";
+import {RangePresenter} from "../../input/range/RangePresenter";
+import {RangeView} from "../../input/range/RangeView";
+import {RangeTemplate} from "../../input/range/RangeTemplate";
 
 export class AnimationViewImpl extends AnimationView {
 
@@ -37,6 +41,12 @@ export class AnimationViewImpl extends AnimationView {
     template : Template;
     $element : JQuery;
     chart: Chart;
+
+    fileDialogButtonPresenter : ButtonPresenter;
+    resumePauseButtonPresenter : ButtonPresenter;
+    frameRangePresenter : RangePresenter;
+    sortSelectionPresenter : SelectPresenter;
+    checkboxPresenter : ButtonPresenter;
 
     doInitialize() {
         this.chart = this.chart = ChartFactory.getInstance()
@@ -46,35 +56,42 @@ export class AnimationViewImpl extends AnimationView {
         const presenterCreator = new PresenterCreator();
 
         // File Dialog
-        const fileDialogButtonPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new FileDialogView(), new FileDialogTemplate());
-        const fileDialogCommand = new ParseFileCommand(this.presenter);
-        fileDialogButtonPresenter.setOnChange(fileDialogCommand);
-        fileDialogButtonPresenter.setLabel("Choose File...");
-        this.add(`#load-dataset-button`, fileDialogButtonPresenter);
+        this.fileDialogButtonPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new FileDialogView(), new FileDialogTemplate());
+        this.fileDialogButtonPresenter.setOnChange(new ParseFileCommand(this.presenter));
+        this.fileDialogButtonPresenter.setLabel("Choose File...");
+        this.add(`#load-dataset-button`, this.fileDialogButtonPresenter);
 
         // Resume Pause Control
-        const resumePauseButtonPresenter = elementFactory.createElement<ButtonPresenter>("button");
-        resumePauseButtonPresenter.getView().setTemplate(new ResumeButtonTemplate());
-        resumePauseButtonPresenter.initialize();
-        const resumePauseCommand = new ResumePauseCommand(this.presenter, <ButtonView> resumePauseButtonPresenter.getView());
-        resumePauseButtonPresenter.setOnClick(resumePauseCommand);
-        this.add(`#start-pause-button`, resumePauseButtonPresenter);
+        this.resumePauseButtonPresenter = elementFactory.createElement<ButtonPresenter>("button");
+        this.resumePauseButtonPresenter.getView().setTemplate(new ResumeButtonTemplate());
+        this.resumePauseButtonPresenter.initialize();
+        const resumePauseCommand = new ResumePauseCommand(this.presenter, <ButtonView> this.resumePauseButtonPresenter.getView());
+        this.resumePauseButtonPresenter.setOnClick(resumePauseCommand);
+        this.add(`#start-pause-button`, this.resumePauseButtonPresenter);
+
+        // Frame Range
+        this.frameRangePresenter = presenterCreator.create<RangePresenter>(new RangePresenter(), new RangeView(), new RangeTemplate());
+        this.frameRangePresenter.setLabel("");
+        this.frameRangePresenter.setOnChange(new RangeCommand(this.presenter));
+        this.frameRangePresenter.setMin(0);
+        this.frameRangePresenter.setMax(1);
+        this.frameRangePresenter.setStep(1);
+        this.add("#frame-range", this.frameRangePresenter);
 
         // Sort Selection
-        const sortSelectionPresenter =  elementFactory.createElement<SelectPresenter>("select")
-        sortSelectionPresenter.setOnSelect(new SelectSortCommand(this.presenter));
-        sortSelectionPresenter.setLabel("Sort by");
-        sortSelectionPresenter.addOption("value", "Value");
-        sortSelectionPresenter.addOption("color", "Color");
-        sortSelectionPresenter.addOption("label", "Label");
-        this.add(`#select-sort`, sortSelectionPresenter);
+        this.sortSelectionPresenter =  elementFactory.createElement<SelectPresenter>("select")
+        this.sortSelectionPresenter.setOnSelect(new SelectSortCommand(this.presenter));
+        this.sortSelectionPresenter.setLabel("Sort by");
+        this.sortSelectionPresenter.addOption("value", "Value");
+        this.sortSelectionPresenter.addOption("color", "Color");
+        this.sortSelectionPresenter.addOption("label", "Label");
+        this.add(`#select-sort`, this.sortSelectionPresenter);
 
         // Reverse Checkbox
-        const checkboxPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxTemplate());
-        const reverseSortCommand = new ReverseSortCommand(this.presenter);
-        checkboxPresenter.setOnClick(reverseSortCommand);
-        checkboxPresenter.setLabel("reverse");
-        this.add(`#checkbox-reverse`, checkboxPresenter);
+        this.checkboxPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxTemplate());
+        this.checkboxPresenter.setOnClick(new ReverseSortCommand(this.presenter));
+        this.checkboxPresenter.setLabel("reverse");
+        this.add(`#checkbox-reverse`, this.checkboxPresenter);
 
         // Chart Selection
         const charSelectionPresenter = elementFactory.createElement<SelectPresenter>("select");
@@ -130,8 +147,7 @@ export class AnimationViewImpl extends AnimationView {
         const smallCheckboxPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
         const smallDecorator = new TagWrapperPropertyFrameDataDecorator();
         smallDecorator.setValue("small");
-        const smallCommand = new TagWrapperCommand(this.presenter, smallDecorator);
-        smallCheckboxPresenter.setOnClick(smallCommand);
+        smallCheckboxPresenter.setOnClick(new TagWrapperCommand(this.presenter, smallDecorator));
         smallCheckboxPresenter.setLabel("small");
         this.add(`#checkbox-small`, smallCheckboxPresenter);
 
@@ -164,11 +180,13 @@ export class AnimationViewImpl extends AnimationView {
             0);
     }
 
-    updateChart(dataSets: FrameDataSet[]): void {
-        this.setChartData(dataSets.map( set => set.label),
-            dataSets.map( set => `rgba(${set.color[0]},${set.color[1]},${set.color[2]})`),
-            dataSets.map( set => set.value),
+    update(frameData : FrameData): void {
+        this.setChartData(frameData.getFrameDataSet().map( set => set.label),
+            frameData.getFrameDataSet().map( set => `rgba(${set.color[0]},${set.color[1]},${set.color[2]})`),
+            frameData.getFrameDataSet().map( set => set.value),
             1000);
+        this.setRange(0, frameData.getSampleSize(), 1);
+        this.frameRangePresenter.setValue(frameData.getCurrentFrame());
     }
 
     private setChartData(labels : string[], colors : string[], dataSets : number[], duration: number) {
@@ -178,4 +196,9 @@ export class AnimationViewImpl extends AnimationView {
         this.chart.update(duration);
     }
 
+    private setRange(min: number, max: number, step: number) {
+        this.frameRangePresenter.setMin(min);
+        this.frameRangePresenter.setMax(max);
+        this.frameRangePresenter.setStep(step);
+    }
 }

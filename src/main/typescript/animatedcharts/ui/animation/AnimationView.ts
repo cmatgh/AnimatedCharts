@@ -1,5 +1,5 @@
-import {FrameDataSet} from "../../animation/Animation";
 import {AbstractView} from "../AbstractView";
+import {FrameData, ChartData} from "../../animation/data/FrameData";
 
 export abstract class AnimationView extends AbstractView{
 
@@ -9,6 +9,6 @@ export abstract class AnimationView extends AbstractView{
 
     abstract setTitle(title : string) : void
 
-    abstract updateChart(datasets: FrameDataSet[]) : void
+    abstract update(datasets: FrameData) : void
 
 }

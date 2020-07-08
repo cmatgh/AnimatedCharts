@@ -5,6 +5,8 @@ import * as convert from "color-convert";
 import {Observer} from "./Observer";
 import {Command} from "../commands/Command";
 import {FrameDataImpl} from "./data/FrameDataImpl";
+import {ChartData, FrameData} from "./data/FrameData";
+import {FrameIterator} from "./data/FrameIterator";
 
 export interface DataSet {
     label : string,
@@ -18,26 +20,19 @@ export interface DataObject {
     valuesLength: number,
  }
 
- export interface FrameDataSet {
-    label : string,
-    color : number[],
-    value: number
-}
-
 export class Animation implements Observable{
 
-    private animationObjects : Set<Observer>;
+    private readonly animationObjects : Set<Observer>;
+    private frameManager : FrameIterator;
     private dataObject: DataObject;
     private animationLoop: AnimationLoop;
-    private frame: number;
-    private numFrames: number;
 
     constructor(window: Window) {
         this.animationObjects = new Set();
         this.dataObject = null;
+        this.frameManager = new FrameIterator([]);
         this.animationLoop = new AnimationLoop(window, { updatesPerSecond : 2 });
-        this.frame = 0;
-        this.numFrames = 0;
+
         this.animationLoop.setOnTickCommand( new class implements Command {
 
             private animation : Animation;
@@ -55,9 +50,9 @@ export class Animation implements Observable{
 
     setDataObject(dataObject: DataObject) : void {
         this.dataObject = dataObject;
-        this.frame = 0;
-        this.numFrames = dataObject.valuesLength;
         this.setColors(dataObject);
+        this.frameManager = new FrameIterator(this.getArray())
+        this.frameManager.getNext();
     }
 
     get AnimationObjects() : Observer[] {
@@ -86,27 +81,12 @@ export class Animation implements Observable{
         this.animationObjects.forEach( obj => obj.update());
     }
 
-    getCurrentFrameData() : FrameDataImpl {
-        const frameData = new FrameDataImpl();
-        frameData.setProperty("");
-        frameData.setFrameDataSet([]);
-        if(this.dataObject != null) {
-            frameData.setProperty( this.dataObject.columnDefs[2 + this.frame]);
-            frameData.setFrameDataSet(this.dataObject.dataSets.map( set => {
-                return {
-                    label: set.label.slice(),
-                    color : [...set.color],
-                    value: set.values[this.frame]
-                }
-            }));
-        }
-
-        return frameData;
+    getCurrentFrameData() : FrameData {
+        return this.frameManager.getCurrentFrame();
     }
 
     incrementFrame() : void{
-        this.frame++;
-        this.frame %= this.numFrames;
+        this.frameManager.getNext();
     }
 
     start() : void{
@@ -117,7 +97,7 @@ export class Animation implements Observable{
 
     stop() : void{
         this.animationLoop.stop();
-        this.frame = 0;
+        this.frameManager.setFrame(0);
         this.notifyObservers();
     }
 
@@ -154,4 +134,38 @@ export class Animation implements Observable{
         return color;
     }
 
+    private getArray() : FrameData[]{
+        const frameData = [];
+        for(let i = 0; i < this.dataObject.valuesLength; i++) {
+            frameData.push(this.asFrameData(i));
+        }
+
+        return frameData;
+    }
+
+
+    private asFrameData(frame : number) : FrameData {
+        const frameData = new FrameDataImpl();
+        frameData.setProperty("");
+        frameData.setSampleSize(this.dataObject.valuesLength);
+        frameData.setCurrentFrame(frame);
+        frameData.setFrameDataSet([]);
+        if(this.dataObject != null) {
+            frameData.setProperty( this.dataObject.columnDefs[2 + frame]);
+            frameData.setCurrentFrame(frame);
+            frameData.setFrameDataSet(this.dataObject.dataSets.map( set => {
+                return {
+                    label: set.label.slice(),
+                    color : [...set.color],
+                    value: set.values[frame]
+                }
+            }));
+        }
+        return frameData;
+    }
+
+    setFrame(frame: number) {
+        this.frameManager.setFrame(frame);
+        this.frameManager.getNext();
+    }
 }

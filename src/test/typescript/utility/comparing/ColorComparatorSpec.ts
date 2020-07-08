@@ -1,12 +1,12 @@
 import { expect } from "chai";
 import {ColorComparator} from "../../../../main/typescript/animatedcharts/utility/comparing/ColorComparator";
-import {FrameDataSet} from "../../../../main/typescript/animatedcharts/animation/Animation";
+import {ChartData} from "../../../../main/typescript/animatedcharts/animation/data/FrameData";
 
 describe("Color Comparator", () => {
 
     let colorComparator: ColorComparator;
-    let o1: FrameDataSet;
-    let o2: FrameDataSet;
+    let o1: ChartData;
+    let o2: ChartData;
 
     beforeEach( () => {
         colorComparator = new ColorComparator();

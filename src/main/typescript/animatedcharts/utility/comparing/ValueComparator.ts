@@ -1,9 +1,9 @@
-import { FrameDataSet } from "../../animation/Animation";
 import { Comparator } from "./Comparator";
+import {ChartData} from "../../animation/data/FrameData";
 
-export class ValueComparator implements Comparator<FrameDataSet> {
+export class ValueComparator implements Comparator<ChartData> {
 
-    compare(o1: FrameDataSet, o2: FrameDataSet): number {
+    compare(o1: ChartData, o2: ChartData): number {
         return o1.value - o2.value;
     }
 

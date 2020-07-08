@@ -1,17 +1,17 @@
 import {LabelComparator} from "./LabelComparator";
 import {Comparator} from "./Comparator";
-import {FrameDataSet} from "../../animation/Animation";
 import {ColorComparator} from "./ColorComparator";
 import {ValueComparator} from "./ValueComparator";
+import {ChartData} from "../../animation/data/FrameData";
 
 export class ComparatorFactory {
 
     private static chartFactory: ComparatorFactory = null;
 
-    comparators : Map<string, Comparator<FrameDataSet>>;
+    comparators : Map<string, Comparator<ChartData>>;
 
     private constructor() {
-        this.comparators = new Map<string, Comparator<FrameDataSet>>([
+        this.comparators = new Map<string, Comparator<ChartData>>([
                 ["label", new LabelComparator()],
                 ["color", new ColorComparator()],
                 ["value", new ValueComparator()]
@@ -25,7 +25,7 @@ export class ComparatorFactory {
         return this.chartFactory;
     }
 
-    create(type: string) : Comparator<FrameDataSet> {
+    create(type: string) : Comparator<ChartData> {
         if(this.comparators.has(type)){
             return this.comparators.get(type);
         }

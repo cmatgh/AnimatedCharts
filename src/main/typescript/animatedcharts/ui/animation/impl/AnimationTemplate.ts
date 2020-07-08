@@ -23,8 +23,7 @@ export class AnimationTemplate implements Template{
                                 <div id="animation-buttons"  class="d-flex flex-column">    
                                     <h3 class="border-bottom pb-2" id="control-label">Control:</h3>       
                                     <div id="start-pause-button"></div>     
-                                    <label for="customRange3">Frame</label>
-                                    <input type="range" class="custom-range" min="0" max="5" step="0.5" id="customRange3">          
+                                    <div id="frame-range"></div>
                                 </div>
                             </div>
                         </div>        

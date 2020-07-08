@@ -1,5 +1,6 @@
-import {FrameDataSet} from "../../animation/Animation";
+
 import {FrameDataDecorator} from "./FrameDataDecorator";
+import {ChartData} from "../../animation/data/FrameData";
 
 export class AppendPropertyDecorator extends FrameDataDecorator {
 
@@ -12,10 +13,6 @@ export class AppendPropertyDecorator extends FrameDataDecorator {
 
     setAppendValue(value : string) {
         this.appendValue = value;
-    }
-
-    getFrameDataSet(): FrameDataSet[] {
-        return this.frameData.getFrameDataSet();
     }
 
     getProperty(): string {

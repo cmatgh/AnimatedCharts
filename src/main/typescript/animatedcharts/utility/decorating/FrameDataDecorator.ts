@@ -1,5 +1,4 @@
-import {FrameData} from "../../animation/data/FrameData";
-import {FrameDataSet} from "../../animation/Animation";
+import {FrameData, ChartData} from "../../animation/data/FrameData";
 
 export abstract class FrameDataDecorator implements FrameData {
 
@@ -9,8 +8,20 @@ export abstract class FrameDataDecorator implements FrameData {
         this.frameData = frameData;
     }
 
-    abstract getFrameDataSet(): FrameDataSet[];
+    getFrameDataSet(): ChartData[]{
+        return this.frameData.getFrameDataSet();
+    }
 
-    abstract getProperty(): string;
+    getProperty(): string{
+        return this.frameData.getProperty();
+    }
+
+    getSampleSize(): number {
+        return this.frameData.getSampleSize();
+    }
+
+    getCurrentFrame(): number {
+        return this.frameData.getCurrentFrame();
+    }
 
 }

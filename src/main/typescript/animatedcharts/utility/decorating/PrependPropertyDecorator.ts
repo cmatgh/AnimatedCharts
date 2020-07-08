@@ -1,6 +1,5 @@
 import {FrameDataDecorator} from "./FrameDataDecorator";
-import {FrameDataSet} from "../../animation/Animation";
-import {FrameData} from "../../animation/data/FrameData";
+import {ChartData} from "../../animation/data/FrameData";
 
 export class PrependPropertyDecorator extends FrameDataDecorator{
 
@@ -13,10 +12,6 @@ export class PrependPropertyDecorator extends FrameDataDecorator{
 
     setValue(prependValue : string) : void {
         this.prependValue = prependValue;
-    }
-
-    getFrameDataSet(): FrameDataSet[] {
-        return this.frameData.getFrameDataSet()
     }
 
     getProperty(): string {
