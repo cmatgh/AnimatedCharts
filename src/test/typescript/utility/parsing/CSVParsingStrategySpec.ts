@@ -11,11 +11,6 @@ describe("CSVParsingStrategy", () => {
 
 
     describe("parse", () => {
-        it("should throw an error when buffer is null", () => {
-            // when
-            expect(() => csvParser.parse(null)).to.throw("May not be null.");
-        });
-
         it("should parse empty string", () => {
             // given
             const buffer = Buffer.from("");
