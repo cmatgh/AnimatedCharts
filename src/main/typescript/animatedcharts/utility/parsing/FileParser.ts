@@ -21,12 +21,12 @@ export class FileParser implements Parser{
             throw Error("No parsing strategy for this type found.");
         }
 
-        let parsedData = FileParser.parsingStrategies.get(type).parseRows(buffer);
+        let parsedData = FileParser.parsingStrategies.get(type).parse(buffer);
         this.validate(parsedData);
         return this.transform(parsedData);
     }
 
-    public validate(data: object[][]) : void {
+    private validate(data: object[][]) : void {
         this.checkHasHeadLine(data);
         this.checkHasRequiredFields(data);
         this.checkHasValidFormat(data);
@@ -34,13 +34,13 @@ export class FileParser implements Parser{
 
     private checkHasHeadLine(data: object[][]) : void {
         if(data.length === 0){
-            throw Error("missing head line");
+            throw Error("Missing head line.");
         }
     }
 
     private checkHasRequiredFields(data: object[][]) : void {
         if(!this.containsCorrectOrderedRequiredFields(data[0])) {
-            throw Error("missing head field or wrong order, expected head line: 'label,color,...'");
+            throw Error("Missing head field or wrong order. expected head line: 'label,color,...'");
         }
     }
 
@@ -56,14 +56,14 @@ export class FileParser implements Parser{
         const headLength = data[0].length;
         for(let i = 1; i < data.length; i++) {
             if(data[i].length != headLength) {
-                throw Error("invalid format: line " + (i + 1));
+                throw Error(`Invalid format: line ${i + 1}.`);
             }
-
         }
     }
 
     private transform(data:object[][]) : DataObject {
-        const valueRows = data.filter((row, index, array) => index > 0);
+        const valueRows = data.slice(1);
+
         const datasets = valueRows.map( row => {
             return {
                 label: row[0].toString(),

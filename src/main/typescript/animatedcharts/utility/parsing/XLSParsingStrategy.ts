@@ -5,7 +5,7 @@ import {ParsingStrategy} from "./ParsingStrategy";
 
 export class XLSParsingStrategy implements ParsingStrategy {
 
-    parseRows(buffer: Buffer): object[][] {
+    parse(buffer: Buffer): object[][] {
         let workBook = XLSX.read(buffer, { type: "buffer"});
         this.checkHasSheet(workBook);
 
