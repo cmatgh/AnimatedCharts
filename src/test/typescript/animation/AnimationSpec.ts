@@ -140,6 +140,8 @@ describe("Animation", () => {
 
         it("should return first dataset after initializing animation instance", () => {
             const expectedFrameData = new FrameDataImpl();
+            expectedFrameData.setCurrentFrame(0);
+            expectedFrameData.setSampleSize(1);
             expectedFrameData.setProperty("1960");
             expectedFrameData.setFrameDataSet([
                 {
@@ -180,6 +182,8 @@ describe("Animation", () => {
 
             const expectedFrameData = new FrameDataImpl();
             expectedFrameData.setProperty("key1");
+            expectedFrameData.setCurrentFrame(0);
+            expectedFrameData.setSampleSize(2);
             expectedFrameData.setFrameDataSet([{
                 label : "Africa",
                 color : [255,255,255],
@@ -194,6 +198,8 @@ describe("Animation", () => {
             animation.incrementFrame();
 
             expectedFrameData.setProperty("key2");
+            expectedFrameData.setCurrentFrame(1);
+            expectedFrameData.setSampleSize(2);
             expectedFrameData.setFrameDataSet([{
                 label : "Africa",
                 color : [255,255,255],
@@ -208,6 +214,8 @@ describe("Animation", () => {
             animation.incrementFrame();
 
             expectedFrameData.setProperty("key1");
+            expectedFrameData.setCurrentFrame(0);
+            expectedFrameData.setSampleSize(2);
             expectedFrameData.setFrameDataSet([{
                 label : "Africa",
                 color : [255,255,255],

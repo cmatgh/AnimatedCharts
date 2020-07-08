@@ -1,5 +1,5 @@
 import {FrameDataDecorator} from "./FrameDataDecorator";
-import {FrameDataSet} from "../../animation/Animation";
+import {ChartData} from "../../animation/data/FrameData";
 
 export class TagWrapperPropertyFrameDataDecorator extends FrameDataDecorator {
 
@@ -7,10 +7,6 @@ export class TagWrapperPropertyFrameDataDecorator extends FrameDataDecorator {
 
     setValue(value : string) : void {
         this.value = value;
-    }
-
-    getFrameDataSet(): FrameDataSet[] {
-        return this.frameData.getFrameDataSet();
     }
 
     getProperty(): string {

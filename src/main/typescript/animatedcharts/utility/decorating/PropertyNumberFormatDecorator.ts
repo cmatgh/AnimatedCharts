@@ -1,7 +1,6 @@
 import {NumberFormatter} from "../formatting/NumberFormatter";
 import {FrameDataDecorator} from "./FrameDataDecorator";
-import {FrameDataSet} from "../../animation/Animation";
-import {FrameData} from "../../animation/data/FrameData";
+import {ChartData} from "../../animation/data/FrameData";
 
 
 export class PropertyNumberFormatDecorator extends FrameDataDecorator {
@@ -15,10 +14,6 @@ export class PropertyNumberFormatDecorator extends FrameDataDecorator {
 
     setFormat(format : string) : void {
         this.format = format;
-    }
-
-    getFrameDataSet(): FrameDataSet[] {
-        return this.frameData.getFrameDataSet();
     }
 
     getProperty(): string {

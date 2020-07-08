@@ -1,14 +1,15 @@
-import { Animation, FrameDataSet } from "./Animation";
 import { Comparator } from "../utility/comparing/Comparator";
 import {ComparatorFactory} from "../utility/comparing/ComparatorFactory";
 import Chart from "chart.js";
 import {AnimationObserver} from "./AnimationObserver";
+import {ChartData} from "./data/FrameData";
+import {Animation} from "./Animation";
 
 export class AnimationChart implements AnimationObserver {
 
     chart: Chart;
     animation: Animation;
-    comparator: Comparator<FrameDataSet>;
+    comparator: Comparator<ChartData>;
 
     setAnimation(animation : Animation) : void {
         this.animation = animation;
@@ -21,11 +22,11 @@ export class AnimationChart implements AnimationObserver {
         this.update();
     }
 
-    getComparator() : Comparator<FrameDataSet> {
+    getComparator() : Comparator<ChartData> {
         return this.comparator;
     }
 
-    setComparator(comparator : Comparator<FrameDataSet>) : void {
+    setComparator(comparator : Comparator<ChartData>) : void {
         this.comparator = comparator;
     }
 

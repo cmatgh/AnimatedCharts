@@ -1,10 +1,10 @@
-import { FrameDataSet } from "../../animation/Animation";
 import { Comparator } from "./Comparator";
 import * as convert from "color-convert";
+import {ChartData} from "../../animation/data/FrameData";
 
-export class ColorComparator implements Comparator<FrameDataSet> {
+export class ColorComparator implements Comparator<ChartData> {
 
-    compare(o1: FrameDataSet, o2: FrameDataSet): number {
+    compare(o1: ChartData, o2: ChartData): number {
         const o1HSV = convert.rgb.hsv([o1.color[0], o1.color[1], o1.color[2]]);
         const o2HSV = convert.rgb.hsv([o2.color[0], o2.color[1], o2.color[2]]);
 

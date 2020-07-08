@@ -13,7 +13,7 @@ export abstract class InputView extends AbstractView {
 
         if(selector) {
             // @ts-ignore
-            this.getElement().find(selector).first().on(event, func);
+            this.getElement().find(selector).addBack().on(event, func);
         } else {
             // @ts-ignore
             this.getElement().on(event, func);

@@ -1,12 +1,12 @@
-import {FrameDataSet} from "../../../../main/typescript/animatedcharts/animation/Animation";
 import {ValueComparator} from "../../../../main/typescript/animatedcharts/utility/comparing/ValueComparator";
 import { expect } from "chai";
+import {ChartData} from "../../../../main/typescript/animatedcharts/animation/data/FrameData";
 
 describe("Value Comparator", () => {
 
     let valueComparator: ValueComparator;
-    let o1: FrameDataSet;
-    let o2: FrameDataSet;
+    let o1: ChartData;
+    let o2: ChartData;
 
     beforeEach( () => {
         valueComparator = new ValueComparator();
