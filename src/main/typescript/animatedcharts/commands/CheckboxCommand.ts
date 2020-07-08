@@ -1,21 +1,16 @@
 import {Command} from "./Command";
 
-export class CheckboxCommand implements Command {
-
-    onSelectCommand : Command;
-    onDeselectCommand : Command;
-
-    constructor(onSelectCommand: Command, onDeselectCommand : Command) {
-        this.onSelectCommand = onSelectCommand;
-        this.onDeselectCommand = onDeselectCommand;
-    }
+export abstract class CheckboxCommand implements Command {
 
     execute(map: Map<string, any>): void {
         if(map.get("event").target.checked) {
-            this.onSelectCommand.execute(map);
+            this.doOnSelect(map);
         } else {
-            this.onDeselectCommand.execute(map);
+            this.doOnDeselect(map);
         }
     }
+
+    abstract doOnSelect(map : Map<string, any>);
+    abstract doOnDeselect(map : Map<string, any>);
 
 }

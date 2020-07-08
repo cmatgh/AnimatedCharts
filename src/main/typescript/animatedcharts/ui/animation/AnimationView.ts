@@ -1,14 +1,14 @@
-import {View} from "../View";
 import {FrameDataSet} from "../../animation/Animation";
+import {AbstractView} from "../AbstractView";
 
-export interface AnimationView extends View{
+export abstract class AnimationView extends AbstractView{
 
-    setProperty(property: string)
+    abstract setProperty(property: string)
 
-    setChart(type : string) : void
+    abstract setChart(type : string) : void
 
-    setTitle(title : string) : void
+    abstract setTitle(title : string) : void
 
-    updateChart(datasets: FrameDataSet[]) : void
+    abstract updateChart(datasets: FrameDataSet[]) : void
 
 }

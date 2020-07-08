@@ -1,47 +1,24 @@
-import {View} from "../View";
 import {InputPresenter} from "./InputPresenter";
-import {Template} from "../Template";
+import {AbstractView} from "../AbstractView";
 
-export abstract class InputView implements View {
+export abstract class InputView extends AbstractView {
 
     protected presenter: InputPresenter;
-    protected template: Template;
-    protected $element: JQuery;
-
-    initialize(): void {
-        if(this.$element != null) {
-            const $newElement = $(this.template.html());
-            this.$element.replaceWith($newElement);
-            this.$element = $newElement;
-        } else {
-            this.$element = $(this.template.html());
-        }
-
-        this.doInitialize();
-    }
-
-    getElement(): any {
-        return this.$element;
-    }
 
     setPresenter(presenter: InputPresenter): void {
         this.presenter = presenter;
     }
 
-    setTemplate(template: Template): void {
-        if(this.getElement() != null) {
-            this.getElement().off();
+    protected bind(event : string, func : Function, selector? : string) {
+
+        if(selector) {
+            // @ts-ignore
+            this.getElement().find(selector).first().on(event, func);
+        } else {
+            // @ts-ignore
+            this.getElement().on(event, func);
         }
-
-        this.template = template;
-        this.initialize();
     }
-
-    getTemplate(): Template {
-        return this.template;
-    }
-
-    protected abstract doInitialize() : void;
 
     abstract setLabel(label : String) : void;
 }

@@ -1,19 +1,25 @@
-import {Presenter} from "../Presenter";
-import {Animation, DataObject} from "../../animation/Animation";
+import {DataObject} from "../../animation/Animation";
+import {AbstractPresenter} from "../AbstractPresenter";
+import {AnimationView} from "./AnimationView";
+import {FrameDataDecorator} from "../../utility/decorating/FrameDataDecorator";
 
-export interface AnimationPresenter extends Presenter {
+export abstract class AnimationPresenter extends AbstractPresenter{
 
-    getAnimation() : Animation
-    setTitle(title: string);
-    loadDataset(data: DataObject) : void;
-    start() : void;
-    stop() : void;
-    pause() : void;
-    resume() : void;
-    isRunning(): boolean;
-    hasPaused(): boolean;
-    reverse() : void;
-    sortBy(type : string);
-    setChart(type : string);
+    protected view : AnimationView
+
+    abstract setTitle(title: string) : void;
+    abstract loadDataset(data: DataObject) : void;
+    abstract start() : void;
+    abstract stop() : void;
+    abstract pause() : void;
+    abstract resume() : void;
+    abstract isRunning(): boolean;
+    abstract hasPaused(): boolean;
+    abstract reverse() : void;
+    abstract sortBy(type : string) : void;
+    abstract addFrameDataDecorator(propertyDecorator: FrameDataDecorator) : void;
+    abstract removeFrameDataDecorator(propertyDecorator: FrameDataDecorator) : void;
+    abstract setChart(type : string) : void;
+    abstract update() : void;
 
 }

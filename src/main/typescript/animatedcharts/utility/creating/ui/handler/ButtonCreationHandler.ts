@@ -1,9 +1,9 @@
 import {CreationHandler} from "./CreationHandler";
-import {Presenter} from "../../../ui/Presenter";
-import {PresenterCreator} from "./PresenterCreator";
-import {ButtonPresenter} from "../../../ui/input/button/ButtonPresenter";
-import {ButtonView} from "../../../ui/input/button/ButtonView";
-import {DefaultButtonTemplate} from "../../../ui/input/button/templates/DefaultButtonTemplate";
+import {Presenter} from "../../../../ui/Presenter";
+import {PresenterCreator} from "../PresenterCreator";
+import {ButtonPresenter} from "../../../../ui/input/button/ButtonPresenter";
+import {ButtonView} from "../../../../ui/input/button/ButtonView";
+import {DefaultButtonTemplate} from "../../../../ui/input/button/templates/DefaultButtonTemplate";
 
 export class ButtonCreationHandler extends CreationHandler{
 

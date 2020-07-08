@@ -4,38 +4,24 @@ import {Observer} from "../../../animation/Observer";
 import {Comparator} from "../../../utility/comparing/Comparator";
 import {ComparatorFactory} from "../../../utility/comparing/ComparatorFactory";
 import {ComparatorUtils} from "../../../utility/comparing/ComparatorUtils";
-import {AnimationView} from "../AnimationView";
+import {FrameDataDecorator} from "../../../utility/decorating/FrameDataDecorator";
+import {FrameData} from "../../../animation/data/FrameData";
 
-export class AnimationPresenterImpl implements AnimationPresenter, Observer{
+export class AnimationPresenterImpl extends AnimationPresenter implements Observer {
 
-    private readonly animation: Animation;
-    private view : AnimationView;
-    private comparator : Comparator<FrameDataSet>;
+    private animation: Animation;
+    private comparator: Comparator<FrameDataSet>;
+    private frameDataDecorators : Array<FrameDataDecorator>;
 
-    constructor() {
+    protected doInitialize() : void{
         this.animation = new Animation(window);
         this.animation.register(this);
         this.comparator = ComparatorFactory.getInstance().create("label");
+        this.frameDataDecorators = [];
     }
 
-    initialize(): void {
-        this.view.initialize();
-    }
-
-    setTitle(title: string) {
+    setTitle(title: string) : void{
         this.view.setTitle(title);
-    }
-
-    getElement(): JQuery {
-        return this.view.getElement();
-    }
-
-    setView(view: AnimationView) {
-        this.view = view;
-    }
-
-    getView(): AnimationView {
-        return this.view;
     }
 
     pause(): void {
@@ -73,10 +59,21 @@ export class AnimationPresenterImpl implements AnimationPresenter, Observer{
     }
 
     update(): void {
-        const dataSets = this.animation.getCurrentFrameData();
-        dataSets.sort(this.comparator.compare);
-        this.view.updateChart(dataSets);
-        this.view.setProperty(this.animation.getCurrentColumnProperty());
+        const currentFrameData = this.animation.getCurrentFrameData();
+        currentFrameData.getFrameDataSet().sort(this.comparator.compare);
+        this.view.updateChart(currentFrameData.getFrameDataSet());
+        console.log(this.frameDataDecorators);
+        this.view.setProperty(this.applyDecorators(currentFrameData).getProperty());
+    }
+
+    private applyDecorators(frameData: FrameData) : FrameData {
+        let curFrameData = frameData;
+        this.frameDataDecorators.forEach( decorator => {
+            decorator.setFrameData(curFrameData);
+            curFrameData = decorator;
+        })
+
+        return curFrameData;
     }
 
     loadDataset(data: DataObject): void {
@@ -84,12 +81,18 @@ export class AnimationPresenterImpl implements AnimationPresenter, Observer{
         this.animation.notifyObservers();
     }
 
-    getAnimation(): Animation {
-        return this.animation;
+    setChart(type: string) : void{
+        this.view.setChart(type);
     }
 
-    setChart(type: string) {
-        this.view.setChart(type);
+    addFrameDataDecorator(frameDataDecorator : FrameDataDecorator): void {
+        this.frameDataDecorators.push(frameDataDecorator);
+    }
+
+    removeFrameDataDecorator(frameDataDecorator : FrameDataDecorator) : void {
+        this.frameDataDecorators = this.frameDataDecorators.filter( decorator => {
+            return decorator != frameDataDecorator;
+        });
     }
 
 }

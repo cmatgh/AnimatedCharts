@@ -4,10 +4,10 @@ export interface Presenter {
 
     initialize() : void;
 
-    setView(view : View)
+    setView(view : View) : void;
 
     getView() : View;
 
-    getElement() : JQuery
+    getElement() : JQuery;
 
 }

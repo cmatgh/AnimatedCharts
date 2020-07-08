@@ -1,5 +1,4 @@
 import {Command} from "./Command";
-import {Animation} from "../animation/Animation";
 import {ButtonView} from "../ui/input/button/ButtonView";
 import {ResumeButtonTemplate} from "../ui/input/button/templates/ResumeButtonTemplate";
 import {PauseButtonTemplate} from "../ui/input/button/templates/PauseButtonTemplate";
@@ -27,15 +26,18 @@ export class ResumePauseCommand implements Command {
         if(!this.animationPresenter.isRunning()) {
             Logger.getInstance().info("Starting the animation.")
             this.animationPresenter.start();
-            this.buttonView.setTemplate(this.pauseTemplate)
+            this.buttonView.setTemplate(this.pauseTemplate);
+            this.buttonView.initialize();
         } else if(this.animationPresenter.hasPaused()) {
             Logger.getInstance().info("Resuming the animation.")
             this.animationPresenter.resume();
             this.buttonView.setTemplate(this.pauseTemplate)
+            this.buttonView.initialize();
         } else {
             Logger.getInstance().info("Pausing the animation.")
             this.animationPresenter.pause();
-            this.buttonView.setTemplate(this.resumeTemplate)
+            this.buttonView.setTemplate(this.resumeTemplate);
+            this.buttonView.initialize();
         }
     }
 

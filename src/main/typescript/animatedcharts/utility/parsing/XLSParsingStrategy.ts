@@ -1,11 +1,11 @@
 import * as XLSX from "xlsx";
-import {AbstractParser} from "./AbstractParser";
 import * as Papa from "papaparse";
 import {WorkBook} from "xlsx";
+import {ParsingStrategy} from "./ParsingStrategy";
 
-export class XLSParser extends AbstractParser {
+export class XLSParsingStrategy implements ParsingStrategy {
 
-    protected parseRows(buffer: Buffer): object[][] {
+    parse(buffer: Buffer): object[][] {
         let workBook = XLSX.read(buffer, { type: "buffer"});
         this.checkHasSheet(workBook);
 

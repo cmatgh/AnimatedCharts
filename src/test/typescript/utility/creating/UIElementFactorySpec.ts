@@ -1,5 +1,5 @@
 import {UIElementFactory} from "../../../../main/typescript/animatedcharts/utility/creating/ui/UIElementFactory";
-import {CreationHandler} from "../../../../main/typescript/animatedcharts/utility/creating/ui/CreationHandler";
+import {CreationHandler} from "../../../../main/typescript/animatedcharts/utility/creating/ui/handler/CreationHandler";
 import {instance, mock, verify, when} from "ts-mockito";
 import { expect } from "chai";
 import {InputPresenter} from "../../../../main/typescript/animatedcharts/ui/input/InputPresenter";
