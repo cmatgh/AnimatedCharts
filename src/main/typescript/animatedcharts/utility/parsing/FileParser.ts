@@ -1,6 +1,7 @@
 import {Parser} from "./Parser";
 import {DataObject} from "../../animation/Animation";
 import {ParsingStrategy} from "./ParsingStrategy";
+import {Preconditions} from "../Preconditions";
 
 export class FileParser implements Parser{
 
@@ -13,6 +14,9 @@ export class FileParser implements Parser{
     }
 
     parse(buffer: Buffer, type : string): DataObject {
+        Preconditions.checkNotNull(buffer);
+        Preconditions.checkNotNull(type)
+
         if(!FileParser.parsingStrategies.has(type)) {
             throw Error("No parsing strategy for this type found.");
         }
