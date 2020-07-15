@@ -12,4 +12,6 @@ Design Patterns used:
 -Decorator
 -Chain of Responsibility
 -Template
+-State
+-Iterator
 ```
