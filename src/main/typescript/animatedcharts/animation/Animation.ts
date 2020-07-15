@@ -3,10 +3,14 @@ import { Preconditions } from "../utility/Preconditions";
 import { AnimationLoop } from "./AnimationLoop";
 import * as convert from "color-convert";
 import {Observer} from "./Observer";
-import {Command} from "../commands/Command";
 import {FrameDataImpl} from "./data/FrameDataImpl";
-import {ChartData, FrameData} from "./data/FrameData";
+import {FrameData} from "./data/FrameData";
 import {FrameIterator} from "./data/FrameIterator";
+import {AnimationTickCommand} from "./AnimationTickCommand";
+import {AnimationState} from "./state/AnimationState";
+import {StoppedState} from "./state/StoppedState";
+import {PausedState} from "./state/PausedState";
+import {RunningState} from "./state/RunningState";
 
 export interface DataSet {
     label : string,
@@ -26,26 +30,15 @@ export class Animation implements Observable{
     private frameManager : FrameIterator;
     private dataObject: DataObject;
     private animationLoop: AnimationLoop;
+    private state: AnimationState;
 
     constructor(window: Window) {
         this.animationObjects = new Set();
         this.dataObject = null;
         this.frameManager = new FrameIterator([]);
-        this.animationLoop = new AnimationLoop(window, { updatesPerSecond : 2 });
-
-        this.animationLoop.setOnTickCommand( new class implements Command {
-
-            private animation : Animation;
-
-            constructor(animation : Animation) {
-                this.animation = animation;
-            }
-
-            execute(map: Map<string, any>): void {
-                this.animation.incrementFrame();
-                this.animation.notifyObservers();
-            }
-        }(this))
+        this.state = new StoppedState();
+        this.animationLoop = new AnimationLoop(window, 2);
+        this.animationLoop.setOnTickCommand(new AnimationTickCommand(this));
     }
 
     setDataObject(dataObject: DataObject) : void {
@@ -57,6 +50,14 @@ export class Animation implements Observable{
 
     get AnimationObjects() : Observer[] {
         return Array.from(this.animationObjects);
+    }
+
+    hasDataObject() : boolean {
+        return this.dataObject != null;
+    }
+
+    setState(state : AnimationState) {
+        this.state = state;
     }
 
     objectCount(): number {
@@ -90,31 +91,31 @@ export class Animation implements Observable{
     }
 
     start() : void{
-        if(this.dataObject != null) {
-            this.animationLoop.start();
-        }
+        this.state.start(this, this.animationLoop);
     }
 
     stop() : void{
-        this.animationLoop.stop();
-        this.frameManager.setFrame(0);
-        this.notifyObservers();
+        this.state.stop(this, this.animationLoop);
     }
 
     pause() : void {
-        this.animationLoop.pause();
+        this.state.pause(this, this.animationLoop);
     }
 
     resume() : void {
-        this.animationLoop.resume();
+        this.state.resume(this, this.animationLoop);
     }
 
     hasPaused() : boolean {
-        return this.animationLoop.hasPaused();
+        return this.state instanceof PausedState;
     }
 
     isRunning() : boolean {
-        return this.animationLoop.isRunning();
+        return this.state instanceof RunningState;
+    }
+
+    hasStopped() : boolean {
+        return this.state instanceof StoppedState;
     }
 
     private setColors(dataObj: DataObject) : void {
@@ -142,7 +143,6 @@ export class Animation implements Observable{
 
         return frameData;
     }
-
 
     private asFrameData(frame : number) : FrameData {
         const frameData = new FrameDataImpl();
