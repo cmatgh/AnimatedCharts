@@ -26,26 +26,15 @@ export class Animation implements Observable{
     private frameManager : FrameIterator;
     private dataObject: DataObject;
     private animationLoop: AnimationLoop;
+    private state: AnimationState;
 
     constructor(window: Window) {
         this.animationObjects = new Set();
         this.dataObject = null;
         this.frameManager = new FrameIterator([]);
-        this.animationLoop = new AnimationLoop(window, { updatesPerSecond : 2 });
-
-        this.animationLoop.setOnTickCommand( new class implements Command {
-
-            private animation : Animation;
-
-            constructor(animation : Animation) {
-                this.animation = animation;
-            }
-
-            execute(map: Map<string, any>): void {
-                this.animation.incrementFrame();
-                this.animation.notifyObservers();
-            }
-        }(this))
+        this.state = new StoppedState();
+        this.animationLoop = new AnimationLoop(window, 2);
+        this.animationLoop.setOnTickCommand(new AnimationTickCommand(this));
     }
 
     setDataObject(dataObject: DataObject) : void {
