@@ -1,15 +1,22 @@
+import { NullError } from "./NullError";
 
 export class Preconditions {
 
     static checkNotNull(obj: any) {
         if(obj === null) {
-            throw Error("May not be null.");
+            throw new NullError();
         }
     }
 
     static checkNotEmpty(obj: any) {
         if(!obj.length || obj.length == 0) {
             throw Error("May not be empty.");
+        }
+    }
+
+    static checkState(state: boolean, message? : string) {
+        if(!state) {
+            throw Error(message ? message : "Illegal state");
         }
     }
 
