@@ -1,31 +1,43 @@
 import {Animation} from "../Animation";
 import {AnimationState} from "./AnimationState";
-import {AnimationLoop} from "../AnimationLoop";
-import {RunningState} from "./RunningState";
-import {StoppedState} from "./StoppedState";
-
+import {WindowLoop} from "../WindowLoop";
+import {Observable} from "../../utility/Observable";
+import {Preconditions} from "../../utility/Preconditions";
 
 export class PausedState implements AnimationState {
 
-    pause(animation: Animation, animationLoop: AnimationLoop): void {
+    private animation: Animation;
+    private windowLoop : Observable;
+
+    constructor(animation: Animation, windowLoop: Observable) {
+        Preconditions.checkNotNull(animation);
+        Preconditions.checkNotNull(windowLoop);
+
+        this.animation = animation;
+        this.windowLoop = windowLoop;
     }
 
-    resume(animation: Animation, animationLoop: AnimationLoop): void {
-        animationLoop.start();
-        animation.setState(new RunningState());
+    pause(): void {
     }
 
-    start(animation: Animation, animationLoop: AnimationLoop): void {
-        animationLoop.start();
-        animation.setState(new RunningState());
+    resume(): void {
+        this.windowLoop.register(this.animation);
+        this.animation.setState(this.animation.getRunningState());
     }
 
-    stop(animation: Animation, animationLoop: AnimationLoop): void {
-        animationLoop.stop();
-        animation.notifyObservers();
-        animation.setFrame(0);
-        animation.setState(new StoppedState());
+    start(): void {
+        this.windowLoop.register(this.animation);
+        this.animation.setState(this.animation.getRunningState());
     }
 
+    stop(): void {
+        this.windowLoop.unregister(this.animation);
+        this.animation.notifyObservers();
+        this.animation.setFrame(0);
+        this.animation.setState(this.animation.getStoppedState());
+    }
+
+    update() {
+    }
 
 }
