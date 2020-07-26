@@ -2,6 +2,7 @@ import {Parser} from "./Parser";
 import {DataObject} from "../../animation/Animation";
 import {ParsingStrategy} from "./ParsingStrategy";
 import {Preconditions} from "../Preconditions";
+import * as convert from "color-convert";
 
 export class FileParser implements Parser{
 
@@ -70,7 +71,8 @@ export class FileParser implements Parser{
                 color: this.rgbTripletToArray(row[1].toString()),
                 values: row.slice(2).map(value => parseInt(value.toString()))
             }
-        } )
+            })
+
         return {
             columnDefs : data[0].map( val => val.toString()),
             dataSets : datasets,

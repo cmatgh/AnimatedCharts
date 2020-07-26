@@ -2,6 +2,7 @@ import {Command} from "./Command";
 import {Logger} from "../utility/logging/Logger";
 import {AnimationPresenter} from "../ui/animation/AnimationPresenter";
 import {FileParser} from "../utility/parsing/FileParser";
+import {DataTransformation} from "../utility/transforming/DataTransformation";
 
 export class ParseFileCommand implements Command {
 
@@ -17,9 +18,13 @@ export class ParseFileCommand implements Command {
         let parser = new FileParser();
 
         file.arrayBuffer().then( arrayBuffer => {
-            Logger.getInstance().info("Trying to parse file.");
+            Logger.getInstance().info("Parsing file");
             let data = parser.parse(Buffer.from(arrayBuffer), file.type);
-            Logger.getInstance().info("File parsed successfully.");
+            Logger.getInstance().info("Parsing file completed");
+
+            Logger.getInstance().info("Transforming data object");
+            data = DataTransformation.apply(data);
+            Logger.getInstance().info("Transforming data object completed");
 
             this.animationPresenter.loadDataset(data);
         });

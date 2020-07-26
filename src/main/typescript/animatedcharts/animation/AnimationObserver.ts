@@ -1,4 +1,4 @@
-import {Observer} from "./Observer";
+import {Observer} from "../utility/Observer";
 import {Animation} from "./Animation";
 
 export interface AnimationObserver extends Observer {
