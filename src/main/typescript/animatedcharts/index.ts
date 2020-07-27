@@ -13,8 +13,14 @@ import {IntegerMillePointFormat} from "./utility/formatting/IntegerMillePointFor
 import {FileParser} from "./utility/parsing/FileParser";
 import {CSVParsingStrategy} from "./utility/parsing/CSVParsingStrategy";
 import {XLSParsingStrategy} from "./utility/parsing/XLSParsingStrategy";
+import {WindowLoop} from "./animation/WindowLoop";
+import {DataTransformation} from "./utility/transforming/DataTransformation";
+import {ColorFillTransformer} from "./utility/transforming/ColorFillTransformer";
 
 (() => {
+    const windowLoop = WindowLoop.initialize(window);
+    windowLoop.start();
+
     UIElementFactory.add(new ButtonCreationHandler("button"));
     UIElementFactory.add(new SelectCreationHandler("select"));
 
@@ -23,6 +29,8 @@ import {XLSParsingStrategy} from "./utility/parsing/XLSParsingStrategy";
     FileParser.add("application/xlsx", new XLSParsingStrategy());
     FileParser.add("application/vnd.ms-excel", new XLSParsingStrategy());
     FileParser.add("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", new XLSParsingStrategy());
+
+    DataTransformation.add(new ColorFillTransformer());
 
     NumberFormatter.add(new IntegerNumberFormat());
     NumberFormatter.add(new IntegerMilleSpaceFormat());

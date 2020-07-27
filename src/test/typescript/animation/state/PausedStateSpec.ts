@@ -1,76 +1,111 @@
 import {PausedState} from "../../../../main/typescript/animatedcharts/animation/state/PausedState";
-import {anyNumber, anyOfClass, instance, mock, verify} from "ts-mockito";
+import {anything, instance, mock, verify, when} from "ts-mockito";
 import {Animation} from "../../../../main/typescript/animatedcharts/animation/Animation";
-import {AnimationLoop} from "../../../../main/typescript/animatedcharts/animation/AnimationLoop";
+import {WindowLoop} from "../../../../main/typescript/animatedcharts/animation/WindowLoop";
 import {StoppedState} from "../../../../main/typescript/animatedcharts/animation/state/StoppedState";
 import {RunningState} from "../../../../main/typescript/animatedcharts/animation/state/RunningState";
+import {expect} from "chai";
+import {NullError} from "../../../../main/typescript/animatedcharts/utility/NullError";
 
 describe("PausedStateSpec", () => {
 
-    beforeEach( () => {
+    let windowLoopInstance : WindowLoop;
+    let windowLoopMock : WindowLoop
+    let animationMock : Animation;
+    let animationMockInstance : Animation;
 
+    beforeEach(() => {
+        windowLoopMock = mock(WindowLoop);
+        windowLoopInstance = instance(windowLoopMock);
+
+        animationMock = mock(Animation);
+        animationMockInstance = instance(animationMock);
+    })
+
+    describe("constructor", () =>{
+        it("should fail when parameters are null", () => {
+            expect(() => new PausedState(null, windowLoopInstance)).to.throw(NullError);
+            expect(() => new PausedState(animationMockInstance, null)).to.throw(NullError);
+        });
     });
-
 
     describe("start", () => {
         it("should do nothing", () => {
-            const animationMock = mock(Animation);
-            const animationMockInstance = instance(animationMock);
+            when(animationMock.getRunningState()).thenReturn(instance(mock(RunningState)));
 
-            const animationLoopMock = mock(AnimationLoop);
-            const animationLoopMockInstance = instance(animationLoopMock);
+            const state = new PausedState(animationMockInstance, windowLoopInstance);
 
-            const state = new PausedState();
+            state.start();
 
-            state.start(animationMockInstance, animationLoopMockInstance);
-
-            verify(animationMock.setState(anyOfClass(RunningState))).once();
-            verify(animationLoopMock.start()).once();
+            verify(animationMock.setState(animationMockInstance.getRunningState())).once();
+            verify(windowLoopMock.register(animationMockInstance)).once();
         });
     });
 
     describe("stop", () => {
         it("should stop the animation loop and set state to stopped", () => {
-            const animationMock = mock(Animation);
-            const animationMockInstance = instance(animationMock);
+            when(animationMock.getStoppedState()).thenReturn(instance(mock(StoppedState)));
+            const state = new PausedState(animationMockInstance, windowLoopInstance);
 
-            const animationLoopMock = mock(AnimationLoop);
-            const animationLoopMockInstance = instance(animationLoopMock);
+            state.stop();
 
-            const state = new PausedState();
-
-            state.stop(animationMockInstance, animationLoopMockInstance);
-
-            verify(animationMock.setState(anyOfClass(StoppedState))).once();
+            verify(animationMock.setState(animationMockInstance.getStoppedState())).once();
             verify(animationMock.setFrame(0)).once();
             verify(animationMock.notifyObservers()).once();
-            verify(animationLoopMock.stop()).once();
+            verify(windowLoopMock.unregister(animationMockInstance)).once();
         });
     });
 
     describe("resume", () => {
         it("should start the animation loop and set state to running", () => {
-            const animationMock = mock(Animation);
-            const animationMockInstance = instance(animationMock);
+            const state = new PausedState(animationMockInstance, windowLoopInstance);
+            when(animationMock.getRunningState()).thenReturn(instance(mock(RunningState)));
 
-            const animationLoopMock = mock(AnimationLoop);
-            const animationLoopMockInstance = instance(animationLoopMock);
+            state.resume();
 
-            const state = new PausedState();
-
-            state.resume(animationMockInstance, animationLoopMockInstance);
-
-            verify(animationMock.setState(anyOfClass(RunningState))).once();
-            verify(animationLoopMock.start()).once();
+            verify(animationMock.setState(animationMockInstance.getRunningState())).once();
+            verify(windowLoopMock.register(animationMockInstance)).once();
         });
     });
 
     describe("pause", () => {
         it("should do nothing", () => {
-            const state = new PausedState();
+            const state = new PausedState(animationMockInstance, windowLoopInstance);
 
-            state.pause(null, null);
+            state.pause();
+            verifyNoInteractionsWithAnimationObject();
+            verifyNoInteractionsWithLoopWindow();
         });
     });
+
+    function verifyNoInteractionsWithLoopWindow() {
+        verify(windowLoopMock.register(anything())).never();
+        verify(windowLoopMock.unregister(anything())).never();
+        verify(windowLoopMock.start()).never();
+        verify(windowLoopMock.notifyObservers()).never();
+        verify(windowLoopMock.stop()).never();
+        verify(windowLoopMock.isRunning()).never();
+    }
+
+    function verifyNoInteractionsWithAnimationObject() {
+        verify(animationMock.getRunningState()).never();
+        verify(animationMock.getStoppedState()).never();
+        verify(animationMock.getPausedState()).never();
+        verify(animationMock.getCurrentFrameData()).never();
+        verify(animationMock.hasDataObject()).never();
+        verify(animationMock.setUpdatesPerSecond(anything())).never();
+        verify(animationMock.setState(anything())).never();
+        verify(animationMock.setFrame(anything())).never();
+        verify(animationMock.start()).never();
+        verify(animationMock.stop()).never();
+        verify(animationMock.pause()).never();
+        verify(animationMock.resume()).never();
+        verify(animationMock.incrementFrame()).never();
+        verify(animationMock.hasPaused()).never();
+        verify(animationMock.register(anything())).never();
+        verify(animationMock.hasStopped()).never();
+        verify(animationMock.objectCount()).never();
+        verify(animationMock.update()).never();
+    }
 
 });

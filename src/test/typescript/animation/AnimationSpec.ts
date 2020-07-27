@@ -7,20 +7,27 @@ import { JSDOM, DOMWindow } from "jsdom";
 import { Animation } from "../../../main/typescript/animatedcharts/animation/Animation";
 import * as mockito from "../../../../node_modules/ts-mockito/lib/ts-mockito";
 import Chart from "chart.js";
-import {Observer} from "../../../main/typescript/animatedcharts/animation/Observer";
-import {AnimationChart} from "../../../main/typescript/animatedcharts/animation/AnimationChart";
+import {Observer} from "../../../main/typescript/animatedcharts/utility/Observer";
 import {FrameDataImpl} from "../../../main/typescript/animatedcharts/animation/data/FrameDataImpl";
+import {WindowLoop} from "../../../main/typescript/animatedcharts/animation/WindowLoop";
+import {NullError} from "../../../main/typescript/animatedcharts/utility/NullError";
+import {instance, mock, verify} from "ts-mockito";
+import {AnimationObserver} from "../../../main/typescript/animatedcharts/animation/AnimationObserver";
 
 describe("Animation", () => {
 
     let animation: Animation;
-    let animationObject: AnimationChart;
+    let animationObject: AnimationObserver;
     let mockedChart: Chart;
     let dom: DOMWindow;
 
+    before(() => {
+        dom = new JSDOM(`<!DOCTYPE html><div id='bar'></div>`, { pretendToBeVisual: true }).window;
+        WindowLoop.initialize(dom);
+    })
+
     beforeEach( () => {
-        dom = new JSDOM(`<!DOCTYPE html><div id='bar'></div>`, { pretendToBeVisual: true }).window
-        animation = new Animation(dom);
+        animation = new Animation();
         animation.setDataObject({
             columnDefs: ["labels", "colors", "1960"],
             dataSets: [
@@ -46,7 +53,7 @@ describe("Animation", () => {
         mockedChart.data.datasets[0] = {};
         mockedChart.data.datasets[0].backgroundColor = "";
         mockedChart.data.datasets[0].data = [];
-        animationObject = new AnimationChart(animation, mockedChart);
+        animationObject = instance(mock<AnimationObserver>());
     });
 
     describe("constructor", () => {
@@ -82,7 +89,7 @@ describe("Animation", () => {
         });
 
         it("should throw error when registering null", () => {
-            expect( () => animation.register(null)).to.throw("null");
+            expect( () => animation.register(null)).to.throw(NullError);
         });
     });
 
@@ -105,20 +112,20 @@ describe("Animation", () => {
          });
 
         it("should fail when unregistering an missing object when other objects have been registered already", () => {
-            animation.register(new AnimationChart(animation, mockedChart));
-            animation.register(new AnimationChart(animation, mockedChart));
+            animation.register(instance(mock<AnimationObserver>()));
+            animation.register(instance(mock<AnimationObserver>()));
 
-            expect( () => animation.unregister(new AnimationChart(animation, mockedChart))).to.throw("no such object");
+            expect( () => animation.unregister(instance(mock<AnimationObserver>()))).to.throw("no such object");
         });
 
 
         it("should remove the object when unregistering it", () => {
-            let animationObject : AnimationChart = new AnimationChart(animation, mockedChart);
-            animation.register(animationObject);
+            const animationObserverInstance = instance(mock<AnimationObserver>());
+            animation.register(animationObserverInstance);
 
             expect(animation.objectCount()).to.be.equal(1);
 
-            animation.unregister(animationObject);
+            animation.unregister(animationObserverInstance);
 
             expect(animation.objectCount()).to.be.equal(0);
         });
@@ -126,13 +133,13 @@ describe("Animation", () => {
 
     describe("notifyAnimationObjects", () => {
         it("should call update on AnimationChart when notifyAnimationObjects is called", () => {
-            let animationObject : AnimationChart = new AnimationChart(animation, mockedChart);
-            chai.spy.on(animationObject, "update");
+            const animationObserverMock = mock<AnimationObserver>();
+            const animationObserverInstance = instance(animationObserverMock);
 
-            animation.register(animationObject);
+            animation.register(animationObserverInstance);
             animation.notifyObservers();
 
-            expect(animationObject.update).to.have.been.called();
+            verify(animationObserverMock.update()).once();
         });
     });
 
@@ -177,7 +184,7 @@ describe("Animation", () => {
                 valuesLength: 2
             };
 
-            animation = new Animation(dom);
+            animation = new Animation();
             animation.setDataObject(dataObj);
 
             const expectedFrameData = new FrameDataImpl();
@@ -238,15 +245,16 @@ describe("Animation", () => {
             chai.spy.on(animation, "incrementFrame");
             chai.spy.on(animation, "notifyObservers");
 
+            (<WindowLoop> WindowLoop.getInstance()).start();
             animation.start();
 
             await new Promise(resolve => setTimeout(() => { resolve() }, 2100))
             .then( () => {
                 expect(animation.incrementFrame).to.have.been.called.exactly(4);
                 expect(animation.notifyObservers).to.have.been.called.exactly(4);
-                animation.stop();
             }).finally(() => {
-                animation.stop()
+                animation.stop();
+                (<WindowLoop> WindowLoop.getInstance()).stop();
             });
 
         }).timeout(2500);

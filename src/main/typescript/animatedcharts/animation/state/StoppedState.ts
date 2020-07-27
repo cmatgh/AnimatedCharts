@@ -1,24 +1,39 @@
 import {Animation} from "../Animation";
 import {AnimationState} from "./AnimationState";
-import {AnimationLoop} from "../AnimationLoop";
-import {RunningState} from "./RunningState";
+import {Observable} from "../../utility/Observable";
+import {Preconditions} from "../../utility/Preconditions";
 
 export class StoppedState implements AnimationState {
 
-    pause(animation: Animation, animationLoop: AnimationLoop): void {
+    private animation: Animation;
+    private windowLoop : Observable;
+
+    constructor(animation: Animation, windowLoop: Observable) {
+        Preconditions.checkNotNull(animation);
+        Preconditions.checkNotNull(windowLoop);
+
+        this.animation = animation;
+        this.windowLoop = windowLoop;
     }
 
-    resume(animation: Animation, animationLoop: AnimationLoop): void {
+    pause(): void {
     }
 
-    start(animation: Animation, animationLoop: AnimationLoop): void {
-        if(animation.hasDataObject()) {
-            animationLoop.start();
-            animation.setState(new RunningState());
+    resume(): void {
+    }
+
+    start(): void {
+        if(this.animation.hasDataObject()) {
+            this.windowLoop.register(this.animation);
+            this.animation.setState(this.animation.getRunningState());
         }
     }
 
-    stop(animation: Animation, animationLoop: AnimationLoop): void {
+    stop(): void {
+    }
+
+    update() {
+
     }
 
 }

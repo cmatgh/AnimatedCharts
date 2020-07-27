@@ -1,27 +1,58 @@
 import {Animation} from "../Animation";
 import {AnimationState} from "./AnimationState";
-import {AnimationLoop} from "../AnimationLoop";
-import {PausedState} from "./PausedState";
-import {StoppedState} from "./StoppedState";
+import {Command} from "../../commands/Command";
+import {Observable} from "../../utility/Observable";
+import {Preconditions} from "../../utility/Preconditions";
 
 export class RunningState implements AnimationState{
 
-    pause(animation: Animation, animationLoop: AnimationLoop): void {
-        animationLoop.stop();
-        animation.setState(new PausedState());
+    private animation: Animation;
+    private windowLoop : Observable;
+    private lastTimestamp : number;
+    private updateThreshold: number;
+
+    private updateCommand : Command;
+
+    constructor(animation: Animation,  windowLoop: Observable) {
+        Preconditions.checkNotNull(animation);
+        Preconditions.checkNotNull(windowLoop);
+
+        this.animation = animation;
+        this.windowLoop = windowLoop;
+        this.lastTimestamp = Date.now();
     }
 
-    resume(animation: Animation, animationLoop: AnimationLoop): void {
+    setUpdateThreshold(value : number) : void {
+        this.updateThreshold = value;
     }
 
-    start(animation: Animation, animationLoop: AnimationLoop): void {
+    setUpdateCommand(command : Command) {
+        this.updateCommand = command;
     }
 
-    stop(animation: Animation, animationLoop: AnimationLoop): void {
-        animationLoop.stop();
-        animation.setFrame(0);
-        animation.notifyObservers();
-        animation.setState(new StoppedState())
+    pause(): void {
+        this.windowLoop.unregister(this.animation);
+        this.animation.setState(this.animation.getPausedState());
+    }
+
+    resume(): void {
+    }
+
+    start(): void {
+    }
+
+    stop(): void {
+        this.windowLoop.unregister(this.animation);
+        this.animation.setFrame(0);
+        this.animation.notifyObservers();
+        this.animation.setState(this.animation.getStoppedState())
+    }
+
+    update() {
+        if(this.updateCommand != null && Date.now() >= this.lastTimestamp + this.updateThreshold){
+            this.updateCommand.execute(null);
+            this.lastTimestamp = Date.now();
+        }
     }
 
 }

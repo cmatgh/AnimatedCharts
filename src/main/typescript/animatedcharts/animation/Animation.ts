@@ -1,16 +1,16 @@
-import { Observable } from "./Observable";
+import { Observable } from "../utility/Observable";
 import { Preconditions } from "../utility/Preconditions";
-import { AnimationLoop } from "./AnimationLoop";
-import * as convert from "color-convert";
-import {Observer} from "./Observer";
+import {Observer} from "../utility/Observer";
 import {FrameDataImpl} from "./data/FrameDataImpl";
 import {FrameData} from "./data/FrameData";
 import {FrameIterator} from "./data/FrameIterator";
-import {AnimationTickCommand} from "./AnimationTickCommand";
 import {AnimationState} from "./state/AnimationState";
 import {StoppedState} from "./state/StoppedState";
 import {PausedState} from "./state/PausedState";
 import {RunningState} from "./state/RunningState";
+import {LoopObserver} from "./LoopObserver";
+import {AnimationTickCommand} from "./AnimationTickCommand";
+import {WindowLoop} from "./WindowLoop";
 
 export interface DataSet {
     label : string,
@@ -24,26 +24,45 @@ export interface DataObject {
     valuesLength: number,
  }
 
-export class Animation implements Observable{
+export class Animation implements Observable, LoopObserver {
+
+    public static readonly MAX_UPDATES_PER_SECOND = 5;
+    public static readonly MIN_UPDATES_PER_SECOND = 0.2;
 
     private readonly animationObjects : Set<Observer>;
     private frameManager : FrameIterator;
     private dataObject: DataObject;
-    private animationLoop: AnimationLoop;
-    private state: AnimationState;
+    private updatesPerSecond: number;
 
-    constructor(window: Window) {
+    private stoppedState: StoppedState;
+    private runningState : RunningState;
+    private pausedState: PausedState;
+    private currentState: AnimationState;
+
+    constructor() {
         this.animationObjects = new Set();
         this.dataObject = null;
         this.frameManager = new FrameIterator([]);
-        this.state = new StoppedState();
-        this.animationLoop = new AnimationLoop(window, 2);
-        this.animationLoop.setOnTickCommand(new AnimationTickCommand(this));
+        this.stoppedState = new StoppedState(this, WindowLoop.getInstance());
+        this.runningState = new RunningState(this, WindowLoop.getInstance());
+        this.runningState.setUpdateCommand(new AnimationTickCommand(this));
+        this.setUpdatesPerSecond(2);
+        this.pausedState = new PausedState(this, WindowLoop.getInstance());
+        this.currentState = this.stoppedState;
+    }
+
+    getStoppedState() : StoppedState {
+        return this.stoppedState;
+    }
+    getPausedState() : PausedState {
+        return this.pausedState;
+    }
+    getRunningState() : RunningState {
+        return this.runningState;
     }
 
     setDataObject(dataObject: DataObject) : void {
         this.dataObject = dataObject;
-        this.setColors(dataObject);
         this.frameManager = new FrameIterator(this.getArray())
         this.frameManager.getNext();
     }
@@ -57,7 +76,7 @@ export class Animation implements Observable{
     }
 
     setState(state : AnimationState) {
-        this.state = state;
+        this.currentState = state;
     }
 
     objectCount(): number {
@@ -86,53 +105,51 @@ export class Animation implements Observable{
         return this.frameManager.getCurrentFrame();
     }
 
+    setUpdatesPerSecond(value: number) : void {
+        if(value > Animation.MAX_UPDATES_PER_SECOND) {
+            value = Animation.MAX_UPDATES_PER_SECOND;
+        }
+        if(value < Animation.MIN_UPDATES_PER_SECOND){
+            value = Animation.MIN_UPDATES_PER_SECOND;
+        }
+        this.updatesPerSecond = value;
+        this.runningState.setUpdateThreshold(1000 / value);
+    }
+
     incrementFrame() : void{
         this.frameManager.getNext();
     }
 
     start() : void{
-        this.state.start(this, this.animationLoop);
+        this.currentState.start();
     }
 
     stop() : void{
-        this.state.stop(this, this.animationLoop);
+        this.currentState.stop();
     }
 
     pause() : void {
-        this.state.pause(this, this.animationLoop);
+        this.currentState.pause();
     }
 
     resume() : void {
-        this.state.resume(this, this.animationLoop);
+        this.currentState.resume();
+    }
+
+    update(): void {
+        this.currentState.update()
     }
 
     hasPaused() : boolean {
-        return this.state instanceof PausedState;
+        return this.currentState instanceof PausedState;
     }
 
     isRunning() : boolean {
-        return this.state instanceof RunningState;
+        return this.currentState instanceof RunningState;
     }
 
     hasStopped() : boolean {
-        return this.state instanceof StoppedState;
-    }
-
-    private setColors(dataObj: DataObject) : void {
-        let hue = 0;
-        let stepLength = Math.floor(360 / this.dataObject.dataSets.length);
-        for(let dataset of dataObj.dataSets) {
-            dataset.color = this.applyColor(dataset.color, hue % 360);
-            hue += stepLength;
-        }
-    }
-
-    private applyColor(color: number[], hue: number): number[] {
-        if(color.length != 3){
-            const rgbaVal = convert.hsv.rgb([hue, 85, 85]);
-            return [rgbaVal[0], rgbaVal[1], rgbaVal[2]];
-        }
-        return color;
+        return this.currentState instanceof StoppedState;
     }
 
     private getArray() : FrameData[]{

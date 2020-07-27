@@ -1,0 +1,7 @@
+export class NullError extends Error {
+
+    constructor(message? : string) {
+        super(message);
+        Object.setPrototypeOf(this, NullError.prototype);
+    }
+}

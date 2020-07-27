@@ -1,6 +1,6 @@
 import {Animation, DataObject} from "../../../animation/Animation";
 import {AnimationPresenter} from "../AnimationPresenter";
-import {Observer} from "../../../animation/Observer";
+import {Observer} from "../../../utility/Observer";
 import {Comparator} from "../../../utility/comparing/Comparator";
 import {ComparatorFactory} from "../../../utility/comparing/ComparatorFactory";
 import {ComparatorUtils} from "../../../utility/comparing/ComparatorUtils";
@@ -14,7 +14,7 @@ export class AnimationPresenterImpl extends AnimationPresenter implements Observ
     private frameDataDecorators : Array<FrameDataDecorator>;
 
     protected doInitialize() : void{
-        this.animation = new Animation(window);
+        this.animation = new Animation();
         this.animation.register(this);
         this.comparator = ComparatorFactory.getInstance().create("label");
         this.frameDataDecorators = [];

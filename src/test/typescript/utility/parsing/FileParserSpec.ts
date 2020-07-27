@@ -2,6 +2,7 @@ import {FileParser} from "../../../../main/typescript/animatedcharts/utility/par
 import { expect } from "chai";
 import {anything, instance, mock, verify, when} from "ts-mockito";
 import {ParsingStrategy} from "../../../../main/typescript/animatedcharts/utility/parsing/ParsingStrategy";
+import {NullError} from "../../../../main/typescript/animatedcharts/utility/NullError";
 
 describe("FileParser", () => {
 
@@ -20,8 +21,8 @@ describe("FileParser", () => {
     describe("parse", () => {
 
         it("should fail when one of the arguments is null", () => {
-            expect(() => fileParser.parse(null, "type")).to.throw("May not be null.");
-            expect(() => fileParser.parse(Buffer.from([]), null)).to.throw("May not be null.");
+            expect(() => fileParser.parse(null, "type")).to.throw(NullError);
+            expect(() => fileParser.parse(Buffer.from([]), null)).to.throw(NullError);
         })
 
         it("should fail when there is no parsing strategy", () => {
