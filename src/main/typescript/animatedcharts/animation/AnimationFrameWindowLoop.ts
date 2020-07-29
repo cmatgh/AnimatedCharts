@@ -2,9 +2,9 @@ import {Preconditions} from "../utility/Preconditions";
 import {Observable} from "../utility/Observable";
 import {LoopObserver} from "./LoopObserver";
 
-export class WindowLoop implements Observable{
+export class AnimationFrameWindowLoop implements Observable{
 
-    private static instance : WindowLoop;
+    private static instance : AnimationFrameWindowLoop;
 
     private observers : Set<LoopObserver>;
     private window: Window;
@@ -17,12 +17,12 @@ export class WindowLoop implements Observable{
         this.running = false;
     }
 
-    static initialize(window : Window) : WindowLoop {
+    static initialize(window : Window) : AnimationFrameWindowLoop {
         Preconditions.checkNotNull(window);
         Preconditions.checkState(this.instance == null, "Initialize has been called before already");
 
         if(this.instance == null) {
-            this.instance = new WindowLoop(window);
+            this.instance = new AnimationFrameWindowLoop(window);
         }
 
         return this.instance;
@@ -30,7 +30,7 @@ export class WindowLoop implements Observable{
 
     static getInstance() : Observable {
         if(this.instance == null) {
-            throw Error("WindowLoop was not initialized");
+            throw Error("AnimationFrameWindowLoop was not initialized");
         }
         return this.instance;
     }

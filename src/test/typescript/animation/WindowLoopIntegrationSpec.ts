@@ -1,15 +1,15 @@
 import { JSDOM } from "jsdom";
-import {WindowLoop} from "../../../main/typescript/animatedcharts/animation/WindowLoop";
+import {AnimationFrameWindowLoop} from "../../../main/typescript/animatedcharts/animation/AnimationFrameWindowLoop";
 import {instance, mock, verify} from "ts-mockito";
 import {AnimationObserver} from "../../../main/typescript/animatedcharts/animation/AnimationObserver";
 
-describe("WindowLoop Integration", () => {
+describe("AnimationFrameWindowLoop Integration", () => {
 
     let dom : Window;
 
     before( () => {
         dom = new JSDOM(`<!DOCTYPE html><div id='bar'></div>`, { pretendToBeVisual: true }).window;
-        WindowLoop.initialize(dom);
+        AnimationFrameWindowLoop.initialize(dom);
     });
 
 
@@ -20,16 +20,16 @@ describe("WindowLoop Integration", () => {
             const observerMock2 = mock<AnimationObserver>();
             const observerMockInstance2 = instance(observerMock2);
 
-            WindowLoop.getInstance().register(observerMockInstance);
-            WindowLoop.getInstance().register(observerMockInstance2);
-            (<WindowLoop> WindowLoop.getInstance()).start();
+            AnimationFrameWindowLoop.getInstance().register(observerMockInstance);
+            AnimationFrameWindowLoop.getInstance().register(observerMockInstance2);
+            (<AnimationFrameWindowLoop> AnimationFrameWindowLoop.getInstance()).start();
 
             await new Promise(resolve => setTimeout(() => { resolve() }, 200))
                 .then( () => {
                     verify(observerMock.update()).atLeast(1);
                     verify(observerMock2.update()).atLeast(1);
                 }).finally(() => {
-                    (<WindowLoop> WindowLoop.getInstance()).stop()
+                    (<AnimationFrameWindowLoop> AnimationFrameWindowLoop.getInstance()).stop()
                 });
 
         });
