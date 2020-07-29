@@ -5,11 +5,11 @@ import {AnimationObserver} from "../../../main/typescript/animatedcharts/animati
 
 describe("AnimationFrameWindowLoop Integration", () => {
 
-    let dom : Window;
+    let windowLoop : AnimationFrameWindowLoop;
 
-    before( () => {
-        dom = new JSDOM(`<!DOCTYPE html><div id='bar'></div>`, { pretendToBeVisual: true }).window;
-        AnimationFrameWindowLoop.initialize(dom);
+    beforeEach( () => {
+        const dom = new JSDOM(`<!DOCTYPE html><div id='bar'></div>`, { pretendToBeVisual: true }).window;
+        windowLoop = new AnimationFrameWindowLoop(dom);
     });
 
 
@@ -20,16 +20,16 @@ describe("AnimationFrameWindowLoop Integration", () => {
             const observerMock2 = mock<AnimationObserver>();
             const observerMockInstance2 = instance(observerMock2);
 
-            AnimationFrameWindowLoop.getInstance().register(observerMockInstance);
-            AnimationFrameWindowLoop.getInstance().register(observerMockInstance2);
-            (<AnimationFrameWindowLoop> AnimationFrameWindowLoop.getInstance()).start();
+            windowLoop.register(observerMockInstance);
+            windowLoop.register(observerMockInstance2);
+            windowLoop.start();
 
             await new Promise(resolve => setTimeout(() => { resolve() }, 200))
                 .then( () => {
                     verify(observerMock.update()).atLeast(1);
                     verify(observerMock2.update()).atLeast(1);
                 }).finally(() => {
-                    (<AnimationFrameWindowLoop> AnimationFrameWindowLoop.getInstance()).stop()
+                    windowLoop.stop()
                 });
 
         });

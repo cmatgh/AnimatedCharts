@@ -6,6 +6,7 @@ import {ComparatorFactory} from "../../../utility/comparing/ComparatorFactory";
 import {ComparatorUtils} from "../../../utility/comparing/ComparatorUtils";
 import {FrameDataDecorator} from "../../../utility/decorating/FrameDataDecorator";
 import {FrameData, ChartData} from "../../../animation/data/FrameData";
+import {SmartWindowLoop} from "../../../animation/SmartWindowLoop";
 
 export class AnimationPresenterImpl extends AnimationPresenter implements Observer {
 
@@ -14,7 +15,7 @@ export class AnimationPresenterImpl extends AnimationPresenter implements Observ
     private frameDataDecorators : Array<FrameDataDecorator>;
 
     protected doInitialize() : void{
-        this.animation = new Animation();
+        this.animation = new Animation(SmartWindowLoop.getInstance());
         this.animation.register(this);
         this.comparator = ComparatorFactory.getInstance().create("label");
         this.frameDataDecorators = [];

@@ -10,17 +10,16 @@ import {IntegerMillePointFormat} from "./utility/formatting/IntegerMillePointFor
 import {FileParser} from "./utility/parsing/FileParser";
 import {CSVParsingStrategy} from "./utility/parsing/CSVParsingStrategy";
 import {XLSParsingStrategy} from "./utility/parsing/XLSParsingStrategy";
-import {AnimationFrameWindowLoop} from "./animation/AnimationFrameWindowLoop";
 import {DataTransformation} from "./utility/transforming/DataTransformation";
 import {ColorFillTransformer} from "./utility/transforming/ColorFillTransformer";
 import {UIElementFactory} from "./utility/creating/ui/UIElementFactory";
 import {ButtonKit} from "./utility/creating/ui/kits/ButtonKit";
 import {SelectKit} from "./utility/creating/ui/kits/SelectKit";
 import {DefaultTemplateFactory} from "./utility/creating/ui/DefaultTemplateFactory";
+import {SmartWindowLoop} from "./animation/SmartWindowLoop";
 
 (() => {
-    const windowLoop = AnimationFrameWindowLoop.initialize(window);
-    windowLoop.start();
+    SmartWindowLoop.initialize(window);
 
     const templateFactory = new DefaultTemplateFactory();
 

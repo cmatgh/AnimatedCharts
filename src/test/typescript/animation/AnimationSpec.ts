@@ -3,7 +3,7 @@ import "mocha"
 import * as spies from 'chai-spies';
 import * as chai from "chai";
 chai.use(spies);
-import { JSDOM, DOMWindow } from "jsdom";
+import {DOMWindow, JSDOM} from "jsdom";
 import { Animation } from "../../../main/typescript/animatedcharts/animation/Animation";
 import * as mockito from "../../../../node_modules/ts-mockito/lib/ts-mockito";
 import Chart from "chart.js";
@@ -13,21 +13,20 @@ import {AnimationFrameWindowLoop} from "../../../main/typescript/animatedcharts/
 import {NullError} from "../../../main/typescript/animatedcharts/utility/NullError";
 import {instance, mock, verify} from "ts-mockito";
 import {AnimationObserver} from "../../../main/typescript/animatedcharts/animation/AnimationObserver";
+import {WindowLoop} from "../../../main/typescript/animatedcharts/animation/WindowLoop";
 
 describe("Animation", () => {
 
     let animation: Animation;
     let animationObject: AnimationObserver;
     let mockedChart: Chart;
-    let dom: DOMWindow;
-
-    before(() => {
-        dom = new JSDOM(`<!DOCTYPE html><div id='bar'></div>`, { pretendToBeVisual: true }).window;
-        AnimationFrameWindowLoop.initialize(dom);
-    })
+    let windowLoop : WindowLoop;
 
     beforeEach( () => {
-        animation = new Animation();
+        const dom = new JSDOM(`<!DOCTYPE html><div id='bar'></div>`, { pretendToBeVisual: true }).window;
+        windowLoop = new AnimationFrameWindowLoop(dom);
+
+        animation = new Animation(windowLoop);
         animation.setDataObject({
             columnDefs: ["labels", "colors", "1960"],
             dataSets: [
@@ -184,7 +183,7 @@ describe("Animation", () => {
                 valuesLength: 2
             };
 
-            animation = new Animation();
+            animation = new Animation(windowLoop);
             animation.setDataObject(dataObj);
 
             const expectedFrameData = new FrameDataImpl();
@@ -245,7 +244,7 @@ describe("Animation", () => {
             chai.spy.on(animation, "incrementFrame");
             chai.spy.on(animation, "notifyObservers");
 
-            (<AnimationFrameWindowLoop> AnimationFrameWindowLoop.getInstance()).start();
+            windowLoop.start();
             animation.start();
 
             await new Promise(resolve => setTimeout(() => { resolve() }, 2100))
@@ -254,7 +253,7 @@ describe("Animation", () => {
                 expect(animation.notifyObservers).to.have.been.called.exactly(4);
             }).finally(() => {
                 animation.stop();
-                (<AnimationFrameWindowLoop> AnimationFrameWindowLoop.getInstance()).stop();
+                windowLoop.stop();
             });
 
         }).timeout(2500);
