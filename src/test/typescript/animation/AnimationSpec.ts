@@ -9,7 +9,7 @@ import * as mockito from "../../../../node_modules/ts-mockito/lib/ts-mockito";
 import Chart from "chart.js";
 import {Observer} from "../../../main/typescript/animatedcharts/utility/Observer";
 import {FrameDataImpl} from "../../../main/typescript/animatedcharts/animation/data/FrameDataImpl";
-import {WindowLoop} from "../../../main/typescript/animatedcharts/animation/WindowLoop";
+import {AnimationFrameWindowLoop} from "../../../main/typescript/animatedcharts/animation/AnimationFrameWindowLoop";
 import {NullError} from "../../../main/typescript/animatedcharts/utility/NullError";
 import {instance, mock, verify} from "ts-mockito";
 import {AnimationObserver} from "../../../main/typescript/animatedcharts/animation/AnimationObserver";
@@ -23,7 +23,7 @@ describe("Animation", () => {
 
     before(() => {
         dom = new JSDOM(`<!DOCTYPE html><div id='bar'></div>`, { pretendToBeVisual: true }).window;
-        WindowLoop.initialize(dom);
+        AnimationFrameWindowLoop.initialize(dom);
     })
 
     beforeEach( () => {
@@ -245,7 +245,7 @@ describe("Animation", () => {
             chai.spy.on(animation, "incrementFrame");
             chai.spy.on(animation, "notifyObservers");
 
-            (<WindowLoop> WindowLoop.getInstance()).start();
+            (<AnimationFrameWindowLoop> AnimationFrameWindowLoop.getInstance()).start();
             animation.start();
 
             await new Promise(resolve => setTimeout(() => { resolve() }, 2100))
@@ -254,7 +254,7 @@ describe("Animation", () => {
                 expect(animation.notifyObservers).to.have.been.called.exactly(4);
             }).finally(() => {
                 animation.stop();
-                (<WindowLoop> WindowLoop.getInstance()).stop();
+                (<AnimationFrameWindowLoop> AnimationFrameWindowLoop.getInstance()).stop();
             });
 
         }).timeout(2500);

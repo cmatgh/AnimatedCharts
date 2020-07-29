@@ -3,7 +3,7 @@ import {DataObject} from "../../animation/Animation";
 
 export class DataTransformation {
 
-    private static transformations : Set<Transformer>;
+    private static transformations : Set<Transformer> = new Set<Transformer>();
 
     static add(transformer : Transformer) : void {
         this.transformations.add(transformer);

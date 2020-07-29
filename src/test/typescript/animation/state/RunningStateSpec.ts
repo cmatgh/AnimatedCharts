@@ -1,7 +1,7 @@
 import {RunningState} from "../../../../main/typescript/animatedcharts/animation/state/RunningState";
 import {anyNumber, anyOfClass, anything, instance, mock, reset, verify, when} from "ts-mockito";
 import {Animation} from "../../../../main/typescript/animatedcharts/animation/Animation";
-import {WindowLoop} from "../../../../main/typescript/animatedcharts/animation/WindowLoop";
+import {AnimationFrameWindowLoop} from "../../../../main/typescript/animatedcharts/animation/AnimationFrameWindowLoop";
 import {StoppedState} from "../../../../main/typescript/animatedcharts/animation/state/StoppedState";
 import {PausedState} from "../../../../main/typescript/animatedcharts/animation/state/PausedState";
 import { expect } from "chai";
@@ -10,13 +10,13 @@ import {Command} from "../../../../main/typescript/animatedcharts/commands/Comma
 
 describe("RunningState", () => {
 
-    let windowLoopInstance : WindowLoop;
-    let windowLoopMock : WindowLoop
+    let windowLoopInstance : AnimationFrameWindowLoop;
+    let windowLoopMock : AnimationFrameWindowLoop
     let animationMock : Animation;
     let animationMockInstance : Animation;
 
     beforeEach(() => {
-        windowLoopMock = mock(WindowLoop);
+        windowLoopMock = mock(AnimationFrameWindowLoop);
         windowLoopInstance = instance(windowLoopMock);
 
         animationMock = mock(Animation);
@@ -46,7 +46,7 @@ describe("RunningState", () => {
             const animationMockInstance = instance(animationMock);
             when(animationMock.getStoppedState()).thenReturn(instance(mock(StoppedState)));
 
-            const animationLoopMock = mock(WindowLoop);
+            const animationLoopMock = mock(AnimationFrameWindowLoop);
             const animationLoopMockInstance = instance(animationLoopMock);
 
             const state = new RunningState(animationMockInstance, animationLoopMockInstance);
@@ -80,7 +80,7 @@ describe("RunningState", () => {
             when(animationMock.getPausedState())
                 .thenReturn(pausedStateMockInstance);
 
-            const animationLoopMock = mock(WindowLoop);
+            const animationLoopMock = mock(AnimationFrameWindowLoop);
             const animationLoopMockInstance = instance(animationLoopMock);
 
             const state = new RunningState(animationMockInstance, animationLoopMockInstance);

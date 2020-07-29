@@ -1,20 +1,20 @@
 import {StoppedState} from "../../../../main/typescript/animatedcharts/animation/state/StoppedState";
 import {Animation} from "../../../../main/typescript/animatedcharts/animation/Animation";
 import {anything, instance, mock, verify, when} from "ts-mockito";
-import {WindowLoop} from "../../../../main/typescript/animatedcharts/animation/WindowLoop";
+import {AnimationFrameWindowLoop} from "../../../../main/typescript/animatedcharts/animation/AnimationFrameWindowLoop";
 import {RunningState} from "../../../../main/typescript/animatedcharts/animation/state/RunningState";
 import { expect } from "chai";
 import {NullError} from "../../../../main/typescript/animatedcharts/utility/NullError";
 
 describe("StoppedState", () => {
 
-    let windowLoopInstance : WindowLoop;
-    let windowLoopMock : WindowLoop
+    let windowLoopInstance : AnimationFrameWindowLoop;
+    let windowLoopMock : AnimationFrameWindowLoop
     let animationMock : Animation;
     let animationMockInstance : Animation;
 
     beforeEach(() => {
-        windowLoopMock = mock(WindowLoop);
+        windowLoopMock = mock(AnimationFrameWindowLoop);
         windowLoopInstance = instance(windowLoopMock);
 
         animationMock = mock(Animation);

@@ -15,7 +15,7 @@ import {SelectChartCommand} from "../../../commands/SelectChartCommand";
 import {CheckboxTemplate} from "../../input/checkbox/CheckboxTemplate";
 import {ReverseSortCommand} from "../../../commands/ReverseSortCommand";
 import {CheckboxView} from "../../input/checkbox/CheckboxView";
-import {PresenterCreator} from "../../../utility/creating/ui/PresenterCreator";
+import {ElementComposer} from "../../../utility/creating/ui/ElementComposer";
 import {UIElementFactory} from "../../../utility/creating/ui/UIElementFactory";
 import {SelectPresenter} from "../../input/select/SelectPresenter";
 import {NumberFormatter} from "../../../utility/formatting/NumberFormatter";
@@ -47,16 +47,21 @@ export class AnimationViewImpl extends AnimationView {
     frameRangePresenter : RangePresenter;
     sortSelectionPresenter : SelectPresenter;
     checkboxPresenter : ButtonPresenter;
+    charSelectionPresenter : SelectPresenter;
+    numberPropertyPresenter : SelectPresenter;
+    unitPropertyPresenter : SelectPresenter;
+    italicCheckboxPresenter : ButtonPresenter;
+    smallCheckboxPresenter : ButtonPresenter;
 
     doInitialize() {
         this.chart = this.chart = ChartFactory.getInstance()
              .create("bar", <HTMLCanvasElement> this.$element.find(`#chart`).get(0));
 
-        const elementFactory = new UIElementFactory();
-        const presenterCreator = new PresenterCreator();
+        const elementComposer = new ElementComposer();
+        const elementFactory = new UIElementFactory(elementComposer);
 
         // File Dialog
-        this.fileDialogButtonPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new FileDialogView(), new FileDialogTemplate());
+        this.fileDialogButtonPresenter = elementComposer.create<ButtonPresenter>(new ButtonPresenter(), new FileDialogView(), new FileDialogTemplate());
         this.fileDialogButtonPresenter.setOnChange(new ParseFileCommand(this.presenter));
         this.fileDialogButtonPresenter.setLabel("Choose File...");
         this.add(`#load-dataset-button`, this.fileDialogButtonPresenter);
@@ -70,7 +75,7 @@ export class AnimationViewImpl extends AnimationView {
         this.add(`#start-pause-button`, this.resumePauseButtonPresenter);
 
         // Frame Range
-        this.frameRangePresenter = presenterCreator.create<RangePresenter>(new RangePresenter(), new RangeView(), new RangeTemplate());
+        this.frameRangePresenter = elementComposer.create<RangePresenter>(new RangePresenter(), new RangeView(), new RangeTemplate());
         this.frameRangePresenter.setLabel("");
         this.frameRangePresenter.setOnChange(new RangeCommand(this.presenter));
         this.frameRangePresenter.setMin(0);
@@ -88,45 +93,45 @@ export class AnimationViewImpl extends AnimationView {
         this.add(`#select-sort`, this.sortSelectionPresenter);
 
         // Reverse Checkbox
-        this.checkboxPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxTemplate());
+        this.checkboxPresenter = elementComposer.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxTemplate());
         this.checkboxPresenter.setOnClick(new ReverseSortCommand(this.presenter));
         this.checkboxPresenter.setLabel("reverse");
         this.add(`#checkbox-reverse`, this.checkboxPresenter);
 
         // Chart Selection
-        const charSelectionPresenter = elementFactory.createElement<SelectPresenter>("select");
-        charSelectionPresenter.setOnSelect(new SelectChartCommand(this.presenter));
-        charSelectionPresenter.setLabel("Chart type");
-        charSelectionPresenter.addOption("bar", "Bar" );
-        charSelectionPresenter.addOption("pie", "Pie");
-        charSelectionPresenter.addOption("polarArea", "Polar Area");
-        charSelectionPresenter.addOption("doughnut", "Doughnut");
-        this.add(`#select-chart`, charSelectionPresenter);
+        this.charSelectionPresenter = elementFactory.createElement<SelectPresenter>("select");
+        this.charSelectionPresenter.setOnSelect(new SelectChartCommand(this.presenter));
+        this.charSelectionPresenter.setLabel("Chart type");
+        this.charSelectionPresenter.addOption("bar", "Bar" );
+        this.charSelectionPresenter.addOption("pie", "Pie");
+        this.charSelectionPresenter.addOption("polarArea", "Polar Area");
+        this.charSelectionPresenter.addOption("doughnut", "Doughnut");
+        this.add(`#select-chart`, this.charSelectionPresenter);
 
         // Property Number Decorator
         const propertyNumberFormatDecorator = new PropertyNumberFormatDecorator(IntegerNumberFormat.IDENTIFIER);
-        const numberPropertyPresenter = elementFactory.createElement<SelectPresenter>("select");
-        numberPropertyPresenter.setOnSelect(new NumberFormatDecoratorCommand(this.presenter, propertyNumberFormatDecorator));
-        numberPropertyPresenter.setLabel("Number format");
-        numberPropertyPresenter.addOption(IntegerNumberFormat.IDENTIFIER, NumberFormatter.format("1611,32", IntegerNumberFormat.IDENTIFIER));
-        numberPropertyPresenter.addOption(IntegerMillePointFormat.IDENTIFIER, NumberFormatter.format("1611,32", IntegerMillePointFormat.IDENTIFIER));
-        numberPropertyPresenter.addOption(IntegerMilleSpaceFormat.IDENTIFIER, NumberFormatter.format("1611,32", IntegerMilleSpaceFormat.IDENTIFIER));
-        this.add(`#select-property-number-format`, numberPropertyPresenter);
+        this.numberPropertyPresenter = elementFactory.createElement<SelectPresenter>("select");
+        this.numberPropertyPresenter.setOnSelect(new NumberFormatDecoratorCommand(this.presenter, propertyNumberFormatDecorator));
+        this.numberPropertyPresenter.setLabel("Number format");
+        this.numberPropertyPresenter.addOption(IntegerNumberFormat.IDENTIFIER, NumberFormatter.format("1611,32", IntegerNumberFormat.IDENTIFIER));
+        this.numberPropertyPresenter.addOption(IntegerMillePointFormat.IDENTIFIER, NumberFormatter.format("1611,32", IntegerMillePointFormat.IDENTIFIER));
+        this.numberPropertyPresenter.addOption(IntegerMilleSpaceFormat.IDENTIFIER, NumberFormatter.format("1611,32", IntegerMilleSpaceFormat.IDENTIFIER));
+        this.add(`#select-property-number-format`, this.numberPropertyPresenter);
 
         // Property Unit Decorator
         const appendPropertyDecorator = new AppendPropertyDecorator("");
-        const unitPropertyPresenter = elementFactory.createElement<SelectPresenter>("select");
-        unitPropertyPresenter.setOnSelect(new UnitDecoratorCommand(this.presenter, appendPropertyDecorator));
-        unitPropertyPresenter.setLabel("Unit");
-        unitPropertyPresenter.addOption("", "None");
-        unitPropertyPresenter.addOption("€", "Euro");
-        unitPropertyPresenter.addOption("$", "Dollar");
-        unitPropertyPresenter.addOption("m", "Meters");
-        unitPropertyPresenter.addOption("s", "Seconds");
-        this.add(`#select-property-unit-format`, unitPropertyPresenter);
+        this.unitPropertyPresenter = elementFactory.createElement<SelectPresenter>("select");
+        this.unitPropertyPresenter.setOnSelect(new UnitDecoratorCommand(this.presenter, appendPropertyDecorator));
+        this.unitPropertyPresenter.setLabel("Unit");
+        this.unitPropertyPresenter.addOption("", "None");
+        this.unitPropertyPresenter.addOption("€", "Euro");
+        this.unitPropertyPresenter.addOption("$", "Dollar");
+        this.unitPropertyPresenter.addOption("m", "Meters");
+        this.unitPropertyPresenter.addOption("s", "Seconds");
+        this.add(`#select-property-unit-format`, this.unitPropertyPresenter);
 
         // Italic Checkbox
-        const italicCheckboxPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
+        const italicCheckboxPresenter = elementComposer.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
         const italicDecorator = new TagWrapperPropertyFrameDataDecorator();
         italicDecorator.setValue("i");
         const italicCommand = new TagWrapperCommand(this.presenter, italicDecorator);
@@ -135,21 +140,21 @@ export class AnimationViewImpl extends AnimationView {
         this.add(`#checkbox-italic`, italicCheckboxPresenter);
 
         // Bold Checkbox
-        const boldCheckboxPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
+        this.italicCheckboxPresenter = elementComposer.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
         const boldDecorator = new TagWrapperPropertyFrameDataDecorator();
         boldDecorator.setValue("strong");
         const boldCommand = new TagWrapperCommand(this.presenter, boldDecorator);
-        boldCheckboxPresenter.setOnClick(boldCommand);
-        boldCheckboxPresenter.setLabel("bold");
-        this.add(`#checkbox-bold`, boldCheckboxPresenter);
+        this.italicCheckboxPresenter.setOnClick(boldCommand);
+        this.italicCheckboxPresenter.setLabel("bold");
+        this.add(`#checkbox-bold`, this.italicCheckboxPresenter);
 
         // Italic Checkbox
-        const smallCheckboxPresenter = presenterCreator.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
+        this.smallCheckboxPresenter = elementComposer.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
         const smallDecorator = new TagWrapperPropertyFrameDataDecorator();
         smallDecorator.setValue("small");
-        smallCheckboxPresenter.setOnClick(new TagWrapperCommand(this.presenter, smallDecorator));
-        smallCheckboxPresenter.setLabel("small");
-        this.add(`#checkbox-small`, smallCheckboxPresenter);
+        this.smallCheckboxPresenter.setOnClick(new TagWrapperCommand(this.presenter, smallDecorator));
+        this.smallCheckboxPresenter.setLabel("small");
+        this.add(`#checkbox-small`, this.smallCheckboxPresenter);
 
         this.presenter.addFrameDataDecorator(propertyNumberFormatDecorator);
         this.presenter.addFrameDataDecorator(appendPropertyDecorator);

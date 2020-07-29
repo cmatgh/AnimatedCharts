@@ -1,6 +1,6 @@
 import {Animation} from "../Animation";
 import {AnimationState} from "./AnimationState";
-import {WindowLoop} from "../WindowLoop";
+import {AnimationFrameWindowLoop} from "../AnimationFrameWindowLoop";
 import {Observable} from "../../utility/Observable";
 import {Preconditions} from "../../utility/Preconditions";
 
