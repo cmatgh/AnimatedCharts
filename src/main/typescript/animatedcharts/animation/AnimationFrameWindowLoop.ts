@@ -1,38 +1,25 @@
 import {Preconditions} from "../utility/Preconditions";
 import {Observable} from "../utility/Observable";
 import {LoopObserver} from "./LoopObserver";
+import {WindowLoop} from "./WindowLoop";
 
-export class AnimationFrameWindowLoop implements Observable{
-
-    private static instance : AnimationFrameWindowLoop;
+export class AnimationFrameWindowLoop implements WindowLoop{
 
     private observers : Set<LoopObserver>;
     private window: Window;
     private animationFrameNumber: number;
     private running : boolean;
 
-    private constructor(window : Window) {
+    constructor(window : Window) {
+        Preconditions.checkNotNull(window);
+
         this.observers = new Set<LoopObserver>();
         this.window = window;
         this.running = false;
     }
 
-    static initialize(window : Window) : AnimationFrameWindowLoop {
-        Preconditions.checkNotNull(window);
-        Preconditions.checkState(this.instance == null, "Initialize has been called before already");
-
-        if(this.instance == null) {
-            this.instance = new AnimationFrameWindowLoop(window);
-        }
-
-        return this.instance;
-    }
-
-    static getInstance() : Observable {
-        if(this.instance == null) {
-            throw Error("AnimationFrameWindowLoop was not initialized");
-        }
-        return this.instance;
+    countObservers() : number {
+        return this.observers.size;
     }
 
     isRunning() : boolean {

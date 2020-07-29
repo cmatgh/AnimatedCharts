@@ -10,7 +10,8 @@ import {PausedState} from "./state/PausedState";
 import {RunningState} from "./state/RunningState";
 import {LoopObserver} from "./LoopObserver";
 import {AnimationTickCommand} from "./AnimationTickCommand";
-import {AnimationFrameWindowLoop} from "./AnimationFrameWindowLoop";
+import {SmartWindowLoop} from "./SmartWindowLoop";
+import {WindowLoop} from "./WindowLoop";
 
 export interface DataSet {
     label : string,
@@ -39,15 +40,15 @@ export class Animation implements Observable, LoopObserver {
     private pausedState: PausedState;
     private currentState: AnimationState;
 
-    constructor() {
+    constructor(windowLoop : WindowLoop) {
         this.animationObjects = new Set();
         this.dataObject = null;
         this.frameManager = new FrameIterator([]);
-        this.stoppedState = new StoppedState(this, AnimationFrameWindowLoop.getInstance());
-        this.runningState = new RunningState(this, AnimationFrameWindowLoop.getInstance());
+        this.stoppedState = new StoppedState(this, windowLoop);
+        this.runningState = new RunningState(this, windowLoop);
         this.runningState.setUpdateCommand(new AnimationTickCommand(this));
         this.setUpdatesPerSecond(2);
-        this.pausedState = new PausedState(this, AnimationFrameWindowLoop.getInstance());
+        this.pausedState = new PausedState(this, windowLoop);
         this.currentState = this.stoppedState;
     }
 
