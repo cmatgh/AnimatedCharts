@@ -2,7 +2,6 @@ import "mocha"
 import * as spies from 'chai-spies';
 import * as chai from "chai";
 chai.use(spies);
-import { JSDOM } from "jsdom";
 import { AnimationFrameWindowLoop } from "../../../main/typescript/animatedcharts/animation/AnimationFrameWindowLoop";
 import { expect } from "chai";
 import {NullError} from "../../../main/typescript/animatedcharts/utility/NullError";
@@ -79,6 +78,42 @@ describe("AnimationFrameWindowLoop", () => {
     describe("unregister", () => {
         it("should do nothing when element not in list", () => {
             animationLoop.unregister(instance(mock<Observer>()))
+        })
+    });
+
+    describe("countObservers", () => {
+        it("should return zero when newly initialized", () => {
+            expect(animationLoop.countObservers()).to.to.be.eq(0);
+        })
+
+        it("should return correct count when adding observers", () => {
+            animationLoop.register(instance(mock<Observer>()));
+            animationLoop.register(instance(mock<Observer>()));
+            animationLoop.register(instance(mock<Observer>()));
+
+            expect(animationLoop.countObservers()).to.to.be.eq(3);
+        })
+
+        it("should return correct count when removing observers when newly initialized", () => {
+            animationLoop.unregister(instance(mock<Observer>()));
+
+            expect(animationLoop.countObservers()).to.to.be.eq(0);
+        })
+
+        it("should return correct count when adding same observer twice", () => {
+            const observer = instance(mock<Observer>());
+            animationLoop.register(observer);
+            animationLoop.register(observer);
+
+            expect(animationLoop.countObservers()).to.to.be.eq(1);
+        })
+
+        it("should return correct count when adding and removing same observer", () => {
+            const observer = instance(mock<Observer>());
+            animationLoop.register(observer);
+            animationLoop.unregister(observer);
+
+            expect(animationLoop.countObservers()).to.to.be.eq(0);
         })
     });
 
