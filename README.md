@@ -4,14 +4,15 @@
 
 Design Patterns used:
 ```
--Factory
+-Abstract Factory
 -Observer
 -Command
 -Singleton
 -Strategy
 -Decorator
--Chain of Responsibility
--Template
+-Template Method
 -State
 -Iterator
+-Proxy
+-Facade
 ```
