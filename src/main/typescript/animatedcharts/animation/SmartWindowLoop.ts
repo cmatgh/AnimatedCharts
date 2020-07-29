@@ -1,25 +1,23 @@
 import {WindowLoop} from "./WindowLoop";
 import {Preconditions} from "../utility/Preconditions";
-import {Observable} from "../utility/Observable";
 import { Observer } from "../utility/Observer";
-import {AnimationFrameWindowLoop} from "./AnimationFrameWindowLoop";
 import {Logger} from "../utility/logging/Logger";
 
 export class SmartWindowLoop implements WindowLoop {
 
     private static instance : SmartWindowLoop;
 
-    private windowLoop : AnimationFrameWindowLoop;
+    private windowLoop : WindowLoop;
 
-    private constructor(windowLoop: AnimationFrameWindowLoop) {
+    private constructor(windowLoop: WindowLoop) {
         this.windowLoop = windowLoop;
     }
 
-    static initialize(window : Window) : void {
-        Preconditions.checkNotNull(window);
+    static initialize(windowLoop : WindowLoop) : void {
+        Preconditions.checkNotNull(windowLoop);
         Preconditions.checkState(this.instance == null, "Initialize has been called before already");
 
-        this.instance = new SmartWindowLoop(new AnimationFrameWindowLoop(window))
+        this.instance = new SmartWindowLoop(windowLoop);
     }
 
     static getInstance() : WindowLoop {
@@ -53,6 +51,10 @@ export class SmartWindowLoop implements WindowLoop {
     }
     notifyObservers(): void {
         this.windowLoop.notifyObservers();
+    }
+
+    countObservers(): number {
+        return this.windowLoop.countObservers();
     }
 
 }

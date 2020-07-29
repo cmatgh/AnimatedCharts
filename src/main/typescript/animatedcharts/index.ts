@@ -17,9 +17,10 @@ import {ButtonKit} from "./utility/creating/ui/kits/ButtonKit";
 import {SelectKit} from "./utility/creating/ui/kits/SelectKit";
 import {DefaultTemplateFactory} from "./utility/creating/ui/DefaultTemplateFactory";
 import {SmartWindowLoop} from "./animation/SmartWindowLoop";
+import {AnimationFrameWindowLoop} from "./animation/AnimationFrameWindowLoop";
 
 (() => {
-    SmartWindowLoop.initialize(window);
+    SmartWindowLoop.initialize(new AnimationFrameWindowLoop(window));
 
     const templateFactory = new DefaultTemplateFactory();
 
