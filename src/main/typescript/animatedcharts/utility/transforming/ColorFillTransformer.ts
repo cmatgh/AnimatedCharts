@@ -6,7 +6,7 @@ export class ColorFillTransformer implements Transformer {
 
     execute(dataObject: DataObject): DataObject {
         let hue = 0;
-        let stepLength = Math.floor(360 / dataObject.valuesLength);
+        let stepLength = Math.floor(360 / dataObject.dataSets.length);
 
         dataObject.dataSets.forEach(dataset => {
             dataset.color = this.generate(dataset.color, hue);
