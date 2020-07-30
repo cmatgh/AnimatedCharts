@@ -7,21 +7,13 @@ import {AnimationState} from "./state/AnimationState";
 import {StoppedState} from "./state/StoppedState";
 import {PausedState} from "./state/PausedState";
 import {RunningState} from "./state/RunningState";
-import {LoopObserver} from "./LoopObserver";
 import {AnimationTickCommand} from "./AnimationTickCommand";
-import {SmartWindowLoop} from "./SmartWindowLoop";
 import {WindowLoop} from "./WindowLoop";
 
-export interface DataSet {
-    label : string,
-    color : number[],
-    values: number[]
-}
-
 export interface DataObject {
-    columnDefs : string[],
-    dataSets : DataSet[],
-    valuesLength: number,
+    frameData : FrameData[],
+    samplesCount: number,
+    entriesCount: number,
  }
 
 /**

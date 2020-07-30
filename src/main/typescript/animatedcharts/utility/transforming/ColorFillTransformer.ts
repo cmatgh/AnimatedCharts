@@ -4,23 +4,34 @@ import * as convert from "color-convert";
 
 export class ColorFillTransformer implements Transformer {
 
-    execute(dataObject: DataObject): DataObject {
-        let hue = 0;
-        let stepLength = Math.floor(360 / dataObject.dataSets.length);
+    private static readonly HUE_MAX : number = 360;
+    private static readonly SATURATION : number = 85;
+    private static readonly VALUE : number = 85;
 
-        dataObject.dataSets.forEach(dataset => {
-            dataset.color = this.generate(dataset.color, hue);
-            hue += stepLength;
+    execute(dataObject: DataObject): DataObject {
+
+
+        dataObject.frameData.forEach(data => {
+            let hue = 0;
+            let stepLength = Math.floor(ColorFillTransformer.HUE_MAX / dataObject.entriesCount);
+
+            data.getFrameDataSet().forEach( entry => {
+                entry.color = ColorFillTransformer.generate(entry.color, hue);
+                hue += stepLength;
+            })
+
         });
 
         return dataObject;
     }
 
 
-    private generate(color: number[], hue: number): number[] {
+    private static generate(color: number[], hue: number): number[] {
         if(color.length != 3) {
-            const rgbaVal = convert.hsv.rgb([hue % 360, 85, 85]);
-            return [rgbaVal[0], rgbaVal[1], rgbaVal[2]];
+            return convert.hsv.rgb([
+                hue % ColorFillTransformer.HUE_MAX,
+                ColorFillTransformer.SATURATION,
+                ColorFillTransformer.VALUE]);
         }
         return color;
     }
