@@ -37,9 +37,9 @@ export class Animation implements Observable, Observer {
     private dataObject: DataObject;
     private updatesPerSecond: number;
 
-    private stoppedState: StoppedState;
-    private runningState : RunningState;
-    private pausedState: PausedState;
+    private readonly stoppedState: StoppedState;
+    private readonly runningState : RunningState;
+    private readonly pausedState: PausedState;
     private currentState: AnimationState;
 
     constructor(windowLoop : WindowLoop) {
