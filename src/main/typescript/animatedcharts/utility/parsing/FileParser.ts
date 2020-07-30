@@ -65,6 +65,10 @@ export class FileParser implements Parser{
 
     private transform(data:object[][]) : DataObject {
         let frameData : FrameData[] = [];
+
+        data.filter((row, index) => index > 0)
+            .forEach( row => this.isValidColor(row[1].toString()))
+
         for(let col = 2; col < data[0].length; col++) {
             frameData.push(this.asFrameData(data, col));
         }
@@ -96,14 +100,13 @@ export class FileParser implements Parser{
     private getColumn(column : number, data : object[][]) {
         return data
             .filter((value, index) => index > 0)
-            .map(value => value[column])
+            .map(value => value[column]);
     }
 
     private rgbTripletToArray(color : string) : number[] {
         if(color == "") {
             return [];
         }
-        this.isValidColor(color);
 
         const colorTripletString = color
             .toString()
@@ -119,7 +122,7 @@ export class FileParser implements Parser{
     private isValidColor(color : string) : void {
         //regex for 'rgb(xxx,xxx,xxx)' where xxx can be between 0 and 255
         const regexTemplate = /rgb\(([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5]),([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5]),([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\)/g;
-        if(color.match(regexTemplate) == null) {
+        if(color !== "" && color.match(regexTemplate) == null) {
             throw new Error("Invalid color field. Valid format: rgb(xx,xxx,x).");
         }
     }
