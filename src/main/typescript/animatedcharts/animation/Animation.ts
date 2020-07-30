@@ -31,7 +31,7 @@ export class Animation implements Observable, LoopObserver {
     public static readonly MIN_UPDATES_PER_SECOND = 0.2;
 
     private readonly animationObjects : Set<Observer>;
-    private frameManager : FrameIterator;
+    private dataIterator : CyclicRandomAccessIterator<FrameData>;
     private dataObject: DataObject;
     private updatesPerSecond: number;
 
@@ -43,7 +43,7 @@ export class Animation implements Observable, LoopObserver {
     constructor(windowLoop : WindowLoop) {
         this.animationObjects = new Set();
         this.dataObject = null;
-        this.frameManager = new FrameIterator([]);
+        this.dataIterator = new CyclicRandomAccessIterator<FrameData>([]);
         this.stoppedState = new StoppedState(this, windowLoop);
         this.runningState = new RunningState(this, windowLoop);
         this.runningState.setUpdateCommand(new AnimationTickCommand(this));
@@ -64,8 +64,8 @@ export class Animation implements Observable, LoopObserver {
 
     setDataObject(dataObject: DataObject) : void {
         this.dataObject = dataObject;
-        this.frameManager = new FrameIterator(this.getArray())
-        this.frameManager.getNext();
+        this.dataIterator = new CyclicRandomAccessIterator<FrameData>(dataObject.frameData)
+        this.dataIterator.getNext();
     }
 
     get AnimationObjects() : Observer[] {
@@ -103,7 +103,7 @@ export class Animation implements Observable, LoopObserver {
     }
 
     getCurrentFrameData() : FrameData {
-        return this.frameManager.getCurrentFrame();
+        return this.dataIterator.getCurrentFrame();
     }
 
     setUpdatesPerSecond(value: number) : void {
@@ -118,7 +118,7 @@ export class Animation implements Observable, LoopObserver {
     }
 
     incrementFrame() : void{
-        this.frameManager.getNext();
+        this.dataIterator.getNext();
     }
 
     start() : void{
@@ -183,7 +183,7 @@ export class Animation implements Observable, LoopObserver {
     }
 
     setFrame(frame: number) {
-        this.frameManager.setFrame(frame);
-        this.frameManager.getNext();
+        this.dataIterator.setFrame(frame);
+        this.dataIterator.getNext();
     }
 }
