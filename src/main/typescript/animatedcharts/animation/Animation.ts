@@ -155,35 +155,6 @@ export class Animation implements Observable, Observer {
         return this.currentState instanceof StoppedState;
     }
 
-    private getArray() : FrameData[]{
-        const frameData = [];
-        for(let i = 0; i < this.dataObject.valuesLength; i++) {
-            frameData.push(this.asFrameData(i));
-        }
-
-        return frameData;
-    }
-
-    private asFrameData(frame : number) : FrameData {
-        const frameData = new FrameDataImpl();
-        frameData.setProperty("");
-        frameData.setSampleSize(this.dataObject.valuesLength);
-        frameData.setCurrentFrame(frame);
-        frameData.setFrameDataSet([]);
-        if(this.dataObject != null) {
-            frameData.setProperty( this.dataObject.columnDefs[2 + frame]);
-            frameData.setCurrentFrame(frame);
-            frameData.setFrameDataSet(this.dataObject.dataSets.map( set => {
-                return {
-                    label: set.label.slice(),
-                    color : [...set.color],
-                    value: set.values[frame]
-                }
-            }));
-        }
-        return frameData;
-    }
-
     setFrame(frame: number) {
         this.dataIterator.setFrame(frame);
         this.dataIterator.getNext();
