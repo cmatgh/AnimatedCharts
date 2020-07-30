@@ -6,7 +6,6 @@ import {Observer} from "../../../main/typescript/animatedcharts/interfaces/Obser
 import {AnimationFrameWindowLoop} from "../../../main/typescript/animatedcharts/animation/AnimationFrameWindowLoop";
 import {NullError} from "../../../main/typescript/animatedcharts/utility/NullError";
 import {instance, mock, verify} from "ts-mockito";
-import {AnimationObserver} from "../../../main/typescript/animatedcharts/animation/AnimationObserver";
 import {WindowLoop} from "../../../main/typescript/animatedcharts/animation/WindowLoop";
 import {FrameData} from "../../../main/typescript/animatedcharts/animation/data/FrameData";
 import * as spies from 'chai-spies';
@@ -16,14 +15,14 @@ chai.use(spies);
 describe("Animation", () => {
 
     let animation: Animation;
-    let animationObject: AnimationObserver;
+    let animationObject: Observer;
     let windowLoop : WindowLoop;
 
     beforeEach( () => {
         const dom = new JSDOM(`<!DOCTYPE html><div id='bar'></div>`, { pretendToBeVisual: true }).window;
         windowLoop = new AnimationFrameWindowLoop(dom);
         animation = new Animation(windowLoop);
-        animationObject = instance(mock<AnimationObserver>());
+        animationObject = instance(mock<Observer>());
     });
 
     describe("constructor", () => {
@@ -82,15 +81,15 @@ describe("Animation", () => {
          });
 
         it("should fail when unregistering an missing object when other objects have been registered already", () => {
-            animation.register(instance(mock<AnimationObserver>()));
-            animation.register(instance(mock<AnimationObserver>()));
+            animation.register(instance(mock<Observer>()));
+            animation.register(instance(mock<Observer>()));
 
-            expect( () => animation.unregister(instance(mock<AnimationObserver>()))).to.throw("no such object");
+            expect( () => animation.unregister(instance(mock<Observer>()))).to.throw("no such object");
         });
 
 
         it("should remove the object when unregistering it", () => {
-            const animationObserverInstance = instance(mock<AnimationObserver>());
+            const animationObserverInstance = instance(mock<Observer>());
             animation.register(animationObserverInstance);
 
             expect(animation.objectCount()).to.be.equal(1);
@@ -103,7 +102,7 @@ describe("Animation", () => {
 
     describe("notifyAnimationObjects", () => {
         it("should call update on AnimationChart when notifyAnimationObjects is called", () => {
-            const animationObserverMock = mock<AnimationObserver>();
+            const animationObserverMock = mock<Observer>();
             const animationObserverInstance = instance(animationObserverMock);
 
             animation.register(animationObserverInstance);

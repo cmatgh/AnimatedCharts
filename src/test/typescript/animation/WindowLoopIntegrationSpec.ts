@@ -1,7 +1,7 @@
 import { JSDOM } from "jsdom";
 import {AnimationFrameWindowLoop} from "../../../main/typescript/animatedcharts/animation/AnimationFrameWindowLoop";
 import {instance, mock, verify} from "ts-mockito";
-import {AnimationObserver} from "../../../main/typescript/animatedcharts/animation/AnimationObserver";
+import {Observer} from "../../../main/typescript/animatedcharts/interfaces/Observer";
 
 describe("AnimationFrameWindowLoop Integration", () => {
 
@@ -15,9 +15,9 @@ describe("AnimationFrameWindowLoop Integration", () => {
 
     describe("loop", () => {
         it("should notify observers when ticking", async () => {
-            const observerMock = mock<AnimationObserver>();
+            const observerMock = mock<Observer>();
             const observerMockInstance = instance(observerMock);
-            const observerMock2 = mock<AnimationObserver>();
+            const observerMock2 = mock<Observer>();
             const observerMockInstance2 = instance(observerMock2);
 
             windowLoop.register(observerMockInstance);
