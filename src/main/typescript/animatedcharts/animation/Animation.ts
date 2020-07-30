@@ -1,9 +1,8 @@
-import { Observable } from "../utility/Observable";
+import { Observable } from "../interfaces/Observable";
 import { Preconditions } from "../utility/Preconditions";
-import {Observer} from "../utility/Observer";
-import {FrameDataImpl} from "./data/FrameDataImpl";
+import {Observer} from "../interfaces/Observer";
 import {FrameData} from "./data/FrameData";
-import {FrameIterator} from "./data/FrameIterator";
+import {CyclicRandomAccessIterator} from "./data/CyclicRandomAccessIterator";
 import {AnimationState} from "./state/AnimationState";
 import {StoppedState} from "./state/StoppedState";
 import {PausedState} from "./state/PausedState";
@@ -25,7 +24,18 @@ export interface DataObject {
     valuesLength: number,
  }
 
-export class Animation implements Observable, LoopObserver {
+/**
+ * Observable for objects that want to hook into this animation.
+ *
+ * <ul>
+ *      Participants:
+ *      <li>Observer : {@link Observer}</li>
+ *      <li>ConcreteObserver : {@link AnimationPresenterImpl}</li>
+ *      <li>Subject: {@link Observable}</li>
+ *      <li>ConcreteSubject: {@link Animation}</li>
+ * </ul>
+ */
+export class Animation implements Observable, Observer {
 
     public static readonly MAX_UPDATES_PER_SECOND = 5;
     public static readonly MIN_UPDATES_PER_SECOND = 0.2;

@@ -1,6 +1,6 @@
 import {WindowLoop} from "./WindowLoop";
 import {Preconditions} from "../utility/Preconditions";
-import { Observer } from "../utility/Observer";
+import { Observer } from "../interfaces/Observer";
 import {Logger} from "../utility/logging/Logger";
 
 export class SmartWindowLoop implements WindowLoop {

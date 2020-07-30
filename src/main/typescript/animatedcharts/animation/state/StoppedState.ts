@@ -1,6 +1,6 @@
 import {Animation} from "../Animation";
 import {AnimationState} from "./AnimationState";
-import {Observable} from "../../utility/Observable";
+import {Observable} from "../../interfaces/Observable";
 import {Preconditions} from "../../utility/Preconditions";
 
 export class StoppedState implements AnimationState {

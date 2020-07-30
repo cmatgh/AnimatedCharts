@@ -1,6 +1,6 @@
 import {AnimationView} from "../AnimationView";
 import {AnimationPresenter} from "../AnimationPresenter";
-import {Template} from "../../Template";
+import {Template} from "../../../interfaces/Template";
 import {ButtonPresenter} from "../../input/button/ButtonPresenter";
 import {ButtonView} from "../../input/button/ButtonView";
 import {ChartFactory} from "../../../utility/creating/ui/ChartFactory";

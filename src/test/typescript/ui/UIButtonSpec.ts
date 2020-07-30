@@ -1,11 +1,8 @@
 import "mocha"
-import { expect } from "chai";
 import * as spies from 'chai-spies';
 import * as chai from "chai";
 chai.use(spies);
 import jsdom = require('jsdom');
-import {InputPresenter} from "../../../main/typescript/animatedcharts/ui/input/InputPresenter";
-import {Command} from "../../../main/typescript/animatedcharts/commands/Command";
 var document = new jsdom.JSDOM(`<!DOCTYPE html><html></html>`).window.document;
 var window = document.defaultView;
 

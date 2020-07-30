@@ -1,4 +1,4 @@
-import { Comparator } from "./Comparator";
+import { Comparator } from "../../interfaces/Comparator";
 import * as convert from "color-convert";
 import {ChartData} from "../../animation/data/FrameData";
 

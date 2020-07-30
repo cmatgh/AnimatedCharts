@@ -1,5 +1,5 @@
 import {TemplateFactory} from "./TemplateFactory";
-import {Template} from "../../../ui/Template";
+import {Template} from "../../../interfaces/Template";
 import {DefaultButtonTemplate} from "../../../ui/input/button/templates/DefaultButtonTemplate";
 import {CheckboxTemplate} from "../../../ui/input/checkbox/CheckboxTemplate";
 import {FileDialogTemplate} from "../../../ui/input/filedialog/FileDialogTemplate";

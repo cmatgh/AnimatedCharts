@@ -1,4 +1,4 @@
-import {Command} from "./Command";
+import {Command} from "../interfaces/Command";
 
 export abstract class CheckboxCommand implements Command {
 

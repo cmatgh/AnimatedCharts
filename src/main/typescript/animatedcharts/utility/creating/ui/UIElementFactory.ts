@@ -1,4 +1,4 @@
-import {Presenter} from "../../../ui/Presenter";
+import {Presenter} from "../../../interfaces/Presenter";
 import {ComponentKit} from "./kits/ComponentKit";
 import {ElementComposer} from "./ElementComposer";
 import {Preconditions} from "../../Preconditions";

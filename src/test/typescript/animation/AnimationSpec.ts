@@ -7,7 +7,7 @@ import {DOMWindow, JSDOM} from "jsdom";
 import { Animation } from "../../../main/typescript/animatedcharts/animation/Animation";
 import * as mockito from "../../../../node_modules/ts-mockito/lib/ts-mockito";
 import Chart from "chart.js";
-import {Observer} from "../../../main/typescript/animatedcharts/utility/Observer";
+import {Observer} from "../../../main/typescript/animatedcharts/interfaces/Observer";
 import {FrameDataImpl} from "../../../main/typescript/animatedcharts/animation/data/FrameDataImpl";
 import {AnimationFrameWindowLoop} from "../../../main/typescript/animatedcharts/animation/AnimationFrameWindowLoop";
 import {NullError} from "../../../main/typescript/animatedcharts/utility/NullError";

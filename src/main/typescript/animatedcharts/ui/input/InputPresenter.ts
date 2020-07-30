@@ -1,4 +1,4 @@
-import {Command} from "../../commands/Command";
+import {Command} from "../../interfaces/Command";
 import {InputView} from "./InputView";
 import {AbstractPresenter} from "../AbstractPresenter";
 

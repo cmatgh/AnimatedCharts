@@ -1,5 +1,4 @@
 import {InputView} from "../InputView";
-import {Template} from "../../Template";
 
 export class ButtonView extends InputView {
 

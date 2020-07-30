@@ -1,4 +1,4 @@
-import {Command} from "../commands/Command";
+import {Command} from "../interfaces/Command";
 import {Animation} from "./Animation";
 
 export class AnimationTickCommand implements Command{

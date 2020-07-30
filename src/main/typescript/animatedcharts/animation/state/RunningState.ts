@@ -1,7 +1,7 @@
 import {Animation} from "../Animation";
 import {AnimationState} from "./AnimationState";
-import {Command} from "../../commands/Command";
-import {Observable} from "../../utility/Observable";
+import {Command} from "../../interfaces/Command";
+import {Observable} from "../../interfaces/Observable";
 import {Preconditions} from "../../utility/Preconditions";
 
 export class RunningState implements AnimationState{

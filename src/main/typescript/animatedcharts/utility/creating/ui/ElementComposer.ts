@@ -1,6 +1,6 @@
-import {Presenter} from "../../../ui/Presenter";
-import {View} from "../../../ui/View";
-import {Template} from "../../../ui/Template";
+import {Presenter} from "../../../interfaces/Presenter";
+import {View} from "../../../interfaces/View";
+import {Template} from "../../../interfaces/Template";
 import {Preconditions} from "../../Preconditions";
 
 export class ElementComposer {

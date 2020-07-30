@@ -1,5 +1,5 @@
-import {Presenter} from "./Presenter";
-import {View} from "./View";
+import {Presenter} from "../interfaces/Presenter";
+import {View} from "../interfaces/View";
 
 export abstract class AbstractPresenter implements Presenter{
 

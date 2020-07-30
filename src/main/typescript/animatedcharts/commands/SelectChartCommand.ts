@@ -1,5 +1,4 @@
-import {Command} from "./Command";
-import {AnimationView} from "../ui/animation/AnimationView";
+import {Command} from "../interfaces/Command";
 import {AnimationPresenter} from "../ui/animation/AnimationPresenter";
 
 export class SelectChartCommand implements Command {

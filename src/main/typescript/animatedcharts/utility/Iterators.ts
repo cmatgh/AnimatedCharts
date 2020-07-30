@@ -1,4 +1,4 @@
-import {Iterator} from "./Iterator";
+import {Iterator} from "../interfaces/Iterator";
 import {Preconditions} from "./Preconditions";
 
 export class Iterators {

@@ -4,9 +4,9 @@ import { expect } from "chai";
 import {ComponentKit} from "../../../../main/typescript/animatedcharts/utility/creating/ui/kits/ComponentKit";
 import {NullError} from "../../../../main/typescript/animatedcharts/utility/NullError";
 import {ElementComposer} from "../../../../main/typescript/animatedcharts/utility/creating/ui/ElementComposer";
-import {Presenter} from "../../../../main/typescript/animatedcharts/ui/Presenter";
-import {View} from "../../../../main/typescript/animatedcharts/ui/View";
-import {Template} from "../../../../main/typescript/animatedcharts/ui/Template";
+import {Presenter} from "../../../../main/typescript/animatedcharts/interfaces/Presenter";
+import {View} from "../../../../main/typescript/animatedcharts/interfaces/View";
+import {Template} from "../../../../main/typescript/animatedcharts/interfaces/Template";
 
 describe("UIElementFactorySpec", () => {
 

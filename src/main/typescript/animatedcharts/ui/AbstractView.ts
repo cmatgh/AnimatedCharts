@@ -1,6 +1,6 @@
-import {View} from "./View";
-import {Presenter} from "./Presenter";
-import {Template} from "./Template";
+import {View} from "../interfaces/View";
+import {Presenter} from "../interfaces/Presenter";
+import {Template} from "../interfaces/Template";
 
 export abstract class AbstractView implements View{
 

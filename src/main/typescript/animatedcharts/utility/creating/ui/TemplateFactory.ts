@@ -1,4 +1,4 @@
-import {Template} from "../../../ui/Template";
+import {Template} from "../../../interfaces/Template";
 
 export abstract class TemplateFactory {
 

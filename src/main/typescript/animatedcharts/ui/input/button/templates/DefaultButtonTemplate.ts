@@ -1,4 +1,4 @@
-import {Template} from "../../../Template";
+import {Template} from "../../../../interfaces/Template";
 
 export class DefaultButtonTemplate implements Template {
     html(): string {

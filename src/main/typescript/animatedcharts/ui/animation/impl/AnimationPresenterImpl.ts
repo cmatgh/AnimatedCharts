@@ -1,7 +1,7 @@
 import {Animation, DataObject} from "../../../animation/Animation";
 import {AnimationPresenter} from "../AnimationPresenter";
-import {Observer} from "../../../utility/Observer";
-import {Comparator} from "../../../utility/comparing/Comparator";
+import {Observer} from "../../../interfaces/Observer";
+import {Comparator} from "../../../interfaces/Comparator";
 import {ComparatorFactory} from "../../../utility/comparing/ComparatorFactory";
 import {ComparatorUtils} from "../../../utility/comparing/ComparatorUtils";
 import {FrameDataDecorator} from "../../../utility/decorating/FrameDataDecorator";

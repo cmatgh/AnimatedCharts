@@ -1,7 +1,7 @@
 import {SmartWindowLoop} from "../../../main/typescript/animatedcharts/animation/SmartWindowLoop";
 import {WindowLoop} from "../../../main/typescript/animatedcharts/animation/WindowLoop";
 import {instance, mock, reset, verify, when} from "ts-mockito";
-import {Observer} from "../../../main/typescript/animatedcharts/utility/Observer";
+import {Observer} from "../../../main/typescript/animatedcharts/interfaces/Observer";
 
 describe("SmartWindowLoop", () => {
 

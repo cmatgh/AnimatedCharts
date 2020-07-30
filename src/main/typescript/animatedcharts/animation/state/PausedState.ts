@@ -1,7 +1,6 @@
 import {Animation} from "../Animation";
 import {AnimationState} from "./AnimationState";
-import {AnimationFrameWindowLoop} from "../AnimationFrameWindowLoop";
-import {Observable} from "../../utility/Observable";
+import {Observable} from "../../interfaces/Observable";
 import {Preconditions} from "../../utility/Preconditions";
 
 export class PausedState implements AnimationState {
