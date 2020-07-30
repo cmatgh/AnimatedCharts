@@ -1,11 +1,10 @@
-import {Parser} from "./Parser";
 import {DataObject} from "../../animation/Animation";
 import {ParsingStrategy} from "./ParsingStrategy";
 import {Preconditions} from "../Preconditions";
 import {FrameDataImpl} from "../../animation/data/FrameDataImpl";
 import {FrameData} from "../../animation/data/FrameData";
 
-export class FileParser implements Parser{
+export class FileParser {
 
     private static parsingStrategies : Map<string, ParsingStrategy> = new Map<string, ParsingStrategy>();
 
