@@ -3,6 +3,17 @@ import {Observable} from "../interfaces/Observable";
 import {WindowLoop} from "./WindowLoop";
 import {Observer} from "../interfaces/Observer";
 
+/**
+ * Observable for objects that want to hook into the window loop.
+ *
+ * <ul>
+ *      Participants:
+ *      <li>Observer : {@link Observer}</li>
+ *      <li>ConcreteObserver : {@link Animation}</li>
+ *      <li>Subject: {@link Observable}</li>
+ *      <li>ConcreteSubject: {@link AnimationFrameWindowLoop}</li>
+ * </ul>
+ */
 export class AnimationFrameWindowLoop implements WindowLoop{
 
     private observers : Set<Observer>;

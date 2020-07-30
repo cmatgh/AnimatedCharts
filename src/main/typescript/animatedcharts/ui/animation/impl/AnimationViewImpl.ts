@@ -51,6 +51,7 @@ export class AnimationViewImpl extends AnimationView {
     numberPropertyPresenter : SelectPresenter;
     unitPropertyPresenter : SelectPresenter;
     italicCheckboxPresenter : ButtonPresenter;
+    boldCheckboxPresenter : ButtonPresenter;
     smallCheckboxPresenter : ButtonPresenter;
 
     doInitialize() {
@@ -131,22 +132,22 @@ export class AnimationViewImpl extends AnimationView {
         this.add(`#select-property-unit-format`, this.unitPropertyPresenter);
 
         // Italic Checkbox
-        const italicCheckboxPresenter = elementComposer.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
+        this.italicCheckboxPresenter = elementComposer.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
         const italicDecorator = new TagWrapperPropertyFrameDataDecorator();
         italicDecorator.setValue("i");
         const italicCommand = new TagWrapperCommand(this.presenter, italicDecorator);
-        italicCheckboxPresenter.setOnClick(italicCommand);
-        italicCheckboxPresenter.setLabel("italic");
-        this.add(`#checkbox-italic`, italicCheckboxPresenter);
+        this.italicCheckboxPresenter.setOnClick(italicCommand);
+        this.italicCheckboxPresenter.setLabel("italic");
+        this.add(`#checkbox-italic`, this.italicCheckboxPresenter);
 
         // Bold Checkbox
-        this.italicCheckboxPresenter = elementComposer.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
+        this.boldCheckboxPresenter = elementComposer.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
         const boldDecorator = new TagWrapperPropertyFrameDataDecorator();
         boldDecorator.setValue("strong");
         const boldCommand = new TagWrapperCommand(this.presenter, boldDecorator);
-        this.italicCheckboxPresenter.setOnClick(boldCommand);
-        this.italicCheckboxPresenter.setLabel("bold");
-        this.add(`#checkbox-bold`, this.italicCheckboxPresenter);
+        this.boldCheckboxPresenter.setOnClick(boldCommand);
+        this.boldCheckboxPresenter.setLabel("bold");
+        this.add(`#checkbox-bold`, this.boldCheckboxPresenter);
 
         // Italic Checkbox
         this.smallCheckboxPresenter = elementComposer.create<ButtonPresenter>(new ButtonPresenter(), new CheckboxView(), new CheckboxInlineTemplate());
