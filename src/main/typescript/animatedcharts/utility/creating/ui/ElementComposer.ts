@@ -23,6 +23,7 @@ export class ElementComposer {
         view.setPresenter(presenter);
         view.setTemplate(template);
         presenter.initialize();
+        view.initialize();
 
         return <P> presenter;
     }

@@ -20,7 +20,6 @@ export abstract class AbstractPresenter implements Presenter{
 
     public initialize(): void {
         this.doInitialize();
-        this.view.initialize();
     }
 
     protected abstract doInitialize() : void;
