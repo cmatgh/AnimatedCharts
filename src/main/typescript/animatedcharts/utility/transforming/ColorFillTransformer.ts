@@ -9,8 +9,6 @@ export class ColorFillTransformer implements Transformer {
     private static readonly VALUE : number = 85;
 
     execute(dataObject: DataObject): DataObject {
-
-
         dataObject.frameData.forEach(data => {
             let hue = 0;
             let stepLength = Math.floor(ColorFillTransformer.HUE_MAX / dataObject.entriesCount);
@@ -19,7 +17,6 @@ export class ColorFillTransformer implements Transformer {
                 entry.color = ColorFillTransformer.generate(entry.color, hue);
                 hue += stepLength;
             })
-
         });
 
         return dataObject;
