@@ -4,7 +4,7 @@ import {anything, instance, mock, verify, when} from "ts-mockito";
 import {AnimationFrameWindowLoop} from "../../../../main/typescript/animatedcharts/animation/AnimationFrameWindowLoop";
 import {RunningState} from "../../../../main/typescript/animatedcharts/animation/state/RunningState";
 import { expect } from "chai";
-import {NullError} from "../../../../main/typescript/animatedcharts/utility/NullError";
+import {NullError} from "../../../../main/typescript/animatedcharts/utility/errors/NullError";
 
 describe("StoppedState", () => {
 

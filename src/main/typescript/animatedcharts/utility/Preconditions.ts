@@ -1,4 +1,5 @@
-import { NullError } from "./NullError";
+import { NullError } from "./errors/NullError";
+import {IllegalArgumentError} from "./errors/IllegalArgumentError";
 
 export class Preconditions {
 
@@ -35,6 +36,17 @@ export class Preconditions {
     static checkState(state: boolean, message? : string) {
         if(!state) {
             throw Error(message ? message : "Illegal state.");
+        }
+    }
+
+    /**
+     * Checks whether the condition is true. If not throws an Error.
+     * @param argument the argument to check
+     * @param message the error message that should be set
+     */
+    static checkArgument(argument: boolean, message? : string) {
+        if(!argument) {
+            throw new IllegalArgumentError(message ? message : "Illegal argument.");
         }
     }
 

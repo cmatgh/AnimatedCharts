@@ -2,7 +2,7 @@ import {UIElementFactory} from "../../../../main/typescript/animatedcharts/utili
 import {instance, mock, verify, when} from "ts-mockito";
 import { expect } from "chai";
 import {ComponentKit} from "../../../../main/typescript/animatedcharts/utility/creating/ui/kits/ComponentKit";
-import {NullError} from "../../../../main/typescript/animatedcharts/utility/NullError";
+import {NullError} from "../../../../main/typescript/animatedcharts/utility/errors/NullError";
 import {ElementComposer} from "../../../../main/typescript/animatedcharts/utility/creating/ui/ElementComposer";
 import {Presenter} from "../../../../main/typescript/animatedcharts/interfaces/Presenter";
 import {View} from "../../../../main/typescript/animatedcharts/interfaces/View";

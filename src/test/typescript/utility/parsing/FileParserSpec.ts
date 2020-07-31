@@ -2,7 +2,7 @@ import {FileParser} from "../../../../main/typescript/animatedcharts/utility/par
 import { expect } from "chai";
 import {anything, instance, mock, verify, when} from "ts-mockito";
 import {ParsingStrategy} from "../../../../main/typescript/animatedcharts/utility/parsing/ParsingStrategy";
-import {NullError} from "../../../../main/typescript/animatedcharts/utility/NullError";
+import {NullError} from "../../../../main/typescript/animatedcharts/utility/errors/NullError";
 import {DataObject} from "../../../../main/typescript/animatedcharts/animation/Animation";
 import {FrameDataImpl} from "../../../../main/typescript/animatedcharts/animation/data/FrameDataImpl";
 
