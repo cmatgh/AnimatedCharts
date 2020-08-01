@@ -1,5 +1,5 @@
 import {AbstractView} from "../AbstractView";
-import {FrameData, ChartData} from "../../animation/data/FrameData";
+import {FrameData} from "../../animation/data/FrameData";
 
 export abstract class AnimationView extends AbstractView{
 

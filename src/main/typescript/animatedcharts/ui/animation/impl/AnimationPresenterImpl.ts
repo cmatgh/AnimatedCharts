@@ -21,10 +21,6 @@ export class AnimationPresenterImpl extends AnimationPresenter implements Observ
         this.frameDataDecorators = [];
     }
 
-    setTitle(title: string) : void{
-        this.view.setTitle(title);
-    }
-
     pause(): void {
         this.animation.pause();
     }

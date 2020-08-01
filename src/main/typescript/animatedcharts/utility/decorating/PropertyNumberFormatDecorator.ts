@@ -1,6 +1,5 @@
 import {NumberFormatter} from "../formatting/NumberFormatter";
 import {FrameDataDecorator} from "./FrameDataDecorator";
-import {ChartData} from "../../animation/data/FrameData";
 
 
 export class PropertyNumberFormatDecorator extends FrameDataDecorator {

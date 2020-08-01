@@ -1,5 +1,4 @@
 import {FrameDataDecorator} from "./FrameDataDecorator";
-import {ChartData} from "../../animation/data/FrameData";
 
 export class PrependPropertyDecorator extends FrameDataDecorator{
 
