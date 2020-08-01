@@ -13,6 +13,12 @@ export class TagWrapperPropertyFrameDataDecorator extends FrameDataDecorator {
 
     private value : string;
 
+    constructor(value : string) {
+        super();
+        this.value = value;
+    }
+
+
     setValue(value : string) : void {
         this.value = value;
     }
