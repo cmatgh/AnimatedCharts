@@ -2,7 +2,9 @@ import {FileParser} from "../../../../main/typescript/animatedcharts/utility/par
 import { expect } from "chai";
 import {anything, instance, mock, verify, when} from "ts-mockito";
 import {ParsingStrategy} from "../../../../main/typescript/animatedcharts/utility/parsing/ParsingStrategy";
-import {NullError} from "../../../../main/typescript/animatedcharts/utility/NullError";
+import {NullError} from "../../../../main/typescript/animatedcharts/utility/errors/NullError";
+import {DataObject} from "../../../../main/typescript/animatedcharts/animation/Animation";
+import {FrameDataImpl} from "../../../../main/typescript/animatedcharts/animation/data/FrameDataImpl";
 
 describe("FileParser", () => {
 
@@ -115,11 +117,30 @@ describe("FileParser", () => {
 
         it("should succeed when input is correct", () => {
             // given
+            const frameData1 = new FrameDataImpl();
+            frameData1.setSampleSize(2);
+            frameData1.setCurrentFrame(0);
+            frameData1.setProperty("property1");
+            frameData1.setFrameDataSet([
+                {color : [0,0,0], label : "label1", value : 1},
+                {color : [255,255,255], label : "label2", value : 3},
+            ]);
+
+            const frameData2 = new FrameDataImpl();
+            frameData2.setSampleSize(2);
+            frameData2.setCurrentFrame(1);
+            frameData2.setProperty("property2");
+            frameData2.setFrameDataSet([
+                {color : [0,0,0], label : "label1", value : 2},
+                {color : [255,255,255], label : "label2", value : 4},
+            ]);
+
             const expected = {
-                columnDefs : ["label", "color", "property1", "property2"],
-                dataSets : [{label: "label1" ,color: [0,0,0], values: [1, 2]}, {label: "label2" ,color: [255,255,255], values: [3, 4]}],
-                valuesLength : 2
-            };
+                frameData : [frameData1, frameData2],
+                entriesCount : 2,
+                samplesCount : 2,
+            } as DataObject;
+
             const data = [
                 ["label", "color", "property1", "property2"],
                 ["label1", "rgb(0,0,0)", "1", "2"],
@@ -143,13 +164,31 @@ describe("FileParser", () => {
                 ["label1", "", "1", "2"],
                 ["label2", "rgb(255,255,255)", "3", "4"]
             ];
+
+            const frameData1 = new FrameDataImpl();
+            frameData1.setSampleSize(2);
+            frameData1.setCurrentFrame(0);
+            frameData1.setProperty("property1");
+            frameData1.setFrameDataSet([
+                {color : [], label : "label1", value : 1},
+                {color : [255,255,255], label : "label2", value : 3},
+            ]);
+
+            const frameData2 = new FrameDataImpl();
+            frameData2.setSampleSize(2);
+            frameData2.setCurrentFrame(1);
+            frameData2.setProperty("property2");
+            frameData2.setFrameDataSet([
+                {color : [], label : "label1", value : 2},
+                {color : [255,255,255], label : "label2", value : 4},
+            ]);
+
             const expected = {
-                columnDefs : ["label", "color", "property1", "property2"],
-                dataSets : [
-                    {label: "label1" ,color: [], values: [1, 2]},
-                    {label: "label2" ,color: [255,255,255], values: [3, 4]}
-                    ],
-                valuesLength : 2};
+                samplesCount : 2,
+                entriesCount : 2,
+                frameData : [frameData1, frameData2]
+            } as DataObject;
+
             // @ts-ignore
             when(parsingStrategyMock.parse(anything())).thenReturn(data);
 

@@ -1,7 +1,7 @@
 import {instance, mock, verify} from "ts-mockito";
-import {Presenter} from "../../../../main/typescript/animatedcharts/ui/Presenter";
-import {View} from "../../../../main/typescript/animatedcharts/ui/View";
-import {Template} from "../../../../main/typescript/animatedcharts/ui/Template";
+import {Presenter} from "../../../../main/typescript/animatedcharts/interfaces/Presenter";
+import {View} from "../../../../main/typescript/animatedcharts/interfaces/View";
+import {Template} from "../../../../main/typescript/animatedcharts/interfaces/Template";
 import {ElementComposer} from "../../../../main/typescript/animatedcharts/utility/creating/ui/ElementComposer";
 
 describe("ElementComposer", () => {

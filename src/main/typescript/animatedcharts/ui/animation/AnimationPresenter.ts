@@ -7,7 +7,6 @@ export abstract class AnimationPresenter extends AbstractPresenter{
 
     protected view : AnimationView
 
-    abstract setTitle(title: string) : void;
     abstract loadDataset(data: DataObject) : void;
     abstract start() : void;
     abstract stop() : void;

@@ -1,10 +1,10 @@
-import {Parser} from "./Parser";
 import {DataObject} from "../../animation/Animation";
 import {ParsingStrategy} from "./ParsingStrategy";
 import {Preconditions} from "../Preconditions";
-import * as convert from "color-convert";
+import {FrameDataImpl} from "../../animation/data/FrameDataImpl";
+import {FrameData} from "../../animation/data/FrameData";
 
-export class FileParser implements Parser{
+export class FileParser {
 
     private static parsingStrategies : Map<string, ParsingStrategy> = new Map<string, ParsingStrategy>();
 
@@ -63,28 +63,49 @@ export class FileParser implements Parser{
     }
 
     private transform(data:object[][]) : DataObject {
-        const valueRows = data.slice(1);
+        let frameData : FrameData[] = [];
 
-        const datasets = valueRows.map( row => {
-            return {
-                label: row[0].toString(),
-                color: this.rgbTripletToArray(row[1].toString()),
-                values: row.slice(2).map(value => parseInt(value.toString()))
-            }
-            })
+        data.filter((row, index) => index > 0)
+            .forEach( row => this.isValidColor(row[1].toString()))
+
+        for(let col = 2; col < data[0].length; col++) {
+            frameData.push(this.asFrameData(data, col));
+        }
 
         return {
-            columnDefs : data[0].map( val => val.toString()),
-            dataSets : datasets,
-            valuesLength: data[0].length - 2,
+            frameData : frameData,
+            entriesCount: data.length - 1,
+            samplesCount: data[0].length - 2,
         }
+    }
+
+    private asFrameData(data:object[][], column : number) : FrameData {
+        const frameData = new FrameDataImpl();
+        frameData.setSampleSize(data[0].length - 2);
+        frameData.setProperty(data[0][column].toString());
+        frameData.setCurrentFrame(column - 2);
+        frameData.setFrameDataSet(this.getColumn(column, data)
+            .map( (entry,  index) => {
+                return {
+                    value : parseInt(entry.toString()),
+                    label : data[index + 1][0].toString(),
+                    color : this.rgbTripletToArray(data[index + 1][1].toString())
+                }
+        }));
+
+        return frameData;
+    }
+
+    private getColumn(column : number, data : object[][]) {
+        return data
+            .filter((value, index) => index > 0)
+            .map(value => value[column]);
     }
 
     private rgbTripletToArray(color : string) : number[] {
         if(color == "") {
             return [];
         }
-        this.isValidColor(color.toString());
 
         const colorTripletString = color
             .toString()
@@ -100,7 +121,7 @@ export class FileParser implements Parser{
     private isValidColor(color : string) : void {
         //regex for 'rgb(xxx,xxx,xxx)' where xxx can be between 0 and 255
         const regexTemplate = /rgb\(([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5]),([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5]),([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\)/g;
-        if(color.match(regexTemplate) == null) {
+        if(color !== "" && color.match(regexTemplate) == null) {
             throw new Error("Invalid color field. Valid format: rgb(xx,xxx,x).");
         }
     }

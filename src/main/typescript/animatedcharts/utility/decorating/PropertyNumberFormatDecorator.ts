@@ -1,8 +1,15 @@
 import {NumberFormatter} from "../formatting/NumberFormatter";
 import {FrameDataDecorator} from "./FrameDataDecorator";
-import {ChartData} from "../../animation/data/FrameData";
 
-
+/**
+ * Decorator design pattern
+ *
+ * Participants:
+ *      Component : {@link FrameData}
+ *      ConcreteComponent: {@link FrameDataImpl}
+ *      Decorator: {@link FrameDataDecorator}
+ *      ConcreteDecorator: {@link PropertyNumberFormatDecorator}
+ */
 export class PropertyNumberFormatDecorator extends FrameDataDecorator {
 
     format : string;

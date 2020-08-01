@@ -1,12 +1,12 @@
 import {RunningState} from "../../../../main/typescript/animatedcharts/animation/state/RunningState";
-import {anyNumber, anyOfClass, anything, instance, mock, reset, verify, when} from "ts-mockito";
+import {anyNumber, anything, instance, mock, reset, verify, when} from "ts-mockito";
 import {Animation} from "../../../../main/typescript/animatedcharts/animation/Animation";
 import {AnimationFrameWindowLoop} from "../../../../main/typescript/animatedcharts/animation/AnimationFrameWindowLoop";
 import {StoppedState} from "../../../../main/typescript/animatedcharts/animation/state/StoppedState";
 import {PausedState} from "../../../../main/typescript/animatedcharts/animation/state/PausedState";
 import { expect } from "chai";
-import {NullError} from "../../../../main/typescript/animatedcharts/utility/NullError";
-import {Command} from "../../../../main/typescript/animatedcharts/commands/Command";
+import {NullError} from "../../../../main/typescript/animatedcharts/utility/errors/NullError";
+import {Command} from "../../../../main/typescript/animatedcharts/interfaces/Command";
 
 describe("RunningState", () => {
 

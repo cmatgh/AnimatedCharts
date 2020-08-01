@@ -1,4 +1,4 @@
-import { Comparator } from "./Comparator";
+import { Comparator } from "../../interfaces/Comparator";
 import {ChartData} from "../../animation/data/FrameData";
 
 export class ValueComparator implements Comparator<ChartData> {

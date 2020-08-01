@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import {Comparator} from "../../../../main/typescript/animatedcharts/utility/comparing/Comparator";
+import {Comparator} from "../../../../main/typescript/animatedcharts/interfaces/Comparator";
 import {ComparatorUtils} from "../../../../main/typescript/animatedcharts/utility/comparing/ComparatorUtils";
 
 describe("ComparatorUtils", () => {

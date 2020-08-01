@@ -5,7 +5,7 @@ import {AnimationFrameWindowLoop} from "../../../../main/typescript/animatedchar
 import {StoppedState} from "../../../../main/typescript/animatedcharts/animation/state/StoppedState";
 import {RunningState} from "../../../../main/typescript/animatedcharts/animation/state/RunningState";
 import {expect} from "chai";
-import {NullError} from "../../../../main/typescript/animatedcharts/utility/NullError";
+import {NullError} from "../../../../main/typescript/animatedcharts/utility/errors/NullError";
 
 describe("PausedStateSpec", () => {
 

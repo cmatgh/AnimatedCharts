@@ -1,11 +1,22 @@
 import {Preconditions} from "../utility/Preconditions";
-import {Observable} from "../utility/Observable";
-import {LoopObserver} from "./LoopObserver";
+import {Observable} from "../interfaces/Observable";
 import {WindowLoop} from "./WindowLoop";
+import {Observer} from "../interfaces/Observer";
 
+/**
+ * Observable for objects that want to hook into the window loop.
+ *
+ * <ul>
+ *      Participants:
+ *      <li>Observer : {@link Observer}</li>
+ *      <li>ConcreteObserver : {@link Animation}</li>
+ *      <li>Subject: {@link Observable}</li>
+ *      <li>ConcreteSubject: {@link AnimationFrameWindowLoop}</li>
+ * </ul>
+ */
 export class AnimationFrameWindowLoop implements WindowLoop{
 
-    private observers : Set<LoopObserver>;
+    private observers : Set<Observer>;
     private window: Window;
     private animationFrameNumber: number;
     private running : boolean;
@@ -13,7 +24,7 @@ export class AnimationFrameWindowLoop implements WindowLoop{
     constructor(window : Window) {
         Preconditions.checkNotNull(window);
 
-        this.observers = new Set<LoopObserver>();
+        this.observers = new Set<Observer>();
         this.window = window;
         this.running = false;
     }
@@ -49,13 +60,13 @@ export class AnimationFrameWindowLoop implements WindowLoop{
         this.observers.forEach(observer => observer.update());
     }
 
-    register(object: LoopObserver): void {
+    register(object: Observer): void {
         Preconditions.checkNotNull(object);
 
         this.observers.add(object);
     }
 
-    unregister(object: LoopObserver): void {
+    unregister(object: Observer): void {
         this.observers.delete(object);
     }
 }

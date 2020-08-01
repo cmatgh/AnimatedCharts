@@ -1,9 +1,19 @@
 import {Animation} from "../Animation";
 import {AnimationState} from "./AnimationState";
-import {Command} from "../../commands/Command";
-import {Observable} from "../../utility/Observable";
+import {Command} from "../../interfaces/Command";
+import {Observable} from "../../interfaces/Observable";
 import {Preconditions} from "../../utility/Preconditions";
 
+/**
+ * State pattern object that handles the behavior when the animation is running
+ *
+ * <ul>
+ *      Participants:
+ *      <li>Context : {@link Animation}</li>
+ *      <li>State : {@link AnimationState}</li>
+ *      <li>ConcreteState: {@link RunningState}</li>
+ * </ul>
+ */
 export class RunningState implements AnimationState{
 
     private animation: Animation;

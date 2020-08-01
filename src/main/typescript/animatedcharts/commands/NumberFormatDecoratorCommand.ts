@@ -1,4 +1,4 @@
-import {Command} from "./Command";
+import {Command} from "../interfaces/Command";
 import {AnimationPresenter} from "../ui/animation/AnimationPresenter";
 import {PropertyNumberFormatDecorator} from "../utility/decorating/PropertyNumberFormatDecorator";
 

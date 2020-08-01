@@ -1,4 +1,4 @@
-import {Command} from "../../commands/Command";
+import {Command} from "../../interfaces/Command";
 import {InputView} from "./InputView";
 import {AbstractPresenter} from "../AbstractPresenter";
 
@@ -43,7 +43,7 @@ export abstract class InputPresenter extends AbstractPresenter {
         if(this.onSubmitCommand == null) {
             return;
         }
-        console.log("hiwere")
+
         this.onSubmitCommand.execute(new Map<string, any>([["event", event]]));
     }
 
@@ -60,7 +60,6 @@ export abstract class InputPresenter extends AbstractPresenter {
     }
 
     setOnSubmit(command: Command): void {
-        console.log(command);
         this.onSubmitCommand = command;
     }
 

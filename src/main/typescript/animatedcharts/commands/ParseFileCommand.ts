@@ -1,4 +1,4 @@
-import {Command} from "./Command";
+import {Command} from "../interfaces/Command";
 import {Logger} from "../utility/logging/Logger";
 import {AnimationPresenter} from "../ui/animation/AnimationPresenter";
 import {FileParser} from "../utility/parsing/FileParser";

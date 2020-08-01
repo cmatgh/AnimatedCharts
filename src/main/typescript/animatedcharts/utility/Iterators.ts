@@ -1,4 +1,4 @@
-import {Iterator} from "./Iterator";
+import {Iterator} from "../interfaces/Iterator";
 import {Preconditions} from "./Preconditions";
 
 export class Iterators {
@@ -25,10 +25,7 @@ export class Iterators {
             }
 
             hasNext(): boolean {
-                if(this.position < this.array.length) {
-                    return true;
-                }
-                return false;
+                return this.position < this.array.length;
             }
         }(array, offset);
     }

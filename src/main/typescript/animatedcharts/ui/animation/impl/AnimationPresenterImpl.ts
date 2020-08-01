@@ -1,7 +1,7 @@
 import {Animation, DataObject} from "../../../animation/Animation";
 import {AnimationPresenter} from "../AnimationPresenter";
-import {Observer} from "../../../utility/Observer";
-import {Comparator} from "../../../utility/comparing/Comparator";
+import {Observer} from "../../../interfaces/Observer";
+import {Comparator} from "../../../interfaces/Comparator";
 import {ComparatorFactory} from "../../../utility/comparing/ComparatorFactory";
 import {ComparatorUtils} from "../../../utility/comparing/ComparatorUtils";
 import {FrameDataDecorator} from "../../../utility/decorating/FrameDataDecorator";
@@ -19,10 +19,6 @@ export class AnimationPresenterImpl extends AnimationPresenter implements Observ
         this.animation.register(this);
         this.comparator = ComparatorFactory.getInstance().create("label");
         this.frameDataDecorators = [];
-    }
-
-    setTitle(title: string) : void{
-        this.view.setTitle(title);
     }
 
     pause(): void {

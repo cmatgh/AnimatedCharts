@@ -2,7 +2,6 @@ import { Chart }  from "chart.js";
 
 export class ChartFactory {
 
-    private static id: number = 0;
     private static chartFactory: ChartFactory = null;
     types : Set<String>;
 

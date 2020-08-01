@@ -1,58 +1,28 @@
 import { expect } from "chai"
 import "mocha"
+import {JSDOM} from "jsdom";
+import {Animation, DataObject} from "../../../main/typescript/animatedcharts/animation/Animation";
+import {Observer} from "../../../main/typescript/animatedcharts/interfaces/Observer";
+import {AnimationFrameWindowLoop} from "../../../main/typescript/animatedcharts/animation/AnimationFrameWindowLoop";
+import {NullError} from "../../../main/typescript/animatedcharts/utility/errors/NullError";
+import {instance, mock, verify} from "ts-mockito";
+import {WindowLoop} from "../../../main/typescript/animatedcharts/animation/WindowLoop";
+import {FrameData} from "../../../main/typescript/animatedcharts/animation/data/FrameData";
 import * as spies from 'chai-spies';
 import * as chai from "chai";
 chai.use(spies);
-import {DOMWindow, JSDOM} from "jsdom";
-import { Animation } from "../../../main/typescript/animatedcharts/animation/Animation";
-import * as mockito from "../../../../node_modules/ts-mockito/lib/ts-mockito";
-import Chart from "chart.js";
-import {Observer} from "../../../main/typescript/animatedcharts/utility/Observer";
-import {FrameDataImpl} from "../../../main/typescript/animatedcharts/animation/data/FrameDataImpl";
-import {AnimationFrameWindowLoop} from "../../../main/typescript/animatedcharts/animation/AnimationFrameWindowLoop";
-import {NullError} from "../../../main/typescript/animatedcharts/utility/NullError";
-import {instance, mock, verify} from "ts-mockito";
-import {AnimationObserver} from "../../../main/typescript/animatedcharts/animation/AnimationObserver";
-import {WindowLoop} from "../../../main/typescript/animatedcharts/animation/WindowLoop";
 
 describe("Animation", () => {
 
     let animation: Animation;
-    let animationObject: AnimationObserver;
-    let mockedChart: Chart;
+    let animationObject: Observer;
     let windowLoop : WindowLoop;
 
     beforeEach( () => {
         const dom = new JSDOM(`<!DOCTYPE html><div id='bar'></div>`, { pretendToBeVisual: true }).window;
         windowLoop = new AnimationFrameWindowLoop(dom);
-
         animation = new Animation(windowLoop);
-        animation.setDataObject({
-            columnDefs: ["labels", "colors", "1960"],
-            dataSets: [
-                {
-                    label: "Africa",
-                    color: [255,255,255],
-                    values: [1040]
-                },
-                {
-                    label: "America",
-                    color: [155,155,155],
-                    values: [49444]
-                }
-            ],
-            valuesLength : 1
-        });
-        mockedChart = mockito.mock(Chart);
-        mockedChart.config.options = {};
-        mockedChart.config.options.title = {};
-        mockedChart.config.options.title.text = "";
-        mockedChart.data = {};
-        mockedChart.data.datasets = [{}];
-        mockedChart.data.datasets[0] = {};
-        mockedChart.data.datasets[0].backgroundColor = "";
-        mockedChart.data.datasets[0].data = [];
-        animationObject = instance(mock<AnimationObserver>());
+        animationObject = instance(mock<Observer>());
     });
 
     describe("constructor", () => {
@@ -111,15 +81,15 @@ describe("Animation", () => {
          });
 
         it("should fail when unregistering an missing object when other objects have been registered already", () => {
-            animation.register(instance(mock<AnimationObserver>()));
-            animation.register(instance(mock<AnimationObserver>()));
+            animation.register(instance(mock<Observer>()));
+            animation.register(instance(mock<Observer>()));
 
-            expect( () => animation.unregister(instance(mock<AnimationObserver>()))).to.throw("no such object");
+            expect( () => animation.unregister(instance(mock<Observer>()))).to.throw("no such object");
         });
 
 
         it("should remove the object when unregistering it", () => {
-            const animationObserverInstance = instance(mock<AnimationObserver>());
+            const animationObserverInstance = instance(mock<Observer>());
             animation.register(animationObserverInstance);
 
             expect(animation.objectCount()).to.be.equal(1);
@@ -132,7 +102,7 @@ describe("Animation", () => {
 
     describe("notifyAnimationObjects", () => {
         it("should call update on AnimationChart when notifyAnimationObjects is called", () => {
-            const animationObserverMock = mock<AnimationObserver>();
+            const animationObserverMock = mock<Observer>();
             const animationObserverInstance = instance(animationObserverMock);
 
             animation.register(animationObserverInstance);
@@ -145,93 +115,29 @@ describe("Animation", () => {
     describe("getData", () => {
 
         it("should return first dataset after initializing animation instance", () => {
-            const expectedFrameData = new FrameDataImpl();
-            expectedFrameData.setCurrentFrame(0);
-            expectedFrameData.setSampleSize(1);
-            expectedFrameData.setProperty("1960");
-            expectedFrameData.setFrameDataSet([
-                {
-                    label: "Africa",
-                    color: [255,255,255],
-                    value: 1040
-                },
-                {
-                    label: "America",
-                    color: [155,155,155],
-                    value: 49444
-                }
-            ]);
-            expect(animation.getCurrentFrameData()).to.deep.equal(expectedFrameData);
+            const dataObject = createDataObject(instance(mock<FrameData>()));
+
+            animation.setDataObject(dataObject);
+
+            expect(animation.getCurrentFrameData()).to.deep.equal(dataObject.frameData[0]);
         });
 
         it("should return correct dataSet after each frame", () => {
-            const dataSets = [
-                {
-                    label : "Africa",
-                    color : [255,255,255],
-                    values: [13, 14]
-                },{
-                    label : "America",
-                    color : [155,155,155],
-                    values: [12, 13]
-                }
-            ]
+            const frameDataSet1 = instance(mock<FrameData>());
+            const frameDataSet2 = instance(mock<FrameData>());
 
-            const dataObj = {
-                columnDefs: ["labels", "colors", "key1", "key2"],
-                dataSets : dataSets,
-                valuesLength: 2
-            };
+            const dataObj = createDataObject(frameDataSet1, frameDataSet2);
 
             animation = new Animation(windowLoop);
             animation.setDataObject(dataObj);
 
-            const expectedFrameData = new FrameDataImpl();
-            expectedFrameData.setProperty("key1");
-            expectedFrameData.setCurrentFrame(0);
-            expectedFrameData.setSampleSize(2);
-            expectedFrameData.setFrameDataSet([{
-                label : "Africa",
-                color : [255,255,255],
-                value: 13
-            },{
-                label : "America",
-                color : [155,155,155],
-                value: 12
-            }]);
-            expect(animation.getCurrentFrameData()).to.deep.equal(expectedFrameData);
+            expect(animation.getCurrentFrameData()).to.be.eq(frameDataSet1);
 
             animation.incrementFrame();
-
-            expectedFrameData.setProperty("key2");
-            expectedFrameData.setCurrentFrame(1);
-            expectedFrameData.setSampleSize(2);
-            expectedFrameData.setFrameDataSet([{
-                label : "Africa",
-                color : [255,255,255],
-                value: 14
-            },{
-                label : "America",
-                color : [155,155,155],
-                value: 13
-            }]);
-            expect(animation.getCurrentFrameData()).to.deep.equal(expectedFrameData);
+            expect(animation.getCurrentFrameData()).to.be.eq(frameDataSet2);
 
             animation.incrementFrame();
-
-            expectedFrameData.setProperty("key1");
-            expectedFrameData.setCurrentFrame(0);
-            expectedFrameData.setSampleSize(2);
-            expectedFrameData.setFrameDataSet([{
-                label : "Africa",
-                color : [255,255,255],
-                value: 13
-            },{
-                label : "America",
-                color : [155,155,155],
-                value: 12
-            }]);
-            expect(animation.getCurrentFrameData()).to.deep.equal(expectedFrameData);
+            expect(animation.getCurrentFrameData()).to.be.eq(frameDataSet1);
         });
 
     });
@@ -240,9 +146,12 @@ describe("Animation", () => {
 
         it("should delegate to animationLoop", async () => {
 
-            //inrementFrame and notifyAnimationObjects get called in tickStrategy, which gets called in an animationLoop tick
+            //incrementFrame and notifyAnimationObjects get called in tickStrategy, which gets called in an animationLoop tick
             chai.spy.on(animation, "incrementFrame");
             chai.spy.on(animation, "notifyObservers");
+
+            const dataObject = createDataObject(instance(mock<FrameData>()));
+            animation.setDataObject(dataObject);
 
             windowLoop.start();
             animation.start();
@@ -267,4 +176,12 @@ describe("Animation", () => {
     describe("resume", () => {
         //TODO
     });
+
+    function createDataObject(...frameData) : DataObject{
+        return {
+            frameData : frameData,
+            samplesCount : frameData.length,
+            entriesCount : frameData.length > 0 ? frameData[0].least : 0
+        } as DataObject
+    }
 })

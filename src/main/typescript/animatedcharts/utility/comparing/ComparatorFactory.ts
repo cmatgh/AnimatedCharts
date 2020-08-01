@@ -1,5 +1,5 @@
 import {LabelComparator} from "./LabelComparator";
-import {Comparator} from "./Comparator";
+import {Comparator} from "../../interfaces/Comparator";
 import {ColorComparator} from "./ColorComparator";
 import {ValueComparator} from "./ValueComparator";
 import {ChartData} from "../../animation/data/FrameData";

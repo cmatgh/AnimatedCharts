@@ -1,9 +1,9 @@
-import {Command} from "./Command";
+import {Command} from "../interfaces/Command";
 import {ButtonView} from "../ui/input/button/ButtonView";
 import {ResumeButtonTemplate} from "../ui/input/button/templates/ResumeButtonTemplate";
 import {PauseButtonTemplate} from "../ui/input/button/templates/PauseButtonTemplate";
 import {Logger} from "../utility/logging/Logger";
-import {Template} from "../ui/Template";
+import {Template} from "../interfaces/Template";
 import {AnimationPresenter} from "../ui/animation/AnimationPresenter";
 
 export class ResumePauseCommand implements Command {

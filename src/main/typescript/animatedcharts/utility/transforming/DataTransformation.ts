@@ -10,7 +10,6 @@ export class DataTransformation {
     }
 
     static apply(dataObject : DataObject) : DataObject {
-
         this.transformations.forEach( transformation => {
             dataObject = transformation.execute(dataObject);
         })

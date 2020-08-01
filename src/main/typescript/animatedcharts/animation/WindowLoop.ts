@@ -1,4 +1,4 @@
-import {Observable} from "../utility/Observable";
+import {Observable} from "../interfaces/Observable";
 
 export interface WindowLoop extends Observable{
 

@@ -1,53 +1,56 @@
-import { Observable } from "../utility/Observable";
+import { Observable } from "../interfaces/Observable";
 import { Preconditions } from "../utility/Preconditions";
-import {Observer} from "../utility/Observer";
-import {FrameDataImpl} from "./data/FrameDataImpl";
+import {Observer} from "../interfaces/Observer";
 import {FrameData} from "./data/FrameData";
-import {FrameIterator} from "./data/FrameIterator";
+import {CyclicRandomAccessIterator} from "./data/CyclicRandomAccessIterator";
 import {AnimationState} from "./state/AnimationState";
 import {StoppedState} from "./state/StoppedState";
 import {PausedState} from "./state/PausedState";
 import {RunningState} from "./state/RunningState";
-import {LoopObserver} from "./LoopObserver";
 import {AnimationTickCommand} from "./AnimationTickCommand";
-import {SmartWindowLoop} from "./SmartWindowLoop";
 import {WindowLoop} from "./WindowLoop";
 
-export interface DataSet {
-    label : string,
-    color : number[],
-    values: number[]
-}
-
 export interface DataObject {
-    columnDefs : string[],
-    dataSets : DataSet[],
-    valuesLength: number,
+    frameData : FrameData[],
+    samplesCount: number,
+    entriesCount: number,
  }
 
-export class Animation implements Observable, LoopObserver {
+/**
+ * Observable for objects that want to hook into this animation.
+ *
+ * <ul>
+ *      Participants:
+ *      <li>Observer : {@link Observer}</li>
+ *      <li>ConcreteObserver : {@link AnimationPresenterImpl}</li>
+ *      <li>Subject: {@link Observable}</li>
+ *      <li>ConcreteSubject: {@link Animation}</li>
+ * </ul>
+ */
+export class Animation implements Observable, Observer {
 
     public static readonly MAX_UPDATES_PER_SECOND = 5;
     public static readonly MIN_UPDATES_PER_SECOND = 0.2;
+    public static readonly DEFAULT_UPDATES_PER_SECOND = 2;
 
     private readonly animationObjects : Set<Observer>;
-    private frameManager : FrameIterator;
+    private dataIterator : CyclicRandomAccessIterator<FrameData>;
     private dataObject: DataObject;
     private updatesPerSecond: number;
 
-    private stoppedState: StoppedState;
-    private runningState : RunningState;
-    private pausedState: PausedState;
+    private readonly stoppedState: StoppedState;
+    private readonly runningState : RunningState;
+    private readonly pausedState: PausedState;
     private currentState: AnimationState;
 
     constructor(windowLoop : WindowLoop) {
         this.animationObjects = new Set();
         this.dataObject = null;
-        this.frameManager = new FrameIterator([]);
+        this.dataIterator = new CyclicRandomAccessIterator<FrameData>([]);
         this.stoppedState = new StoppedState(this, windowLoop);
         this.runningState = new RunningState(this, windowLoop);
         this.runningState.setUpdateCommand(new AnimationTickCommand(this));
-        this.setUpdatesPerSecond(2);
+        this.setUpdatesPerSecond(Animation.DEFAULT_UPDATES_PER_SECOND);
         this.pausedState = new PausedState(this, windowLoop);
         this.currentState = this.stoppedState;
     }
@@ -64,8 +67,8 @@ export class Animation implements Observable, LoopObserver {
 
     setDataObject(dataObject: DataObject) : void {
         this.dataObject = dataObject;
-        this.frameManager = new FrameIterator(this.getArray())
-        this.frameManager.getNext();
+        this.dataIterator = new CyclicRandomAccessIterator<FrameData>(dataObject.frameData)
+        this.dataIterator.getNext();
     }
 
     get AnimationObjects() : Observer[] {
@@ -103,7 +106,7 @@ export class Animation implements Observable, LoopObserver {
     }
 
     getCurrentFrameData() : FrameData {
-        return this.frameManager.getCurrentFrame();
+        return this.dataIterator.getCurrentFrame();
     }
 
     setUpdatesPerSecond(value: number) : void {
@@ -118,7 +121,7 @@ export class Animation implements Observable, LoopObserver {
     }
 
     incrementFrame() : void{
-        this.frameManager.getNext();
+        this.dataIterator.getNext();
     }
 
     start() : void{
@@ -153,37 +156,8 @@ export class Animation implements Observable, LoopObserver {
         return this.currentState instanceof StoppedState;
     }
 
-    private getArray() : FrameData[]{
-        const frameData = [];
-        for(let i = 0; i < this.dataObject.valuesLength; i++) {
-            frameData.push(this.asFrameData(i));
-        }
-
-        return frameData;
-    }
-
-    private asFrameData(frame : number) : FrameData {
-        const frameData = new FrameDataImpl();
-        frameData.setProperty("");
-        frameData.setSampleSize(this.dataObject.valuesLength);
-        frameData.setCurrentFrame(frame);
-        frameData.setFrameDataSet([]);
-        if(this.dataObject != null) {
-            frameData.setProperty( this.dataObject.columnDefs[2 + frame]);
-            frameData.setCurrentFrame(frame);
-            frameData.setFrameDataSet(this.dataObject.dataSets.map( set => {
-                return {
-                    label: set.label.slice(),
-                    color : [...set.color],
-                    value: set.values[frame]
-                }
-            }));
-        }
-        return frameData;
-    }
-
     setFrame(frame: number) {
-        this.frameManager.setFrame(frame);
-        this.frameManager.getNext();
+        this.dataIterator.setFrame(frame);
+        this.dataIterator.getNext();
     }
 }

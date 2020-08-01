@@ -4,9 +4,9 @@ import * as chai from "chai";
 chai.use(spies);
 import { AnimationFrameWindowLoop } from "../../../main/typescript/animatedcharts/animation/AnimationFrameWindowLoop";
 import { expect } from "chai";
-import {NullError} from "../../../main/typescript/animatedcharts/utility/NullError";
+import {NullError} from "../../../main/typescript/animatedcharts/utility/errors/NullError";
 import {anyNumber, anything, instance, mock, verify} from "ts-mockito";
-import {Observer} from "../../../main/typescript/animatedcharts/utility/Observer";
+import {Observer} from "../../../main/typescript/animatedcharts/interfaces/Observer";
 describe("AnimationFrameWindowLoop", () => {
 
     let animationLoop: AnimationFrameWindowLoop;

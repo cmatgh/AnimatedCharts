@@ -1,8 +1,19 @@
 import {WindowLoop} from "./WindowLoop";
 import {Preconditions} from "../utility/Preconditions";
-import { Observer } from "../utility/Observer";
+import { Observer } from "../interfaces/Observer";
 import {Logger} from "../utility/logging/Logger";
 
+/**
+ * Proxy for concrete WindowLoop subclasses
+ *
+ * Participants:
+ *      Proxy : {@link SmartWindowLoop}
+ *      Subject: {@link WindowLoop}
+ *      RealSubject: Concrete {@link WindowLoop} classes
+ *
+ * This class provides an semi-intelligent handling of the animation loop by only starting the window loop
+ * when there is an observer listening. If there is no observer listening the window loop will be stopped.
+ */
 export class SmartWindowLoop implements WindowLoop {
 
     private static instance : SmartWindowLoop;
