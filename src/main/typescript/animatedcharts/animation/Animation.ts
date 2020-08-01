@@ -31,6 +31,7 @@ export class Animation implements Observable, Observer {
 
     public static readonly MAX_UPDATES_PER_SECOND = 5;
     public static readonly MIN_UPDATES_PER_SECOND = 0.2;
+    public static readonly DEFAULT_UPDATES_PER_SECOND = 2;
 
     private readonly animationObjects : Set<Observer>;
     private dataIterator : CyclicRandomAccessIterator<FrameData>;
@@ -49,7 +50,7 @@ export class Animation implements Observable, Observer {
         this.stoppedState = new StoppedState(this, windowLoop);
         this.runningState = new RunningState(this, windowLoop);
         this.runningState.setUpdateCommand(new AnimationTickCommand(this));
-        this.setUpdatesPerSecond(2);
+        this.setUpdatesPerSecond(Animation.DEFAULT_UPDATES_PER_SECOND);
         this.pausedState = new PausedState(this, windowLoop);
         this.currentState = this.stoppedState;
     }
