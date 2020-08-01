@@ -5,6 +5,7 @@
 Design Patterns used:
 ```
 -Abstract Factory
+-Factory Method
 -Observer
 -Command
 -Singleton
