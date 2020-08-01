@@ -6,6 +6,17 @@ import {TemplateFactory} from "../TemplateFactory";
 import {SelectPresenter} from "../../../../ui/input/select/SelectPresenter";
 import {SelectView} from "../../../../ui/input/select/SelectView";
 
+/**
+ * Abstract factory design pattern
+ *
+ * Participants:
+ *      AbstractFactory : {@link ComponentKit}
+ *      ConcreteFactory: {@link SelectKit}
+ *      AbstractProduct: {@link Presenter}, {@link View}, {@link Template}
+ *      ConcreteProduct: {@link SelectPresenter}, {@link SelectView}, {@link SelectTemplate}
+ *      Client: application
+ *
+ */
 export class SelectKit implements ComponentKit {
 
     private templateFactory : TemplateFactory;

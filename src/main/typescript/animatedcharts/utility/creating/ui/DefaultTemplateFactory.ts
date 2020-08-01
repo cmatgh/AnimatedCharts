@@ -8,6 +8,18 @@ import {RangeTemplate} from "../../../ui/input/range/RangeTemplate";
 import {SelectTemplate} from "../../../ui/input/select/SelectTemplate";
 import {TextfieldTemplate} from "../../../ui/input/textfield/TextfieldTemplate";
 
+/**
+ * Abstract factory design pattern
+ *
+ * Participants:
+ *      AbstractFactory : {@link TemplateFactory}
+ *      ConcreteFactory: {@link DefaultTemplateFactory}
+ *      AbstractProduct: {@link Template}
+ *      ConcreteProduct: Concrete classes: {@link DefaultButtonTemplate}, {@link CheckboxTemplate}, {@link FileDialogTemplate}
+ *      {@link MultiSelectTemplate}, {@link RangeTemplate}, {@link SelectTemplate}, {@link TextfieldTemplate}
+ *      Client: UIElementFactory
+ *
+ */
 export class DefaultTemplateFactory extends TemplateFactory {
 
     createButtonTemplate(): Template {

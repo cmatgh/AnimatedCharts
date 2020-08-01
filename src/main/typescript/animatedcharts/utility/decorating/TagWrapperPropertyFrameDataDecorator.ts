@@ -1,5 +1,14 @@
 import {FrameDataDecorator} from "./FrameDataDecorator";
 
+/**
+ * Decorator design pattern
+ *
+ * Participants:
+ *      Component : {@link FrameData}
+ *      ConcreteComponent: {@link FrameDataImpl}
+ *      Decorator: {@link FrameDataDecorator}
+ *      ConcreteDecorator: {@link TagWrapperPropertyFrameDataDecorator}
+ */
 export class TagWrapperPropertyFrameDataDecorator extends FrameDataDecorator {
 
     private value : string;
