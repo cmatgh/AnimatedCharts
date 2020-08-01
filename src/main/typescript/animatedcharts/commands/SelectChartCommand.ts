@@ -1,16 +1,16 @@
 import {Command} from "../interfaces/Command";
-import {AnimationPresenter} from "../ui/animation/AnimationPresenter";
+import {ChartAnimationPresenter} from "../ui/chartanimation/ChartAnimationPresenter";
 
 export class SelectChartCommand implements Command {
 
-    presenter: AnimationPresenter;
+    presenter: ChartAnimationPresenter;
 
-    constructor(presenter: AnimationPresenter) {
+    constructor(presenter: ChartAnimationPresenter) {
         this.presenter = presenter;
     }
 
     execute(map: Map<string, any>): void {
-        this.presenter.setChart(map.get("event"));
+        this.presenter.setChart(map.get("value"));
     }
 
 }

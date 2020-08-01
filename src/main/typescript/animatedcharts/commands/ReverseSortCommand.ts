@@ -1,11 +1,11 @@
-import {AnimationPresenter} from "../ui/animation/AnimationPresenter";
+import {ChartAnimationPresenter} from "../ui/chartanimation/ChartAnimationPresenter";
 import {CheckboxCommand} from "./CheckboxCommand";
 
 export class ReverseSortCommand extends CheckboxCommand {
 
-    animationPresenter : AnimationPresenter
+    animationPresenter : ChartAnimationPresenter
 
-    constructor(animationPresenter : AnimationPresenter) {
+    constructor(animationPresenter : ChartAnimationPresenter) {
         super();
         this.animationPresenter = animationPresenter;
     }

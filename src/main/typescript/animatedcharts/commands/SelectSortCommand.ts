@@ -1,16 +1,16 @@
 import {Command} from "../interfaces/Command";
-import {AnimationPresenter} from "../ui/animation/AnimationPresenter";
+import {ChartAnimationPresenter} from "../ui/chartanimation/ChartAnimationPresenter";
 
 export class SelectSortCommand implements Command {
 
-    animationPresenter : AnimationPresenter
+    animationPresenter : ChartAnimationPresenter
 
-    constructor(animationPresenter : AnimationPresenter) {
+    constructor(animationPresenter : ChartAnimationPresenter) {
         this.animationPresenter = animationPresenter;
     }
 
     execute(map: Map<string, any>): void {
-        this.animationPresenter.sortBy(map.get("event"));
+        this.animationPresenter.sortBy(map.get("value"));
     }
 
 }

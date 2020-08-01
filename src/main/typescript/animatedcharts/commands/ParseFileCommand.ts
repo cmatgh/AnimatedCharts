@@ -1,18 +1,19 @@
 import {Command} from "../interfaces/Command";
 import {Logger} from "../utility/logging/Logger";
-import {AnimationPresenter} from "../ui/animation/AnimationPresenter";
+import {ChartAnimationPresenter} from "../ui/chartanimation/ChartAnimationPresenter";
 import {FileParser} from "../utility/parsing/FileParser";
 import {DataTransformation} from "../utility/transforming/DataTransformation";
 
 export class ParseFileCommand implements Command {
 
-    animationPresenter: AnimationPresenter
+    animationPresenter: ChartAnimationPresenter
 
-    constructor(animationPresenter: AnimationPresenter) {
+    constructor(animationPresenter: ChartAnimationPresenter) {
         this.animationPresenter = animationPresenter;
     }
 
     execute(map: Map<string, any>): void {
+        console.log(map);
         Logger.getInstance().info("Getting file from file dialog.");
         let file = map.get("event").target.files[0];
         let parser = new FileParser();
