@@ -1,6 +1,5 @@
 import {ChartAnimationView} from "../ChartAnimationView";
 import {ChartAnimationPresenter} from "../ChartAnimationPresenter";
-import {Template} from "../../../interfaces/Template";
 import {ChartFactory} from "../../../utility/creating/ui/ChartFactory";
 import Chart from "chart.js";
 import {ParseFileCommand} from "../../../commands/ParseFileCommand";
@@ -31,8 +30,6 @@ import {TemplateFactory} from "../../../utility/creating/ui/TemplateFactory";
 
 export class ChartAnimationViewImpl extends ChartAnimationView {
 
-    template : Template;
-    $element : JQuery;
     chart: Chart;
 
     fileDialog : FileDialog;

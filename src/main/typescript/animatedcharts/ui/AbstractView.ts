@@ -2,7 +2,6 @@ import {View} from "../interfaces/View";
 import {Presenter} from "../interfaces/Presenter";
 import {Template} from "../interfaces/Template";
 import {Component} from "./Component";
-import {Command} from "../interfaces/Command";
 import TriggeredEvent = JQuery.TriggeredEvent;
 
 export abstract class AbstractView implements View{
