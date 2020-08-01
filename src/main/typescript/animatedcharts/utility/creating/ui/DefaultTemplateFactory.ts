@@ -1,12 +1,10 @@
 import {TemplateFactory} from "./TemplateFactory";
 import {Template} from "../../../interfaces/Template";
-import {DefaultButtonTemplate} from "../../../ui/input/button/templates/DefaultButtonTemplate";
-import {CheckboxTemplate} from "../../../ui/input/checkbox/CheckboxTemplate";
-import {FileDialogTemplate} from "../../../ui/input/filedialog/FileDialogTemplate";
-import {MultiSelectTemplate} from "../../../ui/input/multiselect/MultiSelectTemplate";
-import {RangeTemplate} from "../../../ui/input/range/RangeTemplate";
-import {SelectTemplate} from "../../../ui/input/select/SelectTemplate";
-import {TextfieldTemplate} from "../../../ui/input/textfield/TextfieldTemplate";
+import {DefaultButtonTemplate} from "../../../ui/components/button/templates/DefaultButtonTemplate";
+import {CheckboxTemplate} from "../../../ui/components/checkbox/templates/CheckboxTemplate";
+import {FileDialogTemplate} from "../../../ui/components/filedialog/FileDialogTemplate";
+import {RangeTemplate} from "../../../ui/components/range/RangeTemplate";
+import {SelectTemplate} from "../../../ui/components/select/SelectTemplate";
 
 /**
  * Abstract factory design pattern
@@ -34,20 +32,12 @@ export class DefaultTemplateFactory extends TemplateFactory {
         return new FileDialogTemplate();
     }
 
-    createMultiselectTemplate(): Template {
-        return new MultiSelectTemplate();
-    }
-
     createRangeTemplate(): Template {
         return new RangeTemplate();
     }
 
     createSelectTemplate(): Template {
         return new SelectTemplate();
-    }
-
-    createTextfieldTemplate(): Template {
-        return new TextfieldTemplate();
     }
 
 }

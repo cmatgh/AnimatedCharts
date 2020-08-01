@@ -1,13 +1,13 @@
-import {AnimationPresenter} from "../ui/animation/AnimationPresenter";
+import {ChartAnimationPresenter} from "../ui/chartanimation/ChartAnimationPresenter";
 import {TagWrapperPropertyFrameDataDecorator} from "../utility/decorating/TagWrapperPropertyFrameDataDecorator";
 import {CheckboxCommand} from "./CheckboxCommand";
 
 export class TagWrapperCommand extends CheckboxCommand{
 
-    private presenter : AnimationPresenter;
+    private presenter : ChartAnimationPresenter;
     private frameDataDecorator : TagWrapperPropertyFrameDataDecorator;
 
-    constructor(presenter : AnimationPresenter, frameDataDecorator : TagWrapperPropertyFrameDataDecorator) {
+    constructor(presenter : ChartAnimationPresenter, frameDataDecorator : TagWrapperPropertyFrameDataDecorator) {
         super();
         this.presenter  = presenter;
         this.frameDataDecorator = frameDataDecorator;

@@ -1,10 +1,10 @@
 // import {InputPresenter} from "../ui/input/InputPresenter";
-// import {AnimationPresenterImpl} from "../ui/animation/impl/AnimationPresenterImpl";
+// import {ChartAnimationPresenterImpl} from "../ui/animation/impl/ChartAnimationPresenterImpl";
 //
 // export interface Visitor {
 //
 //     visitButton(button : InputPresenter) : void;
 //
-//     visitAnimationUI(animationUI : AnimationPresenterImpl) : void;
+//     visitAnimationUI(animationUI : ChartAnimationPresenterImpl) : void;
 //
 // }
